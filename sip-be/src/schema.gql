@@ -2,31 +2,48 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type UserType {
   id: ID!
 
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Name of user"""
+  name: String!
+
+  """Avatar of user"""
+  avatar: String!
+  dummy: TestType!
+}
+
+type TestType {
+  id: ID!
+
+  """Name of user"""
+  title: String
 }
 
 type Query {
-  users: [User!]!
-  user(id: Int!): User!
+  users(offset: Float!, limit: Float!, sort: String!, search: String!): [UserType!]!
+  user(id: Int!): UserType
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  createUser(createUserInput: CreateUserInput!): UserType!
+  updateUser(updateUserInput: UpdateUserInput!): UserType!
+  removeUser(id: Int!): UserType!
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Name of user"""
+  name: String!
+
+  """Avatar of user"""
+  avatar: String
 }
 
 input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """Name of user"""
+  name: String
+
+  """Avatar of user"""
+  avatar: String
   id: Int!
 }
