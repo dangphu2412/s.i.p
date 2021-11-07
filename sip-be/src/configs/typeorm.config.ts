@@ -1,3 +1,4 @@
+import { ConfigService } from '@modules/config/config.service';
 import { DynamicModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
