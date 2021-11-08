@@ -10,14 +10,6 @@ type UserType {
 
   """Avatar of user"""
   avatar: String!
-  dummy: TestType!
-}
-
-type TestType {
-  id: ID!
-
-  """Name of user"""
-  title: String
 }
 
 type Query {
@@ -26,24 +18,10 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): UserType!
   updateUser(updateUserInput: UpdateUserInput!): UserType!
   removeUser(id: Int!): UserType!
 }
 
-input CreateUserInput {
-  """Name of user"""
-  name: String!
-
-  """Avatar of user"""
-  avatar: String
-}
-
 input UpdateUserInput {
-  """Name of user"""
-  name: String
-
-  """Avatar of user"""
-  avatar: String
   id: Int!
 }

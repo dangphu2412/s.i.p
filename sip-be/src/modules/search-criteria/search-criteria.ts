@@ -1,15 +1,15 @@
-import { ArgsType, Field } from "@nestjs/graphql";
+import { ArgsType, Field } from '@nestjs/graphql';
 
 @ArgsType()
 export class SearchCriteria {
   @Field()
-  offset: number
+  offset: number;
 
   @Field()
-  limit: number
+  limit: number;
 
   @Field()
-  sort?: string
+  sort?: string;
 
   @Field()
   search?: string;

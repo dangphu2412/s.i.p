@@ -1,21 +1,16 @@
-import { Resolver, Query, Mutation, Args, Int, PickType, ResolveField } from "@nestjs/graphql";
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
-import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { UserType } from "@modules/users/types/user.type";
-import { TestType } from "@modules/users/types/test.type";
-import { SearchCriteria } from "@modules/search-criteria/search-criteria";
+import { UserType } from '@modules/users/types/user.type';
+import { SearchCriteria } from '@modules/search-criteria/search-criteria';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt.guard';
 
 @Resolver(() => UserType)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => UserType)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Query(() => [UserType], { name: 'users' })
   findAll(@Args() searchCriteria: SearchCriteria) {
     console.log(searchCriteria);
@@ -25,14 +20,6 @@ export class UsersResolver {
   @Query(() => UserType, { name: 'user', nullable: true })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.findOne(id);
-  }
-
-  @ResolveField('dummy', () => TestType)
-  getDummy(): TestType {
-    return {
-      id: '1',
-      title: 'asd'
-    }
   }
 
   @Mutation(() => UserType)

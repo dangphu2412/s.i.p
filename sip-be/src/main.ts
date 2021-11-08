@@ -3,7 +3,7 @@ config();
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@modules/config/config.service';
 import { GRAPHQL_UI_PATH } from './constants/config.constant';
 
