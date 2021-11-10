@@ -12,16 +12,21 @@ type UserType {
   avatar: String!
 }
 
+type OAuth {
+  """Token take from google login"""
+  token: String!
+}
+
 type Query {
   users(offset: Float!, limit: Float!, sort: String!, search: String!): [UserType!]!
   user(id: Int!): UserType
 }
 
 type Mutation {
-  updateUser(updateUserInput: UpdateUserInput!): UserType!
-  removeUser(id: Int!): UserType!
+  loginGoogle(authInput: AuthInput!): OAuth!
 }
 
-input UpdateUserInput {
-  id: Int!
+input AuthInput {
+  """Access token from third party"""
+  accessToken: String!
 }
