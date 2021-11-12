@@ -5,4 +5,8 @@ export class ConfigService {
     }
     return process.env[key];
   }
+
+  static getInt(key: string) {
+    return Number.parseInt(ConfigService.get(key), 10);
+  }
 }
