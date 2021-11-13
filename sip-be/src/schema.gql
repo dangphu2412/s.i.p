@@ -24,6 +24,7 @@ type Query {
 
 type Mutation {
   loginGoogle(authInput: AuthInput!): OAuth!
+  getTestToken: OAuth!
 }
 
 input AuthInput {

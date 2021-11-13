@@ -46,7 +46,26 @@ export class AuthService {
     }
 
     return {
-      token: this.jwtService.sign({ id: user.id }),
+      token: this.jwtService.sign({ userId: user.id }),
+    };
+  }
+
+  public async getCredentialsTest() {
+    const TEST_EMAIL = 'dangphu2412@gmail.com';
+    let user = await this.userService.findByEmail(TEST_EMAIL);
+
+    if (!user) {
+      user = await this.userService.createWithGoogleTokenPayload({
+        email: TEST_EMAIL,
+        picture: '',
+        name: 'fusdeptrai',
+      } as any);
+    }
+    console.log(user);
+    console.log(user.id);
+
+    return {
+      token: this.jwtService.sign({ userId: user.id }),
     };
   }
 }

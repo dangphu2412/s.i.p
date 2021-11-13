@@ -13,4 +13,9 @@ export class AuthResolver {
       authInput.accessToken,
     );
   }
+
+  @Mutation(() => OAuth)
+  public getTestToken() {
+    return this.authService.getCredentialsTest();
+  }
 }

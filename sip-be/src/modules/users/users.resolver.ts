@@ -1,3 +1,4 @@
+import { CurrentUser } from '@modules/auth/decorator/current-user.decorator';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt.guard';
 import { SearchCriteria } from '@modules/search-criteria/search-criteria';
 import { UserType } from '@modules/users/types/user.type';
@@ -11,7 +12,9 @@ export class UsersResolver {
 
   @UseGuards(JwtAuthGuard)
   @Query(() => [UserType], { name: 'users' })
-  findAll(@Args() searchCriteria: SearchCriteria) {
+  findAll(@Args() searchCriteria: SearchCriteria, @CurrentUser() user) {
+    console.log(user);
+
     console.log(searchCriteria);
     return this.usersService.findAll();
   }
