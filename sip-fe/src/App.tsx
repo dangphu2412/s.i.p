@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { configAxios } from './config/axios.config';
-import { LoginPage } from './views/auth/LoginPage';
+import { CLientHomePage } from './views/home/ClientHomePage';
 
 configAxios();
 
@@ -10,7 +10,7 @@ function App() {
 	return <>
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<LoginPage/>} />
+				<Route path="/" element={<CLientHomePage/>} />
 			</Routes>
 		</BrowserRouter>
 	</>;
