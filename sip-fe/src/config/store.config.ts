@@ -10,7 +10,7 @@ declare global {
 }
 
 
-export function configAndGetStore() {
+export function createReduxStore() {
 	const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 	const sagaMiddleware = createSagaMiddleware();
 
