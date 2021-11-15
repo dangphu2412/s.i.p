@@ -3,11 +3,11 @@ import { AnyAction } from 'redux';
 import { AppError } from '../app.types';
 import { cancelError, fireError } from './error.action';
 
-const intitalState: AppError = {
+const initialState: AppError = {
 	hasError: false
 };
 
-export function errorReducer(state = intitalState, action: AnyAction) {
+export function errorReducer(state = initialState, action: AnyAction) {
 	return produce(state, draft => {
 		switch(action.type) {
 		case fireError.type:
