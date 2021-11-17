@@ -1,8 +1,8 @@
-import { AbstractTrashTrackerType } from '@database/base/abstract-trash-tracker.type';
+import { TimeTracker } from '@database/base/time-tracker.factory';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class UserType extends AbstractTrashTrackerType {
+export class UserType extends TimeTracker() {
   @Field(() => ID)
   id: string;
 

@@ -1,8 +1,8 @@
-import { AbstractTrashTrackerEntity } from '@database/base/abstract-trash-tracker.entity';
+import { TimeTracker } from '@database/base/time-tracker.factory';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
-export class User extends AbstractTrashTrackerEntity {
+export class User extends TimeTracker() {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

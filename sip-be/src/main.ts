@@ -10,8 +10,8 @@ import { getCorsConfig } from './configs/cors.config';
 
 async function bootstrap() {
   const PORT = ConfigService.get('PORT');
-
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors(getCorsConfig());
 

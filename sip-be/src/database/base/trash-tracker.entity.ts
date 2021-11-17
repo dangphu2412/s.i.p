@@ -1,8 +1,9 @@
 import { Field, InterfaceType } from '@nestjs/graphql';
-import { AbstractTimeTrackerType } from './abstract-time-tracker.type';
+import { DeleteDateColumn } from 'typeorm';
 
 @InterfaceType()
-export abstract class AbstractTrashTrackerType extends AbstractTimeTrackerType {
+export class TrashTracker {
   @Field(() => Date, { description: 'Entity deleted at', nullable: true })
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true, default: null })
   deletedAt: Date;
 }
