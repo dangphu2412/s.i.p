@@ -6,6 +6,13 @@ export class ConfigService {
     return process.env[key];
   }
 
+  static getOptional(key: string): string | null {
+    if (!process.env[key]) {
+      return null;
+    }
+    return process.env[key];
+  }
+
   static getInt(key: string) {
     return Number.parseInt(ConfigService.get(key), 10);
   }
