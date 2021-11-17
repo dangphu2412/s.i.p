@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@apis/*": ["src/apis/*"],
-      "@config/*": ["src/config/*"],
+      "@configs/*": ["src/configs/*"],
       "@modules/*": ["src/modules/*"],
       "@utils/*": ["src/utils/*"],
       "@database/*": ["src/database/*"]

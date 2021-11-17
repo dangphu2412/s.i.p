@@ -1,4 +1,4 @@
-import { DynamicModule, Logger } from '@nestjs/common';
+import { DynamicModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { GRAPHQL_UI_PATH } from 'src/constants/config.constant';
