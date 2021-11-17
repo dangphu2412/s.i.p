@@ -1,7 +1,8 @@
+import { AbstractTrashTrackerType } from '@database/base/abstract-trash-tracker.type';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class UserType {
+export class UserType extends AbstractTrashTrackerType {
   @Field(() => ID)
   id: string;
 

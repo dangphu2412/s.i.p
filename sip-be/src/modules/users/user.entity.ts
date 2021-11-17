@@ -1,7 +1,8 @@
+import { AbstractTrashTrackerEntity } from '@database/base/abstract-trash-tracker.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
-export class User {
+export class User extends AbstractTrashTrackerEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

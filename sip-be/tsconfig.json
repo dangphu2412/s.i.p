@@ -21,7 +21,8 @@
       "@apis/*": ["src/apis/*"],
       "@config/*": ["src/config/*"],
       "@modules/*": ["src/modules/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@database/*": ["src/database/*"]
     }
   }
 }
