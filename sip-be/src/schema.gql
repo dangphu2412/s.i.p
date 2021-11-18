@@ -30,23 +30,36 @@ type OAuth {
   token: String!
 }
 
-type Post {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type PostType {
+  """Entity created at"""
+  createdAt: DateTime!
+
+  """Entity updated at"""
+  updatedAt: DateTime!
+
+  """Entity deleted at"""
+  deletedAt: DateTime
+  id: ID!
+
+  """Title of user"""
+  title: String!
+
+  """Content of user"""
+  content: String!
 }
 
 type Query {
   users(offset: Float!, limit: Float!, sort: String!, search: String!): [UserType!]!
   user(id: Int!): UserType
-  post(id: Int!): Post!
+  post(id: Int!): PostType!
 }
 
 type Mutation {
   loginGoogle(authInput: AuthInput!): OAuth!
   getTestToken: OAuth!
-  createPost(createPostInput: CreatePostInput!): Post!
-  updatePost(updatePostInput: UpdatePostInput!): Post!
-  removePost(id: Int!): Post!
+  createPost(createPostInput: CreatePostInput!): PostType!
+  updatePost(updatePostInput: UpdatePostInput!): PostType!
+  removePost(id: Int!): PostType!
 }
 
 input AuthInput {
@@ -56,11 +69,9 @@ input AuthInput {
 
 input CreatePostInput {
   """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
 }
 
 input UpdatePostInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
 }
