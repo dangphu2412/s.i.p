@@ -6,7 +6,7 @@ import { ConfigService } from '@modules/config/config.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '@modules/users/users.module';
 import { UsersService } from '@modules/users/users.service';
-import { User } from '@modules/users/user.entity';
+import { User } from '@modules/users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [

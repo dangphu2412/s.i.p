@@ -4,7 +4,7 @@ import { getTypeOrmModule } from '@configs/typeorm.config';
 import { UsersModule } from '@modules/users/users.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { PostModule } from '@modules/post/post.module';
-import { TagsModule } from './tags/tags.module';
+import { TopicModule } from './modules/topic/topic.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { TagsModule } from './tags/tags.module';
     UsersModule,
     AuthModule,
     PostModule,
-    TagsModule,
+    TopicModule,
   ],
 })
 export class AppModule {}

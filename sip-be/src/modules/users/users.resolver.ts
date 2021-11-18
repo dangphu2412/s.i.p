@@ -1,7 +1,7 @@
 import { CurrentUser } from '@modules/auth/decorator/current-user.decorator';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt.guard';
 import { SearchCriteria } from '@modules/search-criteria/search-criteria';
-import { UserType } from '@modules/users/graph-model/user.type';
+import { UserType } from '@modules/users/entities/user.type';
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { UsersService } from './users.service';

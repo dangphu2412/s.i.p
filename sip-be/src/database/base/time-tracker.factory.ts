@@ -1,7 +1,8 @@
 import { TimeTracker as DefaultTimeTracker } from './time-tracker.entity';
 import { TrashTracker } from './trash-tracker.entity';
 import { UpdateTracker } from './update-tracker.entity';
-enum TIME_TYPE {
+
+export enum TIME_TYPE {
   UPDATE_TRACKER,
   TRASH_TRACKER,
 }
