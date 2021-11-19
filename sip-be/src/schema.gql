@@ -48,10 +48,19 @@ type PostType {
   content: String!
 }
 
+type TopicType {
+  """Id of topic"""
+  id: ID!
+
+  """Name of topic"""
+  name: String!
+}
+
 type Query {
-  users(offset: Float!, limit: Float!, sort: String!, search: String!): [UserType!]!
+  users(offset: Float = 1, limit: Float = 10, sorts: [String!], filters: [String!], search: String): [UserType!]!
   user(id: Int!): UserType
   post(id: Int!): PostType!
+  topics: [TopicType!]!
 }
 
 type Mutation {
