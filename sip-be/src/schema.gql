@@ -25,6 +25,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type UserTypeEdge {
+  cursor: String!
+  node: UserType!
+}
+
+type PaginatedUser {
+  edges: [UserTypeEdge!]
+  nodes: [UserType!]
+  totalCount: Int!
+  hasNextPage: Boolean!
+}
+
 type OAuth {
   """Token take from google login"""
   token: String!
@@ -57,7 +69,7 @@ type TopicType {
 }
 
 type Query {
-  users(offset: Float = 1, limit: Float = 10, sorts: [String!], filters: [String!], search: String): [UserType!]!
+  users: [PaginatedUser!]!
   user(id: Int!): UserType
   post(id: Int!): PostType!
   topics: [TopicType!]!

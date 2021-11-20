@@ -1,9 +1,9 @@
 import { CurrentUser } from '@modules/auth/decorator/current-user.decorator';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt.guard';
-import { SearchCriteria } from '@modules/search-criteria/search-criteria';
 import { UserType } from '@modules/users/entities/user.type';
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { PaginatedUser } from './entities/paginated-user.type';
 import { UsersService } from './users.service';
 
 @Resolver(() => UserType)
@@ -11,11 +11,8 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => [UserType], { name: 'users' })
-  findAll(@Args() searchCriteria: SearchCriteria, @CurrentUser() user) {
-    console.log(user);
-
-    console.log(searchCriteria);
+  @Query(() => [PaginatedUser], { name: 'users' })
+  findAll(@CurrentUser() user) {
     return this.usersService.findAll();
   }
 
