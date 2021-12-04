@@ -13,4 +13,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const { req } = ctx.getContext();
     return super.canActivate(new ExecutionContextHost([req]));
   }
+
+  handleRequest(err: any, user: any, info: any, context: any, status?: any) {
+    return super.handleRequest(err, user, info, context, status);
+  }
 }

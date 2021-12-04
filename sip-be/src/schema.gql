@@ -69,7 +69,7 @@ type TopicType {
 }
 
 type Query {
-  users: [PaginatedUser!]!
+  users(first: Int, after: String, last: Int, before: String): [PaginatedUser!]!
   user(id: Int!): UserType
   post(id: Int!): PostType!
   topics: [TopicType!]!

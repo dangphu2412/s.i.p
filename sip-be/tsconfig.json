@@ -22,7 +22,8 @@
       "@configs/*": ["src/configs/*"],
       "@modules/*": ["src/modules/*"],
       "@utils/*": ["src/utils/*"],
-      "@database/*": ["src/database/*"]
+      "@database/*": ["src/database/*"],
+      "@shared/*": ["src/shared/*"],
     }
   }
 }

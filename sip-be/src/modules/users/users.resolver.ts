@@ -3,6 +3,7 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt.guard';
 import { UserType } from '@modules/users/entities/user.type';
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { PaginationArgs } from '@shared/graphql/pagination.input';
 import { PaginatedUser } from './entities/paginated-user.type';
 import { UsersService } from './users.service';
 
@@ -12,7 +13,7 @@ export class UsersResolver {
 
   @UseGuards(JwtAuthGuard)
   @Query(() => [PaginatedUser], { name: 'users' })
-  findAll(@CurrentUser() user) {
+  findAll(@Args() pagination: PaginationArgs, @CurrentUser() user) {
     return this.usersService.findAll();
   }
 
