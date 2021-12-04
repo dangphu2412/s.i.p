@@ -5,6 +5,7 @@ import { RaclModule } from '@external/racl/rule.module';
 import { MediaModule } from '@modules/media/media.module';
 import { PermissionModule } from '@modules/permission/permission.module';
 import { RoleModule } from '@modules/role/role.module';
+import { TopicModule } from '@modules/topic/topic.module';
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -20,6 +21,7 @@ import { UserModule } from './modules/user/user.module';
     RoleModule,
     PermissionModule,
     MediaModule,
+    TopicModule,
   ],
 })
 export class AppModule {}
