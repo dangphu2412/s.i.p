@@ -4,6 +4,7 @@ import { getTypeOrmModule } from '@config/typeorm.config';
 import { RaclModule } from '@external/racl/rule.module';
 import { MediaModule } from '@modules/media/media.module';
 import { PermissionModule } from '@modules/permission/permission.module';
+import { PostModule } from '@modules/post/post.module';
 import { RoleModule } from '@modules/role/role.module';
 import { TopicModule } from '@modules/topic/topic.module';
 import { Module } from '@nestjs/common';
@@ -22,6 +23,7 @@ import { UserModule } from './modules/user/user.module';
     PermissionModule,
     MediaModule,
     TopicModule,
+    PostModule,
   ],
 })
 export class AppModule {}
