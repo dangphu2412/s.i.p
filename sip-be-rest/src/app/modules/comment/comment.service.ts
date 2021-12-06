@@ -1,4 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { PermissionEnum } from '@constants/permissions.enum';
+import { RuleManager } from '@external/racl/core/rule.manager';
+import { UserService } from '@modules/user/user.service';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from './comment.entity';
@@ -9,25 +17,50 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentService {
   constructor(
     @InjectRepository(Comment) private commentRepository: Repository<Comment>,
+    private userService: UserService,
   ) {}
 
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  async create(createCommentDto: CreateCommentDto) {
+    createCommentDto.content = createCommentDto.content.trim();
+
+    if (!createCommentDto.content) {
+      throw new BadRequestException('Content of comment can not be empty');
+    }
+    const author = await this.userService.findById(createCommentDto.authorId);
+
+    if (!author) {
+      throw new UnprocessableEntityException(
+        'Author is not persisting, maybe they have been banned',
+      );
+    }
+
+    const comment = new Comment();
+
+    comment.content = createCommentDto.content;
+    comment.author = author;
+
+    return this.commentRepository.save(comment);
   }
 
-  findAll() {
-    return `This action returns all comment`;
-  }
+  async update(
+    id: number,
+    updateCommentDto: UpdateCommentDto,
+    ruleManager: RuleManager,
+  ) {
+    const comment = await this.commentRepository.findOne(id);
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
+    if (!comment) {
+      throw new NotFoundException('No comment found for updating');
+    }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
-  }
+    ruleManager.throwIfCannot(PermissionEnum.EDIT_OWN, {
+      authorId: updateCommentDto.authorId,
+      ownerId: comment.author.id,
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+    if (comment.content !== updateCommentDto.content) {
+      comment.content = updateCommentDto.content;
+      await this.commentRepository.update(id, comment);
+    }
   }
 }

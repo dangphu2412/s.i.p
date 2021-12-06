@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateCommentDto } from './create-comment.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNumber } from 'class-validator';
 
-export class UpdateCommentDto extends PartialType(CreateCommentDto) {}
+export class UpdateCommentDto {
+  @ApiProperty()
+  @IsString()
+  public content: string;
+
+  @ApiProperty()
+  @IsNumber()
+  public postId: number;
+
+  public authorId: number;
+}

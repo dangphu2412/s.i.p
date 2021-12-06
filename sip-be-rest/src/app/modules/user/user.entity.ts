@@ -1,4 +1,5 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
+import { Comment } from '@modules/comment/comment.entity';
 import { Permission } from '@modules/permission/permission.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Index,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -45,9 +47,10 @@ export class User extends TimeEntityGenerator() {
   })
   public permissions: Permission[];
 
+  @OneToMany(() => Comment, (comment) => comment.author)
+  public comments: Comment[];
+
   static create(partials: Partial<User>) {
-    const i = new User();
-    Object.assign(i, partials);
-    return i;
+    return Object.assign(new User(), partials);
   }
 }

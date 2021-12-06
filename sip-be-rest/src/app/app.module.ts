@@ -2,6 +2,7 @@ import '@config/crud.config';
 import { RuleConfig } from '@config/rule.config';
 import { getTypeOrmModule } from '@config/typeorm.config';
 import { RaclModule } from '@external/racl/rule.module';
+import { CommentModule } from '@modules/comment/comment.module';
 import { MediaModule } from '@modules/media/media.module';
 import { PermissionModule } from '@modules/permission/permission.module';
 import { PostModule } from '@modules/post/post.module';
@@ -24,6 +25,7 @@ import { UserModule } from './modules/user/user.module';
     MediaModule,
     TopicModule,
     PostModule,
+    CommentModule,
   ],
 })
 export class AppModule {}

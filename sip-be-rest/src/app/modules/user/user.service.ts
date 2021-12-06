@@ -31,6 +31,41 @@ export class UserService {
     this.logger = new Logger(UserService.name);
   }
 
+  public async createOne(createUserDto: CreateUserDto) {
+    const user = await this.userRepository.findOne({
+      where: [
+        { username: createUserDto.username },
+        { email: createUserDto.email },
+      ],
+    });
+
+    if (user) {
+      throw new UnprocessableEntityException(
+        'Your username or email is duplicated',
+      );
+    }
+
+    const userEntity = User.create(createUserDto);
+
+    userEntity.password = await this.bcryptService.hash(userEntity.password);
+    userEntity.avatar = ConfigService.getCache('DEFAULT_AVATAR');
+
+    try {
+      await this.userRepository.save(userEntity, { reload: false });
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException(
+        'Error while handling insert new user',
+      );
+    }
+  }
+
+  public findAll(searchQuery: SearchCriteria) {
+    return this.userRepository.findAndCount({
+      order: toOrders(searchQuery.sorts),
+    });
+  }
+
   public findByEmail(email: string) {
     return this.userRepository.findOne({
       where: {
@@ -40,14 +75,12 @@ export class UserService {
     });
   }
 
-  public getBasicProfile(user: User): ProfileDto {
-    return pick(user, ['id', 'username', 'fullName', 'avatar']) as ProfileDto;
+  public findById(id: number) {
+    return this.userRepository.findOne(id);
   }
 
-  public findAll(searchQuery: SearchCriteria) {
-    return this.userRepository.findAndCount({
-      order: toOrders(searchQuery.sorts),
-    });
+  public getBasicProfile(user: User): ProfileDto {
+    return pick(user, ['id', 'username', 'fullName', 'avatar']) as ProfileDto;
   }
 
   public async grantPermissionForUser(
@@ -76,34 +109,5 @@ export class UserService {
 
     user.permissions = permissions;
     await this.userRepository.save(user);
-  }
-
-  public async createOne(createUserDto: CreateUserDto) {
-    const user = await this.userRepository.findOne({
-      where: [
-        { username: createUserDto.username },
-        { email: createUserDto.email },
-      ],
-    });
-
-    if (user) {
-      throw new UnprocessableEntityException(
-        'Your username or email is duplicated',
-      );
-    }
-
-    const userEntity = User.create(createUserDto);
-
-    userEntity.password = await this.bcryptService.hash(userEntity.password);
-    userEntity.avatar = ConfigService.getCache('DEFAULT_AVATAR');
-
-    try {
-      await this.userRepository.save(userEntity, { reload: false });
-    } catch (error) {
-      this.logger.error(error);
-      throw new InternalServerErrorException(
-        'Error while handling insert new user',
-      );
-    }
   }
 }
