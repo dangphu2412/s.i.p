@@ -1,19 +1,9 @@
-import { PermissionEnum } from '@constants/permissions.enum';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
-import { PermissionGranted } from '@modules/auth/decorator/granted-permission.decorator';
 import { Protected } from '@modules/auth/decorator/protected.decorator';
 import { AuthContext } from '@modules/auth/decorator/user-cred.decorator';
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';

@@ -13,7 +13,7 @@ export class ConfigService {
     return process.env[key];
   }
 
-  static getInt(key: string) {
+  static getInt(key: string): number {
     return Number.parseInt(ConfigService.get(key), 10);
   }
 }

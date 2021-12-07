@@ -1,0 +1,15 @@
+{
+  "name": "s.i.p",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dangphu2412/s.i.p.git",
+  "author": "dnphu <phu.ngoc.dang@mgm-tp.com>",
+  "scripts": {
+    "prepare": "husky install",
+    "test": "cd ./sip-be-rest && npm run lint"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^7.0.4"
+  }
+}
