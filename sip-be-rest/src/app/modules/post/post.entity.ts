@@ -1,14 +1,17 @@
+import { TimeEntityGenerator } from '@database/base/time-entity';
 import { Topic } from '@modules/topic/topic.entity';
+import { Vote } from '@modules/vote/vote.entity';
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('posts')
-export class Post {
+export class Post extends TimeEntityGenerator() {
   @PrimaryGeneratedColumn()
   public id: string;
 
@@ -31,4 +34,7 @@ export class Post {
     },
   })
   public topics: Topic[];
+
+  @OneToMany(() => Vote, (vote) => vote.post)
+  public votes: Vote[];
 }

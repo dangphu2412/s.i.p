@@ -8,6 +8,7 @@ import { PermissionModule } from '@modules/permission/permission.module';
 import { PostModule } from '@modules/post/post.module';
 import { RoleModule } from '@modules/role/role.module';
 import { TopicModule } from '@modules/topic/topic.module';
+import { VoteModule } from '@modules/vote/vote.module';
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -26,6 +27,7 @@ import { UserModule } from './modules/user/user.module';
     TopicModule,
     PostModule,
     CommentModule,
+    VoteModule,
   ],
 })
 export class AppModule {}

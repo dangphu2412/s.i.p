@@ -1,16 +1,19 @@
+import { Protected } from '@modules/auth/decorator/protected.decorator';
+import { AuthContext } from '@modules/auth/decorator/user-cred.decorator';
+import { UserCredential } from '@modules/auth/types/user-cred.interface';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { PostService } from './post.service';
+import { ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { PostService } from './post.service';
 
 @ApiTags('posts')
 @Controller('v1/post')
@@ -20,6 +23,15 @@ export class PostController {
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
     return this.postService.create(createPostDto);
+  }
+
+  @Protected
+  @Post('/:postId/votes')
+  toggleVoteOfPost(
+    @Param('postId') postId: string,
+    @AuthContext() author: UserCredential,
+  ) {
+    return this.postService.toggleVoteOfPost(+postId, author);
   }
 
   @Get()
