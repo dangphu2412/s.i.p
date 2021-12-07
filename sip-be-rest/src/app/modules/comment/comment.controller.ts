@@ -18,9 +18,9 @@ export class CommentController {
   @Post()
   create(
     @Body() createCommentDto: CreateCommentDto,
-    @AuthContext() user: UserCredential,
+    @AuthContext() author: UserCredential,
   ) {
-    createCommentDto.authorId = +user.userId;
+    createCommentDto.authorId = +author.userId;
     return this.commentService.create(createCommentDto);
   }
 
