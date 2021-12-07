@@ -20,12 +20,17 @@ export class AuthService {
   public async loginWithGoogle(
     accessToken: string,
   ): Promise<AuthenticatedResponseDto> {
-    const { email } =
+    const tokenPayload =
       await this.oAuth2AuthenticationProvider.checkAndClaimsUserWithGoogleAccessToken(
         accessToken,
       );
 
-    const user = await this.userService.findByEmail(email);
+    let user = await this.userService.findByEmail(tokenPayload.email);
+
+    if (!user) {
+      user = await this.userService.createByGooglePayload(tokenPayload);
+    }
+
     const permissions = this.permissionService.toPermissionRules(
       user.permissions,
     );

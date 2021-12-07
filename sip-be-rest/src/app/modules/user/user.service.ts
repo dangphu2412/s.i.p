@@ -19,6 +19,7 @@ import { ArrayUtils } from '@external/utils/array/array.utils';
 import { ErrorAssertion } from '@modules/error/error-assertion';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { toOrders } from '@external/crud/common/pipes/order.pipe';
+import { TokenPayload } from 'google-auth-library';
 
 @Injectable()
 export class UserService {
@@ -45,13 +46,26 @@ export class UserService {
       );
     }
 
-    const userEntity = User.create(createUserDto);
+    return this.createUser(createUserDto);
+  }
+
+  public async createByGooglePayload(payload: TokenPayload) {
+    return this.createUser({
+      email: payload.email,
+      fullName: payload.name,
+      avatar: payload.picture,
+    });
+  }
+
+  private async createUser(partialUser: Partial<User>) {
+    const userEntity = User.create(partialUser);
 
     userEntity.password = await this.bcryptService.hash(userEntity.password);
-    userEntity.avatar = ConfigService.getCache('DEFAULT_AVATAR');
+    userEntity.avatar =
+      userEntity.avatar || ConfigService.getCache('DEFAULT_AVATAR');
 
     try {
-      await this.userRepository.save(userEntity, { reload: false });
+      return await this.userRepository.save(userEntity);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(
