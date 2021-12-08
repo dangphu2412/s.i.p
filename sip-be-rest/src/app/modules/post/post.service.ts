@@ -2,8 +2,13 @@ import { UserCredential } from '@modules/auth/types/user-cred.interface';
 import { User } from '@modules/user/user.entity';
 import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';
 import { VoteService } from '@modules/vote/vote.service';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  UnprocessableEntityException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SlugUtils } from '@utils/slug';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -16,8 +21,23 @@ export class PostService {
     private voteService: VoteService,
   ) {}
 
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  async create(createPostDto: CreatePostDto) {
+    const isTitleConflict = await this.postRepository.count({
+      where: {
+        title: createPostDto.title,
+      },
+    });
+
+    if (isTitleConflict) {
+      throw new ConflictException(
+        `Can not create post which is conflict with title: ${createPostDto.title}`,
+      );
+    }
+
+    const post = Post.create(createPostDto);
+    post.slug = SlugUtils.normalize(post.title);
+
+    return this.postRepository.save(post);
   }
 
   findAll() {

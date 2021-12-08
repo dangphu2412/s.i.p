@@ -25,8 +25,8 @@
     "migrate:latest": "npm run typeorm migration:run",
     "migrate:rollback": "npm run typeorm migration:revert",
     "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed",
-    "schema:drop": "npm run typeorm schema:drop",
-    "schema:sync": "npm run typeorm schema:sync",
+    "schema:drop": "npm run typeorm:w schema:drop",
+    "schema:sync": "npm run typeorm:w schema:sync",
     "typeorm:w": "ts-node -r tsconfig-paths/register node_modules\\typeorm\\cli.js",
     "migrate:w-create": "npm run typeorm:w migration:create -- -n",
     "migrate:w-latest": "npm run typeorm:w migration:run",
@@ -54,8 +54,10 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "slugify": "^1.6.3",
     "swagger-ui-express": "^4.1.6",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -69,6 +71,7 @@
     "@types/node": "^16.0.0",
     "@types/passport-jwt": "^3.0.6",
     "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",

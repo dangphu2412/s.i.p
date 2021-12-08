@@ -15,8 +15,11 @@ export class Post extends TimeEntityGenerator() {
   @PrimaryGeneratedColumn()
   public id: string;
 
-  @Column({ name: 'title', nullable: false })
+  @Column({ name: 'title', nullable: false, unique: true })
   public title: string;
+
+  @Column({ name: 'slug', nullable: false, unique: true })
+  public slug: string;
 
   @Column({ name: 'content', nullable: false })
   public content: string;
@@ -37,4 +40,8 @@ export class Post extends TimeEntityGenerator() {
 
   @OneToMany(() => Vote, (vote) => vote.post)
   public votes: Vote[];
+
+  public static create(partial: Partial<Post>) {
+    return Object.assign(new Post(), partial);
+  }
 }

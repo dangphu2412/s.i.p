@@ -11,6 +11,6 @@ export class VoteService {
   ) {}
 
   async upsertOne(voteDto: UpsertVoteDto) {
-    return this.voteRepository.upsert(voteDto, ['votes.post_id']);
+    return this.voteRepository.upsert(voteDto, ['post_id']);
   }
 }
