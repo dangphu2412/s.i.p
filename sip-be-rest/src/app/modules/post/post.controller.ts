@@ -27,11 +27,11 @@ export class PostController {
 
   @Protected
   @Post('/:postId/votes')
-  toggleVoteOfPost(
+  upsertVoteOfPost(
     @Param('postId') postId: string,
     @AuthContext() author: UserCredential,
   ) {
-    return this.postService.toggleVoteOfPost(+postId, author);
+    return this.postService.upsertVoteOfPost(+postId, author);
   }
 
   @Get()

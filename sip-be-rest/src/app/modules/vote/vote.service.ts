@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ToggleVoteDto } from './dto/toggle-vote.dto';
+import { UpsertVoteDto } from './dto/upsert-vote.dto';
 import { Vote } from './vote.entity';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class VoteService {
     @InjectRepository(Vote) private voteRepository: Repository<Vote>,
   ) {}
 
-  async createOne(voteDto: ToggleVoteDto) {
-    return this.voteRepository.upsert(voteDto, ['votes.author_id']);
+  async upsertOne(voteDto: UpsertVoteDto) {
+    return this.voteRepository.upsert(voteDto, ['votes.post_id']);
   }
 }

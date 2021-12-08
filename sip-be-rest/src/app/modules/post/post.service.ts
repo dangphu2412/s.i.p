@@ -1,5 +1,6 @@
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
-import { ToggleVoteDto } from '@modules/vote/dto/toggle-vote.dto';
+import { User } from '@modules/user/user.entity';
+import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';
 import { VoteService } from '@modules/vote/vote.service';
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -35,7 +36,7 @@ export class PostService {
     return `This action removes a #${id} post`;
   }
 
-  async toggleVoteOfPost(postId: number, author: UserCredential) {
+  async upsertVoteOfPost(postId: number, author: UserCredential) {
     const post = await this.postRepository.findOne(postId);
 
     // Need to specify case where post is disable or this id is not valid
@@ -45,11 +46,11 @@ export class PostService {
       );
     }
 
-    const voteDto = new ToggleVoteDto();
+    const voteDto = new UpsertVoteDto();
 
-    voteDto.authorId = +author.userId;
+    voteDto.user = User.create({ id: author.userId });
     voteDto.post = post;
 
-    return this.voteService.createOne(voteDto);
+    return this.voteService.upsertOne(voteDto);
   }
 }

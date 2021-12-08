@@ -1,6 +1,6 @@
 import { Post } from '@modules/post/post.entity';
 import { User } from '@modules/user/user.entity';
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('votes')
 export class Vote {
@@ -8,8 +8,10 @@ export class Vote {
   public id: string;
 
   @ManyToOne(() => User, (user) => user.votes)
+  @JoinColumn({ name: 'author_id' })
   public author: User;
 
   @ManyToOne(() => Post, (post) => post.votes)
+  @JoinColumn({ name: 'post_id' })
   public post: Post;
 }
