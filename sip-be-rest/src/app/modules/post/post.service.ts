@@ -41,7 +41,7 @@ export class PostService {
   }
 
   findAll() {
-    return `This action returns all post`;
+    return this.postRepository.find();
   }
 
   findOne(id: number) {
