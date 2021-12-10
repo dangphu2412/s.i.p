@@ -24,7 +24,8 @@
     "migrate:generate": "npm run typeorm migration:generate -- -n",
     "migrate:latest": "npm run typeorm migration:run",
     "migrate:rollback": "npm run typeorm migration:revert",
-    "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "seed:run": "ts-node -r tsconfig-paths/register node_modules/typeorm-seeding/dist/cli.js seed",
+    "seed:w-run": "ts-node -r tsconfig-paths/register node_modules\\typeorm-seeding\\dist\\cli.js seed",
     "schema:drop": "npm run typeorm:w schema:drop",
     "schema:sync": "npm run typeorm:w schema:sync",
     "typeorm:w": "ts-node -r tsconfig-paths/register node_modules\\typeorm\\cli.js",
@@ -65,6 +66,7 @@
     "@nestjs/testing": "^8.0.0",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
+    "@types/faker": "^5.5.9",
     "@types/jest": "^27.0.1",
     "@types/lodash": "^4.14.177",
     "@types/multer": "^1.4.7",
@@ -85,6 +87,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
+    "typeorm-seeding": "^1.6.1",
     "typescript": "^4.3.5"
   },
   "jest": {
