@@ -1,5 +1,6 @@
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
 import { User } from '@modules/user/user.entity';
+import { UserService } from '@modules/user/user.service';
 import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';
 import { VoteService } from '@modules/vote/vote.service';
 import {
@@ -19,6 +20,7 @@ export class PostService {
   constructor(
     @InjectRepository(Post) private postRepository: Repository<Post>,
     private voteService: VoteService,
+    private userService: UserService,
   ) {}
 
   async create(createPostDto: CreatePostDto) {
@@ -66,9 +68,17 @@ export class PostService {
       );
     }
 
+    const user = await this.userService.findById(+author.userId);
+
+    if (!user) {
+      throw new UnprocessableEntityException(
+        'User is not available to create post now',
+      );
+    }
+
     const voteDto = new UpsertVoteDto();
 
-    voteDto.user = User.create({ id: author.userId });
+    voteDto.author = user;
     voteDto.post = post;
 
     return this.voteService.upsertOne(voteDto);

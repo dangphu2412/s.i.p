@@ -11,6 +11,14 @@ export class VoteService {
   ) {}
 
   async upsertOne(voteDto: UpsertVoteDto) {
-    return this.voteRepository.save(voteDto);
+    return this.voteRepository
+      .createQueryBuilder()
+      .insert()
+      .values({
+        author: voteDto.author,
+        post: voteDto.post,
+      })
+      .orIgnore('once_per_author')
+      .execute();
   }
 }

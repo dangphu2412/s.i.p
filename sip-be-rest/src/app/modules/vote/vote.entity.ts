@@ -14,11 +14,11 @@ export class Vote {
   @PrimaryGeneratedColumn()
   public id: string;
 
-  @ManyToOne(() => User, (user) => user.votes)
+  @ManyToOne(() => User, (user) => user.votes, { nullable: false })
   @JoinColumn({ name: 'author_id' })
   public author: User;
 
-  @ManyToOne(() => Post, (post) => post.votes)
+  @ManyToOne(() => Post, (post) => post.votes, { nullable: false })
   @JoinColumn({ name: 'post_id' })
   public post: Post;
 }
