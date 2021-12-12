@@ -1,6 +1,7 @@
 import { Post } from '@modules/post/post.entity';
 import { User } from '@modules/user/user.entity';
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -13,6 +14,9 @@ import {
 export class Vote {
   @PrimaryGeneratedColumn()
   public id: string;
+
+  @Column({ name: 'is_voted', default: true })
+  public isVoted: boolean;
 
   @ManyToOne(() => User, (user) => user.votes, { nullable: false })
   @JoinColumn({ name: 'author_id' })

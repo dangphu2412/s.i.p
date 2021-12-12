@@ -18,7 +18,9 @@ export class VoteService {
         author: voteDto.author,
         post: voteDto.post,
       })
-      .orIgnore('once_per_author')
+      .onConflict(
+        'ON CONSTRAINT once_per_author DO UPDATE SET is_voted = NOT votes.is_voted',
+      )
       .execute();
   }
 }

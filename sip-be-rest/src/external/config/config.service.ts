@@ -30,4 +30,8 @@ export class ConfigService {
 
     return ConfigService.get(key);
   }
+
+  static getBoolean(key: string): boolean {
+    return ConfigService.get(key).toLowerCase() === 'true';
+  }
 }

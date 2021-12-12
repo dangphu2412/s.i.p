@@ -1,6 +1,7 @@
 import { ROOT_DIR } from '@constants/app.constant';
 import { DynamicModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { isBooleanString } from 'class-validator';
 import { ConfigService } from 'src/external/config/config.service';
 
 export function getTypeOrmModule(): DynamicModule {
@@ -15,7 +16,9 @@ export function getTypeOrmModule(): DynamicModule {
     password: ConfigService.get('DB_PASSWORD'),
     database: ConfigService.get('DB_DATABASE'),
     entities: pathLookupEntities,
-    synchronize: isNotProd,
+    synchronize: isBooleanString(ConfigService.getOptional('DB_SYNC'))
+      ? ConfigService.getBoolean('DB_SYNC')
+      : isNotProd,
     logging: isNotProd,
   });
 }
