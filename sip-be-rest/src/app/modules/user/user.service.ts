@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-import pick from 'lodash/pick';
+import { pick } from 'lodash';
 import { ProfileDto } from '../auth/dto/profile.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
 import { PermissionService } from '@modules/permission/permission.service';

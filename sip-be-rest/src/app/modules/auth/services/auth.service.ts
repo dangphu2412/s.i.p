@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { OAuth2AuthenticationProvider } from '../provider/o-auth2-authentication.provider';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatedResponseDto } from '../dto/authenticated-response.dto';
@@ -6,6 +6,9 @@ import { BcryptService } from './bcrypt.service';
 import { UserService } from '../../user/user.service';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
 import { PermissionService } from '@modules/permission/permission.service';
+import { LoginDto } from '../dto/login.dto';
+import { User } from '@modules/user/user.entity';
+import { LoginSuccessResponse } from '../interface';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +19,20 @@ export class AuthService {
     private userService: UserService,
     private permissionService: PermissionService,
   ) {}
+
+  public async simpleLogin(loginDto: LoginDto) {
+    const user = await this.userService.findByEmail(loginDto.username);
+    if (
+      !user ||
+      !(await this.bcryptService.compare(loginDto.password, user.password))
+    ) {
+      throw new UnauthorizedException(
+        'Your username or password is not correct',
+      );
+    }
+
+    return this.toLoginSuccessResponse(user);
+  }
 
   public async loginWithGoogle(
     accessToken: string,
@@ -31,6 +48,19 @@ export class AuthService {
       user = await this.userService.createByGooglePayload(tokenPayload);
     }
 
+    return this.toLoginSuccessResponse(user);
+  }
+
+  public generateTestToken() {
+    return {
+      accessToken: this.jwtService.sign(
+        JwtPayloadDto.create('1', 'fus', { ADMIN: 1 }),
+      ),
+      profile: {},
+    };
+  }
+
+  private toLoginSuccessResponse(user: User): LoginSuccessResponse {
     const permissions = this.permissionService.toPermissionRules(
       user.permissions,
     );
@@ -40,15 +70,6 @@ export class AuthService {
         JwtPayloadDto.create(user.id, user.fullName, permissions),
       ),
       profile: this.userService.getBasicProfile(user),
-    };
-  }
-
-  generateTestToken() {
-    return {
-      accessToken: this.jwtService.sign(
-        JwtPayloadDto.create('1', 'fus', { ADMIN: 1 }),
-      ),
-      profile: {},
     };
   }
 }

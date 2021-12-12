@@ -10,7 +10,7 @@ export class BcryptService {
     return compare(data, hashedData);
   }
 
-  public async hash(data) {
+  public async hash(data: string | Buffer) {
     const salted = await genSalt(BcryptService.SALT_ROUNDS);
     return hash(data, salted);
   }
