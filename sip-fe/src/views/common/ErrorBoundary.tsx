@@ -7,15 +7,15 @@ import { selectError } from '../../modules/error/error.selector';
 import { AppError } from '../../modules/app.types';
 
 export function ErrorBoundary() {
-	const dispatch = useDispatch();
-	const error: AppError = useSelector(selectError);
+    const dispatch = useDispatch();
+    const error: AppError = useSelector(selectError);
 
-	if (error.hasError) {
-		toast.error(error.message || 'Unexpected error happened');
-		dispatch(cancelError());
-	}
+    if (error.hasError) {
+        toast.error(error.message || 'Unexpected error happened');
+        dispatch(cancelError());
+    }
     
-	return <>
-		<ToastContainer />
-	</>;
+    return <>
+        <ToastContainer />
+    </>;
 }

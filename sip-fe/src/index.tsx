@@ -7,12 +7,12 @@ import { Provider } from 'react-redux';
 import { createReduxStore } from './config/store.config';
 
 ReactDOM.render(
-	<React.Fragment>
-		<Provider store={createReduxStore()}>
-			<App />
-		</Provider>
-	</React.Fragment>,
-	document.getElementById('root')
+    <React.Fragment>
+        <Provider store={createReduxStore()}>
+            <App />
+        </Provider>
+    </React.Fragment>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -6,14 +6,14 @@ import { ErrorBoundary } from '../../common/ErrorBoundary';
 import LoadingOverlay from 'react-loading-overlay';
 
 export function AdminHomePage(props: RouteProps) {
-	const dispatch = useDispatch();
-	return (
-		<>
-			<ErrorBoundary/>
-			<LoadingOverlay/>
-			<AdminLayout>
+    const dispatch = useDispatch();
+    return (
+        <>
+            <ErrorBoundary/>
+            <LoadingOverlay/>
+            <AdminLayout>
 			Hello
-			</AdminLayout>
-		</>
-	);
+            </AdminLayout>
+        </>
+    );
 }

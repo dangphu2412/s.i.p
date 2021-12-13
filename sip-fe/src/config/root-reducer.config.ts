@@ -4,11 +4,11 @@ import { loadingReducer } from '../modules/loading/loading.reducer';
 import { languageProviderReducer } from '../modules/translations/translation.reducer';
 
 export default function createReducer() {
-	const rootReducer = combineReducers({
-		error: errorReducer,
-		loading: loadingReducer,
-		language: languageProviderReducer,
-	});
+    const rootReducer = combineReducers({
+        error: errorReducer,
+        loading: loadingReducer,
+        language: languageProviderReducer,
+    });
   
-	return rootReducer;
+    return rootReducer;
 }
