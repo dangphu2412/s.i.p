@@ -1,3 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
 
-export const loginAction = createAction('AUTH/LOGIN');
+export interface LoginPayload {
+    username: string;
+    password: string;
+}
+
+export const loginAction = createAction<LoginPayload>('AUTH/LOGIN');

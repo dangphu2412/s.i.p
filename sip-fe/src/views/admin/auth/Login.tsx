@@ -6,12 +6,16 @@ import { useDispatch } from 'react-redux';
 import { fireError } from '../../../modules/error/error.action';
 import { setLoading } from '../../../modules/loading/loading.action';
 import { LoadingOverlay } from '../../common/LoadingOverlay';
+import { loginAction } from '../../../modules/auth/auth.action';
 
 export function LoginPage(props: RouteProps) {
     const dispatch = useDispatch();
 
     const onFinish = (values: any) => {
-        dispatch(setLoading({ isLoading: true, content: 'Saving the data' }));
+        dispatch(loginAction({
+            username: values.username,
+            password: values.password
+        }));
     };
 	
     const onFinishFailed = (errorInfo: any) => {

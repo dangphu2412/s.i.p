@@ -1,8 +1,12 @@
-import axios from 'axios';
+import { HttpServer } from '../modules/http/api.service';
 import { REACT_APP_API_URL } from './constant.config';
 
 export function configAxios() {
-    axios.defaults.baseURL = REACT_APP_API_URL;
-    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('auth') ?? '';
-    axios.defaults.headers.post['Content-Type'] = 'application/json';
+    if (!REACT_APP_API_URL) {
+        throw new Error('Missing config base api url');
+    }
+    HttpServer.config({
+        authKey: 'auth',
+        baseUrl: REACT_APP_API_URL
+    });
 }
