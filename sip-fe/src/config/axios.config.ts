@@ -1,4 +1,4 @@
-import { HttpServer } from '../modules/http/api.service';
+import { HttpServer } from '../modules/http/http.server';
 import { REACT_APP_API_URL } from './constant.config';
 
 export function configAxios() {
