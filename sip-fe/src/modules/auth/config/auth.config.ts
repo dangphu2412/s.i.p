@@ -1,11 +1,13 @@
 export interface IAuthConfig {
     redirectRoute: string;
+    defaultRoute: string;
     authKey: string;
 }
 
 export enum AuthConfigKeys {
     AUTH_KEY_KEY,
-    REDIRECT_ROUTE_KEY
+    REDIRECT_ROUTE_KEY,
+    DEFAULT_ROUTE_KEY
 }
 
 export class AuthConfig {
@@ -19,6 +21,7 @@ export class AuthConfig {
         });
         AuthConfig.store.set(AuthConfigKeys.AUTH_KEY_KEY, config.authKey);
         AuthConfig.store.set(AuthConfigKeys.REDIRECT_ROUTE_KEY, config.redirectRoute);
+        AuthConfig.store.set(AuthConfigKeys.DEFAULT_ROUTE_KEY, config.defaultRoute);
     }
 
     public static get(key: AuthConfigKeys): string {

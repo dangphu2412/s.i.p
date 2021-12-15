@@ -3,7 +3,7 @@ import { CLientLayout } from '../../../layouts/client/ClientLayout';
 import { ErrorBoundary } from '../../common/ErrorBoundary';
 import { LoadingOverlay } from '../../common/LoadingOverlay';
 
-export function CLientHomePage(): JSX.Element {
+export function ClientHomePage(): JSX.Element {
     return (
         <>
             <ErrorBoundary/>
