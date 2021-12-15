@@ -1,3 +1,6 @@
+import { AuthState } from './auth/auth.reducer';
+import { LangState } from './translations/translation.reducer';
+
 export type AppError = {
     message?: string;
     hasError: boolean;
@@ -10,5 +13,7 @@ export type AppLoading = {
 
 export type AppState = {
     error: AppError,
-    loading: AppLoading
+    loading: AppLoading,
+    language: LangState,
+    auth: AuthState
 }

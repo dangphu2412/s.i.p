@@ -5,4 +5,11 @@ export interface LoginPayload {
     password: string;
 }
 
+export interface AuthResponse {
+    accessToken: string;
+    profile: any;
+}
+
 export const loginAction = createAction<LoginPayload>('AUTH/LOGIN');
+
+export const loggedInAction = createAction<AuthResponse>('AUTH/LOGGED_IN');

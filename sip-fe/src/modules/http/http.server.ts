@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { AuthConfig, AuthConfigKeys } from '../auth/config/auth.config';
 
 export interface InitialHttpConfig {
     baseUrl: string;
-    authKey: string;
 }
 
 export class HttpServer {
@@ -10,11 +10,11 @@ export class HttpServer {
 
     public static config(config: InitialHttpConfig) {
         axios.defaults.baseURL = config.baseUrl;
-        axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(config.authKey) ?? '';
+        axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY)) || '';
         axios.defaults.headers.post['Content-Type'] = 'application/json';
     }
 
-    public static getServer() {
+    public static getServer(): HttpServer {
         if (!HttpServer.server) {
             HttpServer.server = new HttpServer();
         }

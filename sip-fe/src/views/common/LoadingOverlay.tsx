@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { AppLoading } from '../../modules/app.types';
 import { selectLoading } from '../../modules/loading/loading.selector';
 
-export function LoadingOverlay<T>(props: { children: T}) {
+export function LoadingOverlay<T>(props: { children: T}): JSX.Element {
     const loading: AppLoading = useSelector(selectLoading);
     return (
         <div>

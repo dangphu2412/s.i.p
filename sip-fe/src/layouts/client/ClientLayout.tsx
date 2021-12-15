@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { RouteProps } from 'react-router-dom';
 import { ClientNavbar } from '../../components/navbar/ClientNavbar.component';
 import { fireError } from '../../modules/error/error.action';
 import { setLoading } from '../../modules/loading/loading.action';
-export function CLientLayout(props: RouteProps) {
+
+export function CLientLayout() {
     const dispatch = useDispatch();
     return (
         <>

@@ -6,7 +6,7 @@ import { cancelError } from '../../modules/error/error.action';
 import { selectError } from '../../modules/error/error.selector';
 import { AppError } from '../../modules/app.types';
 
-export function ErrorBoundary() {
+export function ErrorBoundary(): JSX.Element {
     const dispatch = useDispatch();
     const error: AppError = useSelector(selectError);
 

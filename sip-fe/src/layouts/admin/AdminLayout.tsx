@@ -1,17 +1,12 @@
+import React from 'react';
 import { UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { RouteProps } from 'react-router-dom';
 import './admin-layout.scss';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-export function AdminLayout(props: RouteProps) {
-    const dispatch = useDispatch();
+export function AdminLayout() {
     return (
-
-
         <Layout>
             <Sider
                 style={{

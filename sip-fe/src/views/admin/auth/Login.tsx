@@ -1,27 +1,20 @@
 import React from 'react';
-import { RouteProps } from 'react-router-dom';
-import { Form, Input, Button, Checkbox, Row, Col, Image } from 'antd';
-import { ErrorBoundary } from '../../common/ErrorBoundary';
+import { Button, Checkbox, Col, Form, Image, Input, Row } from 'antd';
 import { useDispatch } from 'react-redux';
-import { fireError } from '../../../modules/error/error.action';
-import { setLoading } from '../../../modules/loading/loading.action';
+import { loginAction, LoginPayload } from '../../../modules/auth/auth.action';
+import { ErrorBoundary } from '../../common/ErrorBoundary';
 import { LoadingOverlay } from '../../common/LoadingOverlay';
-import { loginAction } from '../../../modules/auth/auth.action';
 
-export function LoginPage(props: RouteProps) {
+export function LoginPage(): JSX.Element {
     const dispatch = useDispatch();
 
-    const onFinish = (values: any) => {
+    const onFinish = (loginPayload: LoginPayload) => {
         dispatch(loginAction({
-            username: values.username,
-            password: values.password
+            username: loginPayload.username,
+            password: loginPayload.password
         }));
     };
-	
-    const onFinishFailed = (errorInfo: any) => {
-        dispatch(fireError({message: errorInfo}));
-        dispatch(setLoading({ isLoading: false }));
-    };
+
     return (
         <>
             <ErrorBoundary/>
@@ -43,7 +36,6 @@ export function LoginPage(props: RouteProps) {
                             wrapperCol={{ span: 16 }}
                             initialValues={{ remember: true }}
                             onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
                             autoComplete="off"
                         >
                             <Form.Item

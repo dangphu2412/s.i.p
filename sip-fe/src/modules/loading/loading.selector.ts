@@ -1,3 +1,3 @@
-import { AppState } from '../app.types';
+import { AppLoading, AppState } from '../app.types';
 
-export const selectLoading = (state: AppState) => state.loading;
+export const selectLoading = (state: AppState): AppLoading => state.loading;

@@ -2,6 +2,11 @@ import produce from 'immer';
 import { AnyAction } from 'redux';
 
 const DEFAULT_LOCALE = 'vi';
+
+export interface LangState {
+    locale: string;
+}
+
 export const initialState = {
     locale: DEFAULT_LOCALE,
 };
