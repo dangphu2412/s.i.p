@@ -1,15 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Route, Navigate, RouteProps } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { AuthType } from '../auth.reducer';
 import { selectAuthState } from '../auth.selector';
 import { AuthConfig, AuthConfigKeys } from '../config/auth.config';
 
-export function PublicGuard({element, ...props}: RouteProps): JSX.Element {
+export function PublicGuard({element}: { element: JSX.Element}) {
     const authState = useSelector(selectAuthState);
-    return (
-        authState.authState === AuthType.LOGGED_IN ?
-            <Navigate to={{ pathname: AuthConfig.get(AuthConfigKeys.DEFAULT_ROUTE_KEY) }} />
-            : <Route {...props} element={element} />
-    );
+    return authState.authState === AuthType.LOGGED_IN ?
+        <Navigate to={{ pathname: AuthConfig.get(AuthConfigKeys.DEFAULT_ROUTE_KEY) }} />
+        : element;
 }

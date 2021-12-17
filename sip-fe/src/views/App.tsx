@@ -1,6 +1,6 @@
 import 'antd/dist/antd.css';
 import React from 'react';
-import { BrowserRouter, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { configApp } from '../config/app.config';
 import { AuthenticatorGuard } from '../modules/auth/guards/authenticator.guard';
 import { PublicGuard } from '../modules/auth/guards/public.guard';
@@ -14,9 +14,15 @@ function App(): JSX.Element {
     return <>
         <BrowserRouter>
             <Routes>
-                <PublicGuard path='/login' element={<LoginPage/>}/>
-                <AuthenticatorGuard path="/" element={<ClientHomePage/>} />
-                <AuthenticatorGuard path="/admin" element={<AdminHomePage/>} />
+                <Route path='/login' element={
+                    <PublicGuard element={<LoginPage/>}/>
+                }/>
+                <Route path='/' element={
+                    <AuthenticatorGuard element={<ClientHomePage/>} />
+                }/>
+                <Route path='/admin' element={
+                    <AuthenticatorGuard element={<AdminHomePage/>} />
+                }/>
             </Routes>
         </BrowserRouter>
     </>;

@@ -8,9 +8,7 @@ export function AdminHomePage(): JSX.Element {
         <>
             <ErrorBoundary/>
             <LoadingOverlay/>
-            <AdminLayout>
-			Hello
-            </AdminLayout>
+            <AdminLayout/>
         </>
     );
 }

@@ -8,8 +8,7 @@ export function ClientHomePage(): JSX.Element {
         <>
             <ErrorBoundary/>
             <LoadingOverlay>
-                <CLientLayout>
-                </CLientLayout>
+                <CLientLayout />
             </LoadingOverlay>
         </>
 		
