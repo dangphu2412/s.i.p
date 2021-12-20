@@ -11,7 +11,7 @@ export interface AuthResponse {
 }
 
 export const loginAction = createAction<LoginPayload>('AUTH/LOGIN');
-
+export const loggingAction = createAction('AUTH/LOGGING_IN');
 export const loggedInAction = createAction<AuthResponse>('AUTH/LOGGED_IN');
 
 export const logoutAction = createAction('AUTH/LOG_OUT');

@@ -1,6 +1,6 @@
 import { all, put, takeLatest } from '@redux-saga/core/effects';
 import { AxiosResponse } from 'axios';
-import { loggedOutAction, loggingOutAction, loginAction, logoutAction } from './auth.action';
+import { loggedInAction, loggedOutAction, loggingAction, loggingOutAction, loginAction, logoutAction } from './auth.action';
 import { doLogin } from './auth.service';
 import { AuthConfig, AuthConfigKeys } from './config/auth.config';
 
@@ -8,8 +8,12 @@ export function* getAuthSaga() {
     yield all([
         takeLatest(loginAction.type, function* (action) {
             if (loginAction.match(action)) {
+                yield put(loggingAction());
                 const loginResponse: AxiosResponse = yield doLogin(action.payload);
-                console.log(loginResponse);
+                yield put(loggedInAction({
+                    accessToken: loginResponse.data.accessToken,
+                    profile: loginResponse.data.profile
+                }));
             }
         }),
         takeLatest(logoutAction.type, function* () {

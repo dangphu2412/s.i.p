@@ -1,17 +1,25 @@
 import { Row, Col, Button, Input, Menu, Dropdown, message } from 'antd';
+import { GoogleOutlined } from '@ant-design/icons';
 import React from 'react';
 import './index.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { logoutAction } from '../../modules/auth/auth.action';
+import { loginAction, logoutAction } from '../../modules/auth/auth.action';
+import { selectAuthState } from '../../modules/auth/auth.selector';
+import { AuthState, AuthType } from '../../modules/auth/auth.reducer';
 
 export function ClientNavbar(props: {title?: string, children?: React.ReactNode}) {
     const dispatch = useDispatch();
+    const userState: AuthState = useSelector(selectAuthState);
 
     function onLogout(menuInfo: MenuInfo) {
         menuInfo.domEvent.preventDefault();
         message.info('Logging out');
         dispatch(logoutAction());
+    }
+
+    function onLogin(event: React.MouseEvent<HTMLElement>) {
+        dispatch(loginAction({ username: '', password: '' }));
     }
 
     return (
@@ -32,17 +40,24 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
                 </Menu>
             </Col>
             <Col span={4}>
-                <Dropdown overlay={
-                    <Menu>
-                        <Menu.Item key="1">Profile</Menu.Item>
-                        <Menu.Item key="2">Your products</Menu.Item>
-                        <Menu.Item key="3" onClick={onLogout}>Logout</Menu.Item>
-                    </Menu>
-                }>
-                    <Button className="ant-dropdown-link" type="primary" shape="circle" onClick={e => e.preventDefault()}>
-                        S.I.P
-                    </Button>
-                </Dropdown>
+                {
+                    userState.authState === AuthType.LOGGED_IN
+                        ? <Dropdown overlay={
+                            <Menu>
+                                <Menu.Item key="1">Profile</Menu.Item>
+                                <Menu.Item key="2">Your products</Menu.Item>
+                                <Menu.Item key="3" onClick={onLogout}>Logout</Menu.Item>
+                            </Menu>
+                        }>
+                            <Button className="ant-dropdown-link" type="primary" shape="circle" onClick={e => e.preventDefault()}>
+                            S.I.P
+                            </Button>
+                        </Dropdown>
+                        : <Button className="ant-dropdown-link" type="primary" shape="circle" onClick={onLogin}>
+                            <GoogleOutlined/>
+                        </Button>
+                }
+                
                 
             </Col>
         </Row>
