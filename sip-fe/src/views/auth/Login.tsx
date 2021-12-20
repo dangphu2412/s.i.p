@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Checkbox, Col, Form, Image, Input, Row } from 'antd';
 import { useDispatch } from 'react-redux';
-import { loginAction, LoginPayload } from '../../../modules/auth/auth.action';
-import { ErrorBoundary } from '../../common/ErrorBoundary';
-import { LoadingOverlay } from '../../common/LoadingOverlay';
+import { loginAction, LoginPayload } from '../../modules/auth/auth.action';
+import { ErrorBoundary } from '../common/ErrorBoundary';
+import { LoadingOverlay } from '../common/LoadingOverlay';
 
 export function LoginPage(): JSX.Element {
     const dispatch = useDispatch();

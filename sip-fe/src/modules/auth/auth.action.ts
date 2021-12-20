@@ -13,3 +13,7 @@ export interface AuthResponse {
 export const loginAction = createAction<LoginPayload>('AUTH/LOGIN');
 
 export const loggedInAction = createAction<AuthResponse>('AUTH/LOGGED_IN');
+
+export const logoutAction = createAction('AUTH/LOG_OUT');
+export const loggingOutAction = createAction('AUTH/LOGGING_OUT');
+export const loggedOutAction = createAction<undefined>('AUTH/LOGGED_OUT');

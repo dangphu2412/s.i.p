@@ -7,6 +7,7 @@ interface RouteMapper {
     path: string;
     element: () => JSX.Element;
     protected?: boolean;
+    children?: RouteMapper[]
 }
 
 export class AuthRouteMapper {
@@ -15,11 +16,23 @@ export class AuthRouteMapper {
             if (i.protected) {
                 return <Route key={Math.random()} path={i.path} element={
                     <AuthenticatorGuard element={<i.element/>} />
-                }/>;
+                }>
+                    {
+                        i.children ? 
+                            AuthRouteMapper.toRoutes(i.children)
+                            : undefined
+                    }
+                </Route>;
             }
             return <Route key={Math.random()} path={i.path} element={
                 <PublicGuard element={<i.element/>}/>
-            }/>;
+            }>
+                {
+                    i.children ? 
+                        AuthRouteMapper.toRoutes(i.children)
+                        : undefined
+                }
+            </Route>;
         });
     }
 }

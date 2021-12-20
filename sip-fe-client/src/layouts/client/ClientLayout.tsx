@@ -1,21 +1,18 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { ClientNavbar } from '../../components/navbar/ClientNavbar.component';
-import { fireError } from '../../modules/error/error.action';
-import { setLoading } from '../../modules/loading/loading.action';
+import { ErrorBoundary } from '../../views/common/ErrorBoundary';
+import { LoadingOverlay } from '../../views/common/LoadingOverlay';
+import './index.scss';
 
-export function CLientLayout() {
+export function ClientLayout() {
     const dispatch = useDispatch();
     return (
         <>
-            <ClientNavbar title="Client"/>
-            <button onClick={() => {
-                dispatch(fireError({message: 'Hello con di'}));
-                dispatch(setLoading({ isLoading: true, content: 'Saving the data' }));
-                setTimeout(() => {
-                    dispatch(setLoading({ isLoading: false }));
-                }, 500);
-            }}>Click</button>
+            <ErrorBoundary/>
+            <LoadingOverlay>
+                <ClientNavbar/>
+            </LoadingOverlay>
         </>
     );
 }

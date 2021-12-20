@@ -1,6 +1,7 @@
 import produce from 'immer';
 import { AnyAction } from 'redux';
-import { loggedInAction } from './auth.action';
+import { initialState } from '../translations/translation.reducer';
+import { loggedInAction, loggedOutAction } from './auth.action';
 
 export enum AuthType {
     LOGGED_IN = 'LOGGED_IN',
@@ -24,7 +25,11 @@ export function authReducer(state = intialState, action: AnyAction) {
                 authState: AuthType.LOGGED_IN,
             };
             break;
+        case loggedOutAction.type:
+            draft = { authState: AuthType.LOGGED_OUT };
+            break;
         }
+        
         return draft;
     });
 }
