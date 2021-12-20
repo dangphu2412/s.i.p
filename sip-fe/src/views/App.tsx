@@ -1,30 +1,27 @@
-import 'antd/dist/antd.css';
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import 'antd/dist/antd.css';
+import { HashRouter, Routes } from 'react-router-dom';
 import { configApp } from '../config/app.config';
-import { AuthenticatorGuard } from '../modules/auth/guards/authenticator.guard';
-import { PublicGuard } from '../modules/auth/guards/public.guard';
 import { LoginPage } from './admin/auth/Login';
 import { AdminHomePage } from './admin/home/AdminHomePage';
 import { ClientHomePage } from './client/home/ClientHomePage';
+import { AuthRouteMapper } from '../modules/auth/auth-route.adapter';
 
 configApp();
 
 function App(): JSX.Element {
     return <>
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
-                <Route path='/login' element={
-                    <PublicGuard element={<LoginPage/>}/>
-                }/>
-                <Route path='/' element={
-                    <AuthenticatorGuard element={<ClientHomePage/>} />
-                }/>
-                <Route path='/admin' element={
-                    <AuthenticatorGuard element={<AdminHomePage/>} />
-                }/>
+                {
+                    AuthRouteMapper.toRoutes([
+                        { path: '/login', element: LoginPage },
+                        { path: '/admin', element: AdminHomePage },
+                        { path: '/', element: ClientHomePage, protected: true },
+                    ])
+                }
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     </>;
 }
 
