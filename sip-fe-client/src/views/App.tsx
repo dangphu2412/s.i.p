@@ -4,6 +4,7 @@ import { BrowserRouter, Routes } from 'react-router-dom';
 import { configApp } from '../config/app.config';
 import { AuthRouteMapper } from '../modules/auth/auth-route.adapter';
 import { HomePage } from './home/HomePage';
+import { LoginSuccessPage } from './auth/LoginSuccessPage';
 
 configApp();
 
@@ -13,6 +14,7 @@ function App(): JSX.Element {
             <Routes>
                 {
                     AuthRouteMapper.toRoutes([
+                        { path: '/login/success', element: LoginSuccessPage },
                         { path: '/', element: HomePage },
                     ])
                 }

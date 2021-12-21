@@ -1,12 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { ClientNavbar } from '../../components/navbar/ClientNavbar.component';
-import { ErrorBoundary } from '../../views/common/ErrorBoundary';
-import { LoadingOverlay } from '../../views/common/LoadingOverlay';
+import { ErrorBoundary } from '../../components/progress/ErrorBoundary';
+import { LoadingOverlay } from '../../components/progress/LoadingOverlay';
 import './index.scss';
 
 export function ClientLayout() {
-    const dispatch = useDispatch();
     return (
         <>
             <ErrorBoundary/>

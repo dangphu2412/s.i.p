@@ -19,7 +19,8 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
     }
 
     function onLogin(event: React.MouseEvent<HTMLElement>) {
-        dispatch(loginAction({ username: '', password: '' }));
+        window.open('http://localhost:3000/login/success', '_blank', 'width=500,height=600');
+        // dispatch(loginAction({ username: '', password: '' }));
     }
 
     return (

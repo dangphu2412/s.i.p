@@ -1,19 +1,15 @@
 import { all, put, takeLatest } from '@redux-saga/core/effects';
-import { AxiosResponse } from 'axios';
-import { loggedInAction, loggedOutAction, loggingAction, loggingOutAction, loginAction, logoutAction } from './auth.action';
-import { doLogin } from './auth.service';
+import { REACT_APP_API_URL } from '../../config/constant.config';
+import { loggedOutAction, loggingAction, loggingOutAction, loginAction, loginSSOWithGoogleAction, logoutAction } from './auth.action';
 import { AuthConfig, AuthConfigKeys } from './config/auth.config';
 
 export function* getAuthSaga() {
     yield all([
-        takeLatest(loginAction.type, function* (action) {
+        takeLatest(loginSSOWithGoogleAction.type, function* (action) {
             if (loginAction.match(action)) {
                 yield put(loggingAction());
-                const loginResponse: AxiosResponse = yield doLogin(action.payload);
-                yield put(loggedInAction({
-                    accessToken: loginResponse.data.accessToken,
-                    profile: loginResponse.data.profile
-                }));
+                const googleUrl = `${REACT_APP_API_URL}/auth/login`;
+                window.open(googleUrl, '_blank', 'width=500,height=600');
             }
         }),
         takeLatest(logoutAction.type, function* () {

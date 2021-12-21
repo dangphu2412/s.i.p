@@ -11,6 +11,7 @@ export interface AuthResponse {
 }
 
 export const loginAction = createAction<LoginPayload>('AUTH/LOGIN');
+export const loginSSOWithGoogleAction = createAction<LoginPayload>('AUTH/LOGIN_SSO_GOOGLE');
 export const loggingAction = createAction('AUTH/LOGGING_IN');
 export const loggedInAction = createAction<AuthResponse>('AUTH/LOGGED_IN');
 
