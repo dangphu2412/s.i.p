@@ -4,11 +4,11 @@ import { fireError } from '../error/error.action';
 import { setLoading } from '../loading/loading.action';
 import { AxiosError } from 'axios';
 
-export class ClientHttpHandler {
-    public *get(url: string, params?: unknown): Generator {
+export class ApiRequest {
+    public static *get(url: string, params?: unknown): Generator {
         yield put(setLoading({ isLoading: true }));
 
-        const response: any = yield call(HttpServer.getServer().doGet, url, params);
+        const response: any = yield call(HttpServer.doGet, url, params);
         
         yield put(setLoading({ isLoading: false }));
         
@@ -21,10 +21,10 @@ export class ClientHttpHandler {
         return response;
     }
     
-    public *post(url: string, data: unknown, params?: unknown): Generator {
+    public static *post(url: string, data: unknown, params?: unknown): Generator {
         yield put(setLoading({ isLoading: true }));
 
-        const response: any = yield call(HttpServer.getServer().doPost, url, data, params);
+        const response: any = yield call(HttpServer.doPost, url, data, params);
         
         yield put(setLoading({ isLoading: false }));
         

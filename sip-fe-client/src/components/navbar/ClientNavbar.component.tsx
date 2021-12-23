@@ -1,12 +1,12 @@
-import { Row, Col, Button, Input, Menu, Dropdown, message } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
-import React from 'react';
-import './index.scss';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Col, Dropdown, Input, Menu, message, Row } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { loginAction, logoutAction } from '../../modules/auth/auth.action';
-import { selectAuthState } from '../../modules/auth/auth.selector';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutAction } from '../../modules/auth/auth.action';
 import { AuthState, AuthType } from '../../modules/auth/auth.reducer';
+import { selectAuthState } from '../../modules/auth/auth.selector';
+import './index.scss';
 
 export function ClientNavbar(props: {title?: string, children?: React.ReactNode}) {
     const dispatch = useDispatch();
@@ -19,8 +19,13 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
     }
 
     function onLogin(event: React.MouseEvent<HTMLElement>) {
-        window.open('http://localhost:3000/login/success', '_blank', 'width=500,height=600');
+        window.open('http://localhost:3000/login/success?accessToken=test&refreshToken=test', '_blank', 'width=500,height=600');
         // dispatch(loginAction({ username: '', password: '' }));
+        const interval = setInterval(() => {
+            if (!window) {
+                clearInterval(interval);
+            } 
+        }, 5000);
     }
 
     return (
