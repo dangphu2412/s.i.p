@@ -7,7 +7,8 @@ export interface IAuthConfig {
 export enum AuthConfigKeys {
     AUTH_KEY_KEY,
     REDIRECT_ROUTE_KEY,
-    DEFAULT_ROUTE_KEY
+    DEFAULT_ROUTE_KEY,
+    AUTH_STATE_KEY
 }
 
 export class AuthConfig {
@@ -22,6 +23,7 @@ export class AuthConfig {
         AuthConfig.store.set(AuthConfigKeys.AUTH_KEY_KEY, config.authKey);
         AuthConfig.store.set(AuthConfigKeys.REDIRECT_ROUTE_KEY, config.redirectRoute);
         AuthConfig.store.set(AuthConfigKeys.DEFAULT_ROUTE_KEY, config.defaultRoute);
+        AuthConfig.store.set(AuthConfigKeys.AUTH_STATE_KEY, 'auth-state');
     }
 
     public static get(key: AuthConfigKeys): string {

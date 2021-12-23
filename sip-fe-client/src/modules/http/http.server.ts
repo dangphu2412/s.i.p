@@ -12,7 +12,7 @@ export class HttpServer {
         axios.defaults.headers.post['Content-Type'] = 'application/json';
     }
 
-    public static async doPost(url: string, data: unknown, params?: unknown) {
+    public static async doPost(url: string, data: unknown, params?: unknown): Promise<any> {
         try {
             const response = await axios.post(url, JSON.stringify(data), { params });
             return response;
@@ -22,7 +22,7 @@ export class HttpServer {
     }
 
     
-    public static async doGet(url: string, params?: unknown) {
+    public static async doGet(url: string, params?: unknown): Promise<any> {
         try {
             const response = await axios.get(url, { params });
             return response;
@@ -32,7 +32,7 @@ export class HttpServer {
     }
 
     
-    public static async doPut(url: string,  data: unknown, params?: unknown) {
+    public static async doPut(url: string,  data: unknown, params?: unknown): Promise<any>{
         try {
             const response = await axios.post(url, JSON.stringify(data), { params });
             return response;
@@ -42,7 +42,7 @@ export class HttpServer {
     }
 
     
-    public static async doDelete(url: string, params?: unknown) {
+    public static async doDelete(url: string, params?: unknown): Promise<any> {
         try {
             const response = await axios.delete(url, { params });
             return response;

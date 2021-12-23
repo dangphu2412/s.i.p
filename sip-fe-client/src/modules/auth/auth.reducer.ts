@@ -1,6 +1,7 @@
 import produce from 'immer';
 import { AnyAction } from 'redux';
 import { loggedInAction, loggedOutAction } from './auth.action';
+import { AuthProps } from './components/LoginSuccessPage';
 
 export enum AuthType {
     LOGGED_IN = 'LOGGED_IN',
@@ -8,8 +9,8 @@ export enum AuthType {
 }
 
 export interface AuthState {
-    profile?: any,
-    authState: AuthType
+    profile?: AuthProps,
+    authState: AuthType,
 }
 
 const initialState: AuthState = {
@@ -22,6 +23,7 @@ export function authReducer(state = initialState, action: AnyAction) {
         case loggedInAction.type:
             draft = {
                 authState: AuthType.LOGGED_IN,
+                profile: action.payload.profile,
             };
             break;
         case loggedOutAction.type:

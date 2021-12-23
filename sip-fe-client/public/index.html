@@ -9,7 +9,6 @@
       name="description"
       content="Web site created using create-react-app"
     />
-    <meta name="google-signin-client_id" content="357367126179-hekbdejitl31nk9q87nu27vfvj9m6vv7.apps.googleusercontent.com">
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -41,14 +40,4 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script>
-      function onSignIn(googleUser) {
-        const profile = googleUser.getBasicProfile();
-        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    }
-  </script>
 </html>

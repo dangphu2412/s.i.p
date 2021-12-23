@@ -3,7 +3,7 @@ import { Button, Col, Dropdown, Input, Menu, message, Row } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutAction } from '../../modules/auth/auth.action';
+import { loginGoogleAction, logoutAction } from '../../modules/auth/auth.action';
 import { AuthState, AuthType } from '../../modules/auth/auth.reducer';
 import { selectAuthState } from '../../modules/auth/auth.selector';
 import './index.scss';
@@ -17,16 +17,6 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
         menuInfo.domEvent.preventDefault();
         message.info('Logging out');
         dispatch(logoutAction());
-    }
-
-    function onLogin(event: React.MouseEvent<HTMLElement>) {
-        window.open('http://localhost:3000/login/success?accessToken=test&refreshToken=test', '_blank', 'width=500,height=600');
-        // dispatch(loginAction({ username: '', password: '' }));
-        const interval = setInterval(() => {
-            if (!window) {
-                clearInterval(interval);
-            } 
-        }, 5000);
     }
 
     return (
@@ -50,7 +40,7 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
                 {
                     userState.authState === AuthType.LOGGED_IN
                         ? <Dropdown overlay={
-                            <Menu>
+                            <Menu mode={'horizontal'}>
                                 <Menu.Item key="1">Profile</Menu.Item>
                                 <Menu.Item key="2">Your products</Menu.Item>
                                 <Menu.Item key="3" onClick={onLogout}>Logout</Menu.Item>
@@ -60,12 +50,10 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
                             S.I.P
                             </Button>
                         </Dropdown>
-                        : <Button className="ant-dropdown-link" type="primary" shape="circle" size='large' onClick={onLogin}>
+                        : <Button className="ant-dropdown-link" type="primary" shape="circle" size='large' onClick={() => dispatch(loginGoogleAction())}>
                             <GoogleOutlined/>
                         </Button>
                 }
-                
-                
             </Col>
         </Row>
     );
