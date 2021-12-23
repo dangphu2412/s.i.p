@@ -1,6 +1,5 @@
 import produce from 'immer';
 import { AnyAction } from 'redux';
-import { initialState } from '../translations/translation.reducer';
 import { loggedInAction, loggedOutAction } from './auth.action';
 
 export enum AuthType {
@@ -13,11 +12,11 @@ export interface AuthState {
     authState: AuthType
 }
 
-const intialState: AuthState = {
+const initialState: AuthState = {
     authState: AuthType.LOGGED_OUT
 };
 
-export function authReducer(state = intialState, action: AnyAction) {
+export function authReducer(state = initialState, action: AnyAction) {
     return produce(state, draft => {
         switch(action.type) {
         case loggedInAction.type:

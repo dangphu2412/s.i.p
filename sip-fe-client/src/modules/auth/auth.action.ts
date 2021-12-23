@@ -1,8 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
 
-export interface LoginPayload {
-    username: string;
-    password: string;
+export interface GoogleLoginPayload {
+    accessToken: string;
+    refreshToken: string;
 }
 
 export interface AuthResponse {
@@ -10,8 +10,7 @@ export interface AuthResponse {
     profile: any;
 }
 
-export const loginAction = createAction<LoginPayload>('AUTH/LOGIN');
-export const loginSSOWithGoogleAction = createAction<LoginPayload>('AUTH/LOGIN_SSO_GOOGLE');
+export const loginGoogleAction = createAction<GoogleLoginPayload>('AUTH/LOGIN_SSO_GOOGLE');
 export const loggingAction = createAction('AUTH/LOGGING_IN');
 export const loggedInAction = createAction<AuthResponse>('AUTH/LOGGED_IN');
 

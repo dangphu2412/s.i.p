@@ -20,8 +20,13 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
     }
 
     function onLogin(event: React.MouseEvent<HTMLElement>) {
-        window.open('http://localhost:3000/login/success', '_blank', 'width=500,height=600');
+        window.open('http://localhost:3000/login/success?accessToken=test&refreshToken=test', '_blank', 'width=500,height=600');
         // dispatch(loginAction({ username: '', password: '' }));
+        const interval = setInterval(() => {
+            if (!window) {
+                clearInterval(interval);
+            } 
+        }, 5000);
     }
 
     return (
