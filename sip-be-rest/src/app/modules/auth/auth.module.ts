@@ -1,14 +1,15 @@
 import { PermissionModule } from '@modules/permission/permission.module';
+import { UrlModule } from '@modules/url/url.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigService } from '../../../external/config/config.service';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from './jwt.strategy';
-import { OAuth2AuthenticationProvider } from './provider/o-auth2-authentication.provider';
 import { AuthService } from './services/auth.service';
 import { BcryptService } from './services/bcrypt.service';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -21,13 +22,9 @@ import { BcryptService } from './services/bcrypt.service';
     }),
     UserModule,
     PermissionModule,
+    UrlModule,
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    OAuth2AuthenticationProvider,
-    BcryptService,
-  ],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, BcryptService],
 })
 export class AuthModule {}

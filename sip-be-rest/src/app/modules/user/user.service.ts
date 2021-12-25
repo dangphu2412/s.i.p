@@ -19,7 +19,8 @@ import { ArrayUtils } from '@external/utils/array/array.utils';
 import { ErrorAssertion } from '@modules/error/error-assertion';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { toOrders } from '@external/crud/common/pipes/order.pipe';
-import { TokenPayload } from 'google-auth-library';
+import { GoogleUserExtractedDto } from '@modules/auth/types/google-user-extracted';
+import { SlugUtils } from '@utils/slug';
 
 @Injectable()
 export class UserService {
@@ -46,26 +47,29 @@ export class UserService {
       );
     }
 
-    return this.createUser(createUserDto);
+    const newUser = User.create(createUserDto);
+
+    newUser.password = await this.bcryptService.hash(newUser.password);
+    newUser.avatar = newUser.avatar || ConfigService.getCache('DEFAULT_AVATAR');
+
+    return this.createUser(newUser);
   }
 
-  public async createByGooglePayload(payload: TokenPayload) {
-    return this.createUser({
+  public async createByGooglePayload(payload: GoogleUserExtractedDto) {
+    const fullName = `${payload.firstName} ${payload.lastName}`;
+    const newUser = User.create({
+      username: SlugUtils.normalize(fullName),
       email: payload.email,
-      fullName: payload.name,
+      fullName,
       avatar: payload.picture,
+      password: '',
     });
+    return this.createUser(newUser);
   }
 
-  private async createUser(partialUser: Partial<User>) {
-    const userEntity = User.create(partialUser);
-
-    userEntity.password = await this.bcryptService.hash(userEntity.password);
-    userEntity.avatar =
-      userEntity.avatar || ConfigService.getCache('DEFAULT_AVATAR');
-
+  private async createUser(user: User) {
     try {
-      return await this.userRepository.save(userEntity);
+      return await this.userRepository.save(user);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(

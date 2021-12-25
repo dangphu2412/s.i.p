@@ -43,4 +43,10 @@ export class UserController {
   ) {
     return this.userService.grantPermissionForUser(userId, grantPermissionDto);
   }
+
+  @Protected
+  @Get('me')
+  public getMe(@AuthContext() user: UserCredential) {
+    return {};
+  }
 }

@@ -1,23 +1,32 @@
-import { Body, Controller, Headers, Post } from '@nestjs/common';
+import { UrlProvider } from '@modules/url/url.provider';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiCreatedResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { Response } from 'express';
+import { AuthContext } from './decorator/user-cred.decorator';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './services/auth.service';
+import { GoogleUserExtractedDto } from './types/google-user-extracted';
 
 @ApiTags('auth')
 @Controller('v1/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
-
-  @ApiCreatedResponse()
-  @ApiUnauthorizedResponse()
-  @Post('/google')
-  public loginWithGoogle(@Headers('oauth-google-token') accessToken: string) {
-    return this.authService.loginWithGoogle(accessToken);
-  }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly urlProvider: UrlProvider,
+  ) {}
 
   @ApiCreatedResponse()
   @ApiUnauthorizedResponse()
@@ -31,5 +40,23 @@ export class AuthController {
   @Post('/test/get-cred')
   public getTestCredentials() {
     return this.authService.generateTestToken();
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    return;
+  }
+
+  @Get('google/redirect')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(
+    @Res() res: Response,
+    @AuthContext() user: GoogleUserExtractedDto,
+  ) {
+    const loginResponse = await this.authService.loginWithGoogle(user);
+    return res.redirect(
+      this.urlProvider.getClientSuccessRedirect(loginResponse),
+    );
   }
 }
