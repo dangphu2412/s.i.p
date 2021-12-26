@@ -3,15 +3,41 @@ import { Button, Col, Dropdown, Input, Menu, message, Row } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginGoogleAction, logoutAction } from '../../modules/auth/auth.action';
+import { loggedInAction, loggingAction, logoutAction } from '../../modules/auth/auth.action';
 import { AuthState, AuthType } from '../../modules/auth/auth.reducer';
 import { selectAuthState } from '../../modules/auth/auth.selector';
-import './index.scss';
+import { getLoginUrl } from '../../modules/auth/auth.service';
+import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.config';
+import { fireError } from '../../modules/error/error.action';
 import '../../scss/global.scss';
+import './index.scss';
 
 export function ClientNavbar(props: {title?: string, children?: React.ReactNode}) {
     const dispatch = useDispatch();
     const userState: AuthState = useSelector(selectAuthState);
+
+    function loginGoogle() {
+        dispatch(loggingAction());
+
+        const newWindow = window.open(getLoginUrl(), '_blank', 'width=500,height=600');
+
+        const interval = setInterval(() => {
+            if (newWindow?.closed) {
+                clearInterval(interval);
+
+                const profile = localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY));
+
+                if (!profile) {
+                    dispatch(fireError({message: 'Can not init user'}));
+                    return;
+                }
+
+                dispatch(loggedInAction({
+                    profile: JSON.parse(profile as string)
+                }));
+            } 
+        }, 5000);
+    }
 
     function onLogout(menuInfo: MenuInfo) {
         menuInfo.domEvent.preventDefault();
@@ -50,7 +76,7 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
                             S.I.P
                             </Button>
                         </Dropdown>
-                        : <Button className="ant-dropdown-link" type="primary" shape="circle" size='large' onClick={() => dispatch(loginGoogleAction())}>
+                        : <Button className="ant-dropdown-link" type="primary" shape="circle" size='large' onClick={() => loginGoogle()}>
                             <GoogleOutlined/>
                         </Button>
                 }

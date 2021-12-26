@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { AnyAction } from 'redux';
 import { loggedInAction, loggedOutAction } from './auth.action';
-import { AuthProps } from './components/LoginSuccessPage';
+import { AuthProps } from './pages/LoginSuccessPage';
 
 export enum AuthType {
     LOGGED_IN = 'LOGGED_IN',

@@ -1,3 +1,12 @@
+import { ConfigService } from '@external/config/config.service';
+import { toOrders } from '@external/crud/common/pipes/order.pipe';
+import { SearchCriteria } from '@external/crud/search/core/search-criteria';
+import { ArrayUtils } from '@external/utils/array/array.utils';
+import { Profile } from '@modules/auth/interface';
+import { BcryptService } from '@modules/auth/services/bcrypt.service';
+import { GoogleUserExtractedDto } from '@modules/auth/types/google-user-extracted';
+import { ErrorAssertion } from '@modules/error/error-assertion';
+import { PermissionService } from '@modules/permission/permission.service';
 import {
   Injectable,
   InternalServerErrorException,
@@ -6,21 +15,12 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { Repository } from 'typeorm';
-import { pick } from 'lodash';
-import { ProfileDto } from '../auth/dto/profile.dto';
-import { GrantPermissionDto } from './dto/grant-permission.dto';
-import { PermissionService } from '@modules/permission/permission.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { BcryptService } from '@modules/auth/services/bcrypt.service';
-import { ConfigService } from '@external/config/config.service';
-import { ArrayUtils } from '@external/utils/array/array.utils';
-import { ErrorAssertion } from '@modules/error/error-assertion';
-import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { toOrders } from '@external/crud/common/pipes/order.pipe';
-import { GoogleUserExtractedDto } from '@modules/auth/types/google-user-extracted';
 import { SlugUtils } from '@utils/slug';
+import { pick } from 'lodash';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { GrantPermissionDto } from './dto/grant-permission.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
@@ -97,8 +97,8 @@ export class UserService {
     return this.userRepository.findOne(id);
   }
 
-  public getBasicProfile(user: User): ProfileDto {
-    return pick(user, ['id', 'username', 'fullName', 'avatar']) as ProfileDto;
+  public getBasicProfile(user: User): Profile {
+    return pick(user, ['id', 'username', 'fullName', 'avatar']) as Profile;
   }
 
   public async grantPermissionForUser(

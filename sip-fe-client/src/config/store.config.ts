@@ -1,5 +1,6 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { fireError } from '../modules/error/error.action';
 import createReducer from './root-reducer.config';
 import rootSaga from './root-saga.config';
 
@@ -12,7 +13,13 @@ declare global {
 
 export function createReduxStore() {
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-    const sagaMiddleware = createSagaMiddleware();
+    const sagaMiddleware = createSagaMiddleware({
+        onError: (error: Error) => {
+            if (error.name === 'HTTP') {
+                store.dispatch(fireError({message: error.message }));
+            }
+        }
+    });
 
     const middlewares = [sagaMiddleware];
     const enhancers = [applyMiddleware(...middlewares)];

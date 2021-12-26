@@ -1,6 +1,6 @@
 import { ConfigService } from '@external/config/config.service';
 import { UrlProvider } from '@modules/url/url.provider';
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
 import { AuthService } from '../services/auth.service';

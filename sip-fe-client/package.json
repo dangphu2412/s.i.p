@@ -13,6 +13,7 @@
     "chart.js": "^3.6.0",
     "history": "5",
     "immer": "^9.0.6",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.3.0",
     "react-dom": "^17.0.2",
@@ -53,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.178",
     "@types/react-dom": "^17.0.11",
     "@types/react-loading-overlay": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.6.0",

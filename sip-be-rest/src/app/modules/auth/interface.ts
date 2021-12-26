@@ -1,6 +1,11 @@
-import { ProfileDto } from './dto/profile.dto';
-
 export interface LoginSuccessResponse {
   accessToken: string;
-  profile: ProfileDto;
+  profile: Profile;
+}
+
+export interface Profile {
+  id: string;
+  username: string;
+  avatar: string;
+  fullName: string;
 }
