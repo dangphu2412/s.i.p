@@ -14,7 +14,7 @@ export enum AuthConfigKeys {
 export class AuthConfig {
     private static store = new Map();
 
-    public static config(config: IAuthConfig) {
+    public static config(config: IAuthConfig): void {
         Object.values(config).forEach(i => {
             if (typeof i !== 'string') {
                 throw new Error('Values of auth config need to be string');

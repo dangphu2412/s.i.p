@@ -1,18 +1,18 @@
+import React from 'react';
+import '../../scss/global.scss';
+import './index.scss';
 import { GoogleOutlined } from '@ant-design/icons';
 import { Button, Col, Dropdown, Input, Menu, message, Row } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loggedInAction, loggingAction, logoutAction } from '../../modules/auth/auth.action';
-import { AuthState, AuthType } from '../../modules/auth/auth.reducer';
+import { AuthType } from '../../modules/auth/auth.reducer';
 import { selectAuthState } from '../../modules/auth/auth.selector';
 import { getLoginUrl } from '../../modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.config';
 import { fireError } from '../../modules/error/error.action';
-import '../../scss/global.scss';
-import './index.scss';
 
-export function ClientNavbar(props: {title?: string, children?: React.ReactNode}) {
+export function ClientNavbar(props: {title?: string, children?: React.ReactNode}): JSX.Element {
     const dispatch = useDispatch();
     const authState = useSelector(selectAuthState);
 
@@ -28,7 +28,7 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
                 const profile = localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY));
 
                 if (!profile) {
-                    dispatch(fireError({message: 'Can not init user'}));
+                    dispatch(fireError({message: 'Cannot login at the moment. Please try again later'}));
                     return;
                 }
 
@@ -56,7 +56,7 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
                 <Input  placeholder="Search" />
             </Col>
             <Col className='' span={12}>
-                <Menu mode="horizontal">
+                <Menu mode="horizontal" className={'override-line-height-menu'}>
                     <Menu.Item key="1">Products</Menu.Item>
                     <Menu.Item key="2">Topics</Menu.Item>
                     <Menu.Item key="3">Recommend</Menu.Item>

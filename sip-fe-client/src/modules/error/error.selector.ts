@@ -1,3 +1,3 @@
-import { AppState } from '../app.types';
+import { AppError, AppState } from '../app.types';
 
-export const selectError = (state: AppState) => state.error;
+export const selectError = (state: AppState): AppError => state.error;

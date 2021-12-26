@@ -5,7 +5,7 @@ export interface InitialHttpConfig {
     baseUrl: string;
 }
 
-export function configHttp(config: InitialHttpConfig) {
+export function configHttp(config: InitialHttpConfig): void {
     axios.defaults.baseURL = config.baseUrl;
     axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY)) || '';
     axios.defaults.headers.post['Content-Type'] = 'application/json';
