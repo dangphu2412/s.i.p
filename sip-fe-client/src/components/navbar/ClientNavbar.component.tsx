@@ -14,7 +14,7 @@ import './index.scss';
 
 export function ClientNavbar(props: {title?: string, children?: React.ReactNode}) {
     const dispatch = useDispatch();
-    const userState: AuthState = useSelector(selectAuthState);
+    const authState = useSelector(selectAuthState);
 
     function loginGoogle() {
         dispatch(loggingAction());
@@ -64,7 +64,7 @@ export function ClientNavbar(props: {title?: string, children?: React.ReactNode}
             </Col>
             <Col className='f-center my-3' span={4}>
                 {
-                    userState.authState === AuthType.LOGGED_IN
+                    authState === AuthType.LOGGED_IN
                         ? <Dropdown overlay={
                             <Menu mode={'horizontal'}>
                                 <Menu.Item key="1">Profile</Menu.Item>

@@ -11,7 +11,7 @@ interface RouteMapper {
 }
 
 export class AuthRouteMapper {
-    static toRoutes(mappers: RouteMapper[]): JSX.Element[] {
+    static toRoutes(mappers: RouteMapper[], options = { noPublicGuard: false }): JSX.Element[] {
         return mappers.map(i => {
             if (i.protected) {
                 return <Route key={Math.random()} path={i.path} element={
@@ -19,17 +19,17 @@ export class AuthRouteMapper {
                 }>
                     {
                         i.children ? 
-                            AuthRouteMapper.toRoutes(i.children)
+                            AuthRouteMapper.toRoutes(i.children, options)
                             : undefined
                     }
                 </Route>;
             }
             return <Route key={Math.random()} path={i.path} element={
-                <PublicGuard element={<i.element/>}/>
+                options.noPublicGuard ? <i.element/>: <PublicGuard element={<i.element/>}/>
             }>
                 {
                     i.children ? 
-                        AuthRouteMapper.toRoutes(i.children)
+                        AuthRouteMapper.toRoutes(i.children, options)
                         : undefined
                 }
             </Route>;

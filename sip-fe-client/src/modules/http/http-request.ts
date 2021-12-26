@@ -53,6 +53,18 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
         return data;
     }
 
+    function getErrorMessage() {
+        return errorMsg;
+    }
+
+    function _getErrorMessage(error: AxiosError): string {
+        if (ErrorCodeToMsgMap.has(error.code as string)) {
+            return ErrorCodeToMsgMap.get(error.code as string) as string;
+        }
+
+        return DEFAULT_ERROR_MAPPING.UNEXPECTED_ERROR_CODE;
+    }
+
     function* start() {
         yield put(setLoading({ isLoading: true }));
     }
@@ -68,19 +80,12 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
         return getData();
     }
 
-    function _getErrorMessage(error: AxiosError): string {
-        if (ErrorCodeToMsgMap.has(error.code as string)) {
-            return ErrorCodeToMsgMap.get(error.code as string) as string;
-        }
-
-        return DEFAULT_ERROR_MAPPING.UNEXPECTED_ERROR_CODE;
-    }
-
     return {
         start,
         finish,
         doRequest,
         handle,
-        getData
+        getData,
+        getErrorMessage
     };
 }

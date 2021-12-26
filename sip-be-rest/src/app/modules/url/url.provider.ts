@@ -1,6 +1,6 @@
 import { ConfigService } from '@external/config/config.service';
 import { LoginSuccessResponse } from '@modules/auth/interface';
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 
 @Injectable()
 export class UrlProvider {

@@ -27,8 +27,7 @@ export function LoginSuccessPage(): JSX.Element {
                         profile: request.getData()
                     };
                 } catch(e) {
-                    console.log(e);
-                    
+                    window.close();
                     return;
                 }
             

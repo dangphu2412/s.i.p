@@ -7,7 +7,7 @@ import { AuthConfig, AuthConfigKeys } from '../config/auth.config';
 
 export function PublicGuard({element}: { element: JSX.Element}) {
     const authState = useSelector(selectAuthState);
-    return authState.authState === AuthType.LOGGED_IN ?
+    return authState === AuthType.LOGGED_IN ?
         <Navigate to={{ pathname: AuthConfig.get(AuthConfigKeys.DEFAULT_ROUTE_KEY) }} />
         : element;
 }

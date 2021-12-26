@@ -8,3 +8,5 @@ export const loggedInAction = createAction<Omit<AuthState, 'authState'>>('AUTH/L
 export const logoutAction = createAction('AUTH/LOG_OUT');
 export const loggingOutAction = createAction('AUTH/LOGGING_OUT');
 export const loggedOutAction = createAction<undefined>('AUTH/LOGGED_OUT');
+
+export const restoreAction = createAction<void>('AUTH/RESTORE');
