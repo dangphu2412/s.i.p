@@ -12,7 +12,7 @@ import { getLoginUrl } from '../../modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.config';
 import { fireError } from '../../modules/error/error.action';
 
-export function ClientNavbar(props: {title?: string, children?: React.ReactNode}): JSX.Element {
+export function ClientNavbar(): JSX.Element {
     const dispatch = useDispatch();
     const authState = useSelector(selectAuthState);
 
