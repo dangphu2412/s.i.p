@@ -1,5 +1,15 @@
+@import './variables.scss';
+
 .f-center {
     align-items: center;
     justify-content: center;
     display: flex;
+}
+
+.p-left-container {
+    padding-left: $container-left;
+}
+
+.p-right-container {
+    padding-right: $container-right;
 }

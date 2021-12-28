@@ -6,10 +6,19 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
-.header {
-    background-color: "white"
+.override-line-height-menu {
+    line-height: 76px !important;
 }
 
-.override-line-height-menu {
-    line-height: 64px !important;
+.header-wrapper {
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 74px;
+}
+
+.adjust-avatar-to-the-end {
+    display: flex;
+    justify-content: end;
 }
