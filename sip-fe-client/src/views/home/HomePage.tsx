@@ -1,23 +1,13 @@
-import React, { useState } from 'react';
-import Title from 'antd/lib/typography/Title';
-import { Card, Col, Divider, Dropdown, Menu, Row } from 'antd';
+import { Card, Col, Divider, Row } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
-import { ClientLayout } from '../../layouts/client/ClientLayout';
+import Title from 'antd/lib/typography/Title';
+import React from 'react';
 import { Container } from '../../components/container/Container';
-import { DownOutlined } from '@ant-design/icons';
-import { MenuInfo } from 'rc-menu/lib/interface';
+import { ClientLayout } from '../../layouts/client/ClientLayout';
+import { FilterDropdown } from '../../modules/post/components/dropdown/FilterDropdown';
 
-enum PostFilter {
-    HOTTEST = 'Hottest',
-    NEWEST = 'Newest'
-}
 
 export function HomePage(): JSX.Element {
-    const [selectedFilter, setSelectedFilter] = useState(PostFilter.HOTTEST);
-    function handleFilterChoose(e: MenuInfo) {
-        setSelectedFilter(e.key as PostFilter);
-    }
-
     return (
         <>
             <ClientLayout>
@@ -26,20 +16,7 @@ export function HomePage(): JSX.Element {
                         <Col span={16}>
                             <Title level={2}>Let&#39;s get some idea 💩</Title>
 
-                            <Dropdown overlay={
-                                <Menu onClick={handleFilterChoose}>
-                                    <Menu.Item key={PostFilter.HOTTEST}>
-                                        {PostFilter.HOTTEST}
-                                    </Menu.Item>
-                                    <Menu.Item key={PostFilter.NEWEST}>
-                                        {PostFilter.NEWEST}
-                                    </Menu.Item>
-                                </Menu>
-                            }>
-                                <a className="ant-dropdown-link text-lg" onClick={e => e.preventDefault()}>
-                                    {selectedFilter} <DownOutlined />
-                                </a>
-                            </Dropdown>
+                            <FilterDropdown/>
 
                             <Content>
                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita dolore amet quam voluptates vero nesciunt nemo, cupiditate non dolorum. Deleniti dolorum recusandae sequi esse. Vero voluptatum impedit similique inventore alias?

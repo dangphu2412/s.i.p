@@ -1,3 +1,4 @@
+import { QueryState } from './query/interface';
 import { AuthState } from './auth/auth.reducer';
 import { LangState } from './translations/translation.reducer';
 
@@ -15,5 +16,6 @@ export type AppState = {
     error: AppError,
     loading: AppLoading,
     language: LangState,
-    auth: AuthState
+    auth: AuthState,
+    query: QueryState
 }
