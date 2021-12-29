@@ -2,6 +2,7 @@ import { Card, Col, Divider, Row } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import Title from 'antd/lib/typography/Title';
 import React from 'react';
+import CardContainer from 'src/modules/post/components/card/CardContainer';
 import { Container } from '../../components/container/Container';
 import { ClientLayout } from '../../layouts/client/ClientLayout';
 import { FilterDropdown } from '../../modules/post/components/dropdown/FilterDropdown';
@@ -19,9 +20,7 @@ export function HomePage(): JSX.Element {
                             <FilterDropdown/>
 
                             <Content>
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita dolore amet quam voluptates vero nesciunt nemo, cupiditate non dolorum. Deleniti dolorum recusandae sequi esse. Vero voluptatum impedit similique inventore alias?
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita dolore amet quam voluptates vero nesciunt nemo, cupiditate non dolorum. Deleniti dolorum recusandae sequi esse. Vero voluptatum impedit similique inventore alias?
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita dolore amet quam voluptates vero nesciunt nemo, cupiditate non dolorum. Deleniti dolorum recusandae sequi esse. Vero voluptatum impedit similique inventore alias?
+                                <CardContainer/>
                             </Content>
                         </Col>
 
