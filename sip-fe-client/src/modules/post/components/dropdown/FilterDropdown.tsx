@@ -3,17 +3,26 @@ import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { PostFilter } from '../../constants/post-filter.enum';
+import { useDispatch } from 'react-redux';
+import { queryChanged } from 'src/modules/query/query.action';
 
-export function FilterDropdown() {
+export function FilterDropdown(): JSX.Element {
     const [selectedFilter, setSelectedFilter] = useState(PostFilter.HOTTEST);
-    function handleFilterChoose(e: MenuInfo) {
+    const dispatch = useDispatch();
+
+    function handleFilterChosen(e: MenuInfo) {
         setSelectedFilter(e.key as PostFilter);
+        dispatch(queryChanged({ filter: [{
+            column: 'type',
+            comparator: 'eq',
+            value: e.key
+        }] }));
     }
     
     return (
         <div>
             <Dropdown overlay={
-                <Menu onClick={handleFilterChoose}>
+                <Menu onClick={handleFilterChosen}>
                     <Menu.Item key={PostFilter.HOTTEST}>
                         {PostFilter.HOTTEST}
                     </Menu.Item>
