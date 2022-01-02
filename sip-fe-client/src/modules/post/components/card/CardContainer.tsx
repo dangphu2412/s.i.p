@@ -1,43 +1,75 @@
 import React from 'react';
+import { LoadMore } from '../../../../components/progress/LoadMore';
 import { CardItemOverview } from './CardItemOverview';
 
 export default function CardContainer(): JSX.Element {
     const posts = [
         {
-            title: 'Hello',
+            title: 'Hello dmm',
             summary: 'This is summary',
             topics: ['Free', 'Web app'],
-            totalVote: 10
+            totalVote: 10,
+            isVoted: true
         },
         {
             title: 'Hello',
             summary: 'This is summary',
             topics: ['Free', 'Web app'],
-            totalVote: 12
+            totalVote: 12,
+            isVoted: false
         },
         {
             title: 'Hello',
             summary: 'This is summary',
             topics: ['Free', 'Web app'],
-            totalVote: 15
+            totalVote: 15,
+            isVoted: true
         },
         {
             title: 'Hello',
             summary: 'This is summary',
             topics: ['Free', 'Web app'],
-            totalVote: 20
+            totalVote: 20,
+            isVoted: true
+        },
+        {
+            title: 'Hello',
+            summary: 'This is summary',
+            topics: ['Free', 'Web app'],
+            totalVote: 20,
+            isVoted: true
+        },
+        {
+            title: 'Hello',
+            summary: 'This is summary',
+            topics: ['Free', 'Web app'],
+            totalVote: 20,
+            isVoted: true
+        },
+        {
+            title: 'Hello',
+            summary: 'This is summary',
+            topics: ['Free', 'Web app'],
+            totalVote: 20,
+            isVoted: true
         }
     ];
     return (
         <div>
             {
                 posts.map((post, index) => {
-                    return <CardItemOverview
+                    return <a
+                        href='/post/1'
                         key={index}
-                        data={post}
-                    />;
+                    >
+                        <CardItemOverview
+                            key={index}
+                            data={{id: index, ...post}}
+                        />
+                    </a>;
                 })
             }
+            <LoadMore/>
         </div>
     );
 }

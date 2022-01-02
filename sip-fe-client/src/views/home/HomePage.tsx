@@ -25,7 +25,7 @@ export function HomePage(): JSX.Element {
                         </Col>
 
                         <Col span={1}>
-                            <Divider type="vertical" style={{ height: '100px', backgroundColor: '#000' }}/>
+                            <Divider type="vertical" style={{ height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.31)' }}/>
                         </Col>
 
                         <Col span={7}>
