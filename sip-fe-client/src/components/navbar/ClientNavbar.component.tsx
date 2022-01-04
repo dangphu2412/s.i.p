@@ -52,7 +52,7 @@ export function ClientNavbar(): JSX.Element {
             <Row className='header-wrapper'>
                 <Col className='p-left-container' span={1}>
                     <Button type="primary" shape="circle" size='large'>
-                    S
+                        <a href='/'>S.I.P</a>
                     </Button>
                 </Col>
                 <Col className='f-center p-left-container my-3' span={3}>
