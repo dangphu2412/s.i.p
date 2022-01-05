@@ -21,8 +21,11 @@ export class Post extends TimeEntityGenerator() {
   @Column({ name: 'slug', nullable: false, unique: true })
   public slug: string;
 
-  @Column({ name: 'content', nullable: false })
+  @Column({ name: 'content', nullable: false, type: 'text' })
   public content: string;
+
+  @Column({ name: 'summary', type: 'text' })
+  public summary: string;
 
   @ManyToMany(() => Topic, (topic) => topic.posts)
   @JoinTable({

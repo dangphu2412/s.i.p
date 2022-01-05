@@ -5,6 +5,7 @@ import { SearchCriteria } from '../core/search-criteria';
 export interface SearchValidationSchema {
   allowFilters: string[];
   allowSorts: string[];
+  filterToMatchingMap?: Record<string, (val: any) => boolean>;
 }
 
 export abstract class AbstractSearchValidator
@@ -30,8 +31,12 @@ export abstract class AbstractSearchValidator
       ArrayUtils.isPresent(schema.allowFilters) &&
       ArrayUtils.isPresent(filters)
     ) {
-      const isNotAccepted = !filters.some((item) =>
-        schema.allowFilters.includes(item.column),
+      const isNotAccepted = !filters.some(
+        (item) =>
+          schema.allowFilters.includes(item.column) &&
+          (schema.filterToMatchingMap
+            ? schema?.filterToMatchingMap[item.column](item.value)
+            : true),
       );
 
       if (isNotAccepted) {

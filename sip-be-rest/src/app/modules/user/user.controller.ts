@@ -12,7 +12,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
-import { OverviewSearchValidator } from './pipes/overview-search.validator';
+import { FetchUsersOverviewValidator } from './pipes/overview-search.validator';
 import { UserService } from './user.service';
 
 @ApiTags('users')
@@ -26,7 +26,7 @@ export class UserController {
   public async findAll(
     @AuthContext() user: UserCredential,
     @ExtractRuleManager() ruleManager: RuleManager,
-    @SearchQuery(OverviewSearchValidator) searchQuery: SearchCriteria,
+    @SearchQuery(FetchUsersOverviewValidator) searchQuery: SearchCriteria,
   ) {
     return toPage(await this.userService.findAll(searchQuery), searchQuery);
   }

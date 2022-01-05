@@ -5,7 +5,7 @@ import {
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class OverviewSearchValidator extends AbstractSearchValidator {
+export class FetchUsersOverviewValidator extends AbstractSearchValidator {
   getSchema(): SearchValidationSchema {
     return {
       allowFilters: ['username'],

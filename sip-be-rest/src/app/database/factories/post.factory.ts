@@ -9,6 +9,7 @@ define(Post, (faker: typeof Faker) => {
   return Post.create({
     content: faker.lorem.paragraph(),
     title,
+    summary: faker.lorem.paragraph(1),
     slug: SlugUtils.normalize(title),
   });
 });

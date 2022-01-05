@@ -1,18 +1,20 @@
+import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
-import { User } from '@modules/user/user.entity';
 import { UserService } from '@modules/user/user.service';
 import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';
 import { VoteService } from '@modules/vote/vote.service';
 import {
+  BadRequestException,
+  ConflictException,
   Injectable,
   UnprocessableEntityException,
-  ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SlugUtils } from '@utils/slug';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { FetchPostType } from './enums/fetch-post-type.enum';
 import { Post } from './post.entity';
 
 @Injectable()
@@ -42,12 +44,33 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  findAll() {
-    return this.postRepository.find();
+  findAll(searchQuery: SearchCriteria) {
+    const fetchPostType = searchQuery.filters[0];
+
+    switch (fetchPostType.value) {
+      case FetchPostType.HOTTEST:
+        return this.findHottestPosts(searchQuery);
+      case FetchPostType.LATEST:
+        return this.findLatestPosts(searchQuery);
+      default:
+        throw new BadRequestException('Unsupported filter type to get posts');
+    }
   }
 
   findOne(id: number) {
     return `This action returns a #${id} post`;
+  }
+
+  /**
+   * TODO: Lấy ra những bài viết mới nhất
+   * bao gồm tổng số vote, và cho biết bài viết đó chủ thớt đã vote chưa
+   */
+  private findLatestPosts(searchQuery: SearchCriteria) {
+    return this.postRepository.find();
+  }
+
+  private findHottestPosts(searchQuery: SearchCriteria) {
+    return this.postRepository.find();
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

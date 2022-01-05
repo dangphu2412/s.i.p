@@ -80,7 +80,7 @@ export function CardContainer(): JSX.Element {
                         </a>;
                     })
                 }
-                { isLoading && <Skeleton></Skeleton> }
+                <Skeleton loading={isLoading} />
             </InfiniteScroll>
         </div>
     );

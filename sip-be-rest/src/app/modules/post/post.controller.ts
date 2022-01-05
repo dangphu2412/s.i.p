@@ -1,3 +1,5 @@
+import { SearchCriteria } from '@external/crud/search/core/search-criteria';
+import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import { Protected } from '@modules/auth/decorator/protected.decorator';
 import { AuthContext } from '@modules/auth/decorator/user-cred.decorator';
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
@@ -13,10 +15,11 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
 import { PostService } from './post.service';
 
 @ApiTags('posts')
-@Controller('v1/post')
+@Controller('v1/posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
@@ -35,8 +38,10 @@ export class PostController {
   }
 
   @Get()
-  findAll() {
-    return this.postService.findAll();
+  findAll(
+    @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
+  ) {
+    return this.postService.findAll(searchQuery);
   }
 
   @Get(':id')
