@@ -1,4 +1,4 @@
-import { PermissionEnum } from '@constants/permissions.enum';
+import { AccessRights } from '@constants/access-rights.enum';
 import { toPage } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
@@ -20,7 +20,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @PermissionGranted(PermissionEnum.ADMIN)
+  @PermissionGranted(AccessRights.RootAccess.ADMIN)
   @Protected
   @Get()
   public async findAll(

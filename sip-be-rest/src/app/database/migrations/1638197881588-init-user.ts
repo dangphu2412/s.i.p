@@ -1,3 +1,4 @@
+import { AccessRights } from '@constants/access-rights.enum';
 import { ConfigService } from '@external/config/config.service';
 import { BcryptService } from '@modules/auth/services/bcrypt.service';
 import { Permission } from '@modules/permission/permission.entity';
@@ -6,23 +7,12 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class initUser1638197881588 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    let adminPermission = await queryRunner.manager.findOne(Permission, {
+    const adminPermission = await queryRunner.manager.findOne(Permission, {
       where: {
-        name: 'ADMIN',
+        name: AccessRights.RootAccess.ADMIN,
       },
     });
 
-    if (!adminPermission) {
-      await queryRunner.manager.insert(Permission, {
-        name: 'ADMIN',
-        priority: 0,
-      });
-      adminPermission = await queryRunner.manager.findOne(Permission, {
-        where: {
-          name: 'ADMIN',
-        },
-      });
-    }
     const user = new User();
     user.username = 'admin@gmail.com';
     user.email = 'admin@gmail.com';
@@ -34,12 +24,9 @@ export class initUser1638197881588 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.manager.delete(Permission, {
-      name: 'ADMIN',
-    });
     await queryRunner.manager.delete(User, {
       where: {
-        name: 'ADMIN',
+        username: 'admin@gmail.com',
       },
     });
   }

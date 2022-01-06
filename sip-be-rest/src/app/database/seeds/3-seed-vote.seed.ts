@@ -11,7 +11,7 @@ export default class CreateVotes implements Seeder {
     factory: Factory,
     { post, author }: { post: Post; author: User },
   ) {
-    return factory(Vote)({ post, author }).makeMany(
+    return factory(Vote)({ post, author }).createMany(
       random.number({ min: 15, max: 100 }),
     );
   }
@@ -21,8 +21,23 @@ export default class CreateVotes implements Seeder {
     const authors = await connection.getRepository(User).find();
     const chunkedPosts = chunk(allPosts, 10);
 
+    const authorValidateDuplicate = {};
+
     for (const posts of chunkedPosts) {
-      const author = random.arrayElement(authors);
+      let duplicated = true;
+
+      let author: User;
+
+      while (duplicated) {
+        author = random.arrayElement(authors);
+        if (!authorValidateDuplicate[author.id]) {
+          duplicated = false;
+        } else {
+          authorValidateDuplicate[author.id] = true;
+        }
+      }
+      console.log('Finish random');
+
       await Promise.all(
         posts.map((post) =>
           this.fromPostToVotes(factory, {

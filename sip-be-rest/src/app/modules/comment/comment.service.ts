@@ -1,4 +1,4 @@
-import { PermissionEnum } from '@constants/permissions.enum';
+import { AccessRights } from '@constants/access-rights.enum';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import { UserService } from '@modules/user/user.service';
 import {
@@ -53,7 +53,7 @@ export class CommentService {
       throw new NotFoundException('No comment found for updating');
     }
 
-    ruleManager.throwIfCannot(PermissionEnum.EDIT_OWN, {
+    ruleManager.throwIfCannot(AccessRights.RootAccess.EDIT_OWN, {
       authorId: updateCommentDto.authorId,
       ownerId: comment.author.id,
     });
