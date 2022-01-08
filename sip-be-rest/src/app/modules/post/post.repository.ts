@@ -1,6 +1,7 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
 import { EntityRepository, Repository } from 'typeorm';
+import { PostOverview } from './client/post-overview.api';
 import { Post } from './post.entity';
 
 @EntityRepository(Post)
@@ -11,12 +12,12 @@ export class PostRepository extends Repository<Post> {
   ) {
     const queryBuilder = this.createQueryBuilder('posts')
       .addSelect(
-        `vote_count as "posts_vote_count"
+        `total_votes as "posts_total_votes"
         , ${this.getSelectIsAuthorQuery(author)}`,
       )
       .innerJoin(
         (qb) => {
-          qb.select('posts.id as id, COUNT(votes.id) as vote_count')
+          qb.select('posts.id as id, COUNT(votes.id) as total_votes')
             .from(Post, 'posts')
             .leftJoin('votes', 'votes', 'votes.post_id = posts.id')
             .groupBy('posts.id')
@@ -31,7 +32,7 @@ export class PostRepository extends Repository<Post> {
       .leftJoinAndSelect('posts.author', 'author')
       .leftJoinAndSelect('posts.topics', 'topics');
 
-    return queryBuilder.getMany();
+    return <Promise<PostOverview>>queryBuilder.getMany();
   }
 
   public findHottestPosts(
@@ -40,12 +41,12 @@ export class PostRepository extends Repository<Post> {
   ) {
     const queryBuilder = this.createQueryBuilder('posts')
       .addSelect(
-        `vote_count as "posts_vote_count"
+        `total_votes as "posts_total_votes"
         , ${this.getSelectIsAuthorQuery(author)}`,
       )
       .innerJoin(
         (qb) => {
-          qb.select('posts.id as id, COUNT(votes.id) as vote_count')
+          qb.select('posts.id as id, COUNT(votes.id) as total_votes')
             .from(Post, 'posts')
             .leftJoin('votes', 'votes', 'votes.post_id = posts.id')
             .groupBy('posts.id')
@@ -59,7 +60,7 @@ export class PostRepository extends Repository<Post> {
       )
       .leftJoinAndSelect('posts.author', 'author')
       .leftJoinAndSelect('posts.topics', 'topics');
-    return queryBuilder.getMany();
+    return <Promise<PostOverview>>queryBuilder.getMany();
   }
 
   private getSelectIsAuthorQuery(author: UserCredential | undefined) {

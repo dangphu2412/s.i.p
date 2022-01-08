@@ -16,6 +16,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { PostOverview } from './client/post-overview.api';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
@@ -45,7 +46,7 @@ export class PostController {
   findAll(
     @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
-  ) {
+  ): Promise<PostOverview> {
     return this.postService.findAll(searchQuery, author);
   }
 

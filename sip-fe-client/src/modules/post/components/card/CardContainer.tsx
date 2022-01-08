@@ -1,59 +1,29 @@
 import { Skeleton } from 'antd';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useDispatch, useSelector } from 'react-redux';
 import { LoadMore } from '../../../../components/progress/LoadMore';
+import { selectFilter, selectPage } from '../../../../modules/query/query.selector';
+import { PostOverview } from '../../api/post.api';
+import { fetchPosts } from '../../post.action';
 import { CardItemOverview } from './CardItemOverview';
-// 
+
 export function CardContainer(): JSX.Element {
-    const data = [
-        {
-            title: 'Hello dmm',
-            slug: 'Hello dmm',
-            summary: 'This is summary',
-            topics: ['Free', 'Web app'],
-            totalVote: 10,
-            isVoted: true
-        },
-        {
-            title: 'Hello',
-            slug: 'Hello dmm',
-            summary: 'This is summary',
-            topics: ['Free', 'Web app'],
-            totalVote: 12,
-            isVoted: false
-        },
-        {
-            title: 'Hello',
-            slug: 'Hello dmm',
-            summary: 'This is summary',
-            topics: ['Free', 'Web app'],
-            totalVote: 15,
-            isVoted: true
-        },
-        {
-            title: 'Hello',
-            slug: 'Hello dmm',
-            summary: 'This is summary',
-            topics: ['Free', 'Web app'],
-            totalVote: 20,
-            isVoted: true
-        },
-        {
-            title: 'Hello',
-            slug: 'Hello dmm',
-            summary: 'This is summary',
-            topics: ['Free', 'Web app'],
-            totalVote: 20,
-            isVoted: true
-        }
-    ];
-    const [posts, setPosts] = useState(data);
+    const dispatch = useDispatch();
+    const [posts, setPosts] = useState<PostOverview>([]);
     const [isLoading, setLoading] = useState(false);
+    const filter = useSelector(selectFilter);
+    const page = useSelector(selectPage);
+
     function loadMorePosts() {
         setLoading(true);
         setTimeout(() => {
+            const newPosts = (dispatch(fetchPosts({
+                page,
+                filter
+            })) as unknown) as PostOverview;
             setPosts(posts.concat(
-                posts
+                newPosts
             ));
             setLoading(false);
         }, 1500);
@@ -75,7 +45,7 @@ export function CardContainer(): JSX.Element {
                         >
                             <CardItemOverview
                                 key={index}
-                                data={{id: index, ...post}}
+                                data={post}
                             />
                         </a>;
                     })

@@ -1,14 +1,15 @@
-import { Topic } from '@modules/topic/topic.entity';
-import { User } from '@modules/user/user.entity';
+import { Topic } from '../../topic/api/topic.api';
+import { Author } from '../../user/api/user.api';
 
 export interface PostSummary {
   id: string;
   title: string;
   slug: string;
+  summary: string;
   isAuthor: boolean;
   totalVotes: number;
   topics: Topic[];
-  author: User;
+  author: Author;
 }
 
 export type PostOverview = PostSummary[];

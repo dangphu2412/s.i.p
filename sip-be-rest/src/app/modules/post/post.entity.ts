@@ -49,10 +49,10 @@ export class Post extends TimeEntityGenerator() {
     select: false,
     insert: false,
     update: false,
-    name: 'vote_count',
+    name: 'total_votes',
     nullable: true,
   })
-  public voteCount?: number;
+  public totalVotes?: number;
   /**
    * END VIRTUAL FIELDS
    */

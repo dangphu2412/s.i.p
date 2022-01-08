@@ -1,3 +1,4 @@
+import { PostSummary } from '../../api/post.api';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Image, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
@@ -6,18 +7,11 @@ import '../../../../scss/global.scss';
 import './index.scss';
 
 interface CardItemOverviewProps {
-    data: {
-        id: number;
-        title: string;
-        summary: string;
-        topics: string[];
-        totalVote: number;
-        isVoted: boolean;
-    }
+    data: PostSummary
 }
 
 export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
-    const [isVoted, setIsVoted] = useState(props.data.isVoted);
+    const [isVoted, setIsVoted] = useState(props.data.isAuthor);
     function handleVote(e: React.MouseEvent<HTMLElement, MouseEvent>): void {
         e.preventDefault();
         setIsVoted(!isVoted);
@@ -51,7 +45,7 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                         <div>
                             {
                                 props.data.topics.map((topic, index) => {
-                                    return <span className='mr-2' key={index}>{topic}</span>;
+                                    return <span className='mr-2' key={index}>{topic.name}</span>;
                                 })
                             }
                         </div>
@@ -64,7 +58,7 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                                     : <CaretDownOutlined/>
                             }
                             <div>
-                                { props.data.totalVote }
+                                { props.data.totalVotes }
                             </div>
                             
                         </Button>
