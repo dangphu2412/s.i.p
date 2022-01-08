@@ -1,0 +1,20 @@
+select posts.id as id, title, posts.slug, thumbnail, posts.updated_at, vote_count
+, users.full_name, topics.id as topic_id, topics.name
+, case users.id
+	when 9 then true
+	else false
+  end as is_author
+from posts
+inner join (
+	select posts.id as id
+	, count(votes.id) as vote_count
+	from posts
+	left join votes on votes.post_id = posts.id
+	group by posts.id
+	order by vote_count asc
+	limit 10
+) as post_ordered_by_votes
+on posts.id = post_ordered_by_votes.id
+left join users on users.id = posts."authorId"
+left join posts_topics on posts_topics."posts_id" = posts.id
+left join topics on topics.id = posts_topics."topics_id"

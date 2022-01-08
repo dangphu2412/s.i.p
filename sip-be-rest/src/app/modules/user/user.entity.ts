@@ -1,6 +1,7 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
 import { Comment } from '@modules/comment/comment.entity';
 import { Permission } from '@modules/permission/permission.entity';
+import { Post } from '@modules/post/post.entity';
 import { Vote } from '@modules/vote/vote.entity';
 import {
   Column,
@@ -53,6 +54,9 @@ export class User extends TimeEntityGenerator() {
 
   @OneToMany(() => Vote, (vote) => vote.author)
   public votes: Vote[];
+
+  @OneToMany(() => Post, (post) => post.author)
+  public posts: Post[];
 
   static create(partials: Partial<User>) {
     return Object.assign(new User(), partials);

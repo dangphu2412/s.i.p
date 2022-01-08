@@ -12,6 +12,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { SlugUtils } from '@utils/slug';
 import { Repository } from 'typeorm';
+import { ArrayUtils } from './../../../external/utils/array/array.utils';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';
@@ -45,6 +46,14 @@ export class PostService {
   }
 
   findAll(searchQuery: SearchCriteria) {
+    if (ArrayUtils.isEmpty(searchQuery.filters)) {
+      return this.postRepository.find({
+        relations: ['author', 'votes'],
+        skip: searchQuery.offset,
+        take: searchQuery.limit,
+      });
+    }
+
     const fetchPostType = searchQuery.filters[0];
 
     switch (fetchPostType.value) {
@@ -61,12 +70,12 @@ export class PostService {
     return `This action returns a #${id} post`;
   }
 
-  /**
-   * TODO: Lấy ra những bài viết mới nhất
-   * bao gồm tổng số vote, và cho biết bài viết đó chủ thớt đã vote chưa
-   */
   private findLatestPosts(searchQuery: SearchCriteria) {
-    return this.postRepository.find();
+    const queryBuilder = this.postRepository
+      .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.author', 'author')
+      .getMany();
+    return queryBuilder;
   }
 
   private findHottestPosts(searchQuery: SearchCriteria) {

@@ -5,6 +5,8 @@ import { SearchCriteria } from '../core/search-criteria';
 export interface SearchValidationSchema {
   allowFilters: string[];
   allowSorts: string[];
+  requiredFilter?: boolean;
+  requiredSort?: boolean;
   filterToMatchingMap?: Record<string, (val: any) => boolean>;
 }
 
@@ -14,6 +16,7 @@ export abstract class AbstractSearchValidator
   transform(value: SearchCriteria): SearchCriteria {
     const { filters, sorts } = value;
     const schema: SearchValidationSchema = this.getSchema();
+
     if (
       ArrayUtils.isPresent(schema.allowSorts) &&
       ArrayUtils.isPresent(sorts)

@@ -1,11 +1,13 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
 import { Topic } from '@modules/topic/topic.entity';
+import { User } from '@modules/user/user.entity';
 import { Vote } from '@modules/vote/vote.entity';
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -27,6 +29,9 @@ export class Post extends TimeEntityGenerator() {
   @Column({ name: 'summary', type: 'text' })
   public summary: string;
 
+  @Column({ name: 'thumbnail', nullable: false })
+  public thumbnail: string;
+
   @ManyToMany(() => Topic, (topic) => topic.posts)
   @JoinTable({
     name: 'posts_topics',
@@ -43,6 +48,9 @@ export class Post extends TimeEntityGenerator() {
 
   @OneToMany(() => Vote, (vote) => vote.post)
   public votes: Vote[];
+
+  @ManyToOne(() => User, (author) => author.posts)
+  public author: User;
 
   public static create(partial: Partial<Post>) {
     return Object.assign(new Post(), partial);

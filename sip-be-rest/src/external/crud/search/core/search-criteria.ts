@@ -17,6 +17,7 @@ export class SearchCriteria {
   public filters: FilterCriteria[];
   public limit: number;
   public page: number;
+  public offset: number;
 
   static create(req: Request) {
     const instance = new SearchCriteria();
@@ -25,6 +26,7 @@ export class SearchCriteria {
     instance.filters = SearchCriteria.getFilters(req);
     instance.sorts = SearchCriteria.getSorts(req);
     instance.search = parseSearch(req.query.search as string);
+    instance.offset = (instance.page - 1) * instance.limit;
     return instance;
   }
 
