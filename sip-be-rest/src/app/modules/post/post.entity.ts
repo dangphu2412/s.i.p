@@ -32,6 +32,31 @@ export class Post extends TimeEntityGenerator() {
   @Column({ name: 'thumbnail', nullable: false })
   public thumbnail: string;
 
+  /**
+   * START VIRTUAL FIELDS
+   * FIXME: This is a work around to add virtual field mapping into entity
+   */
+  @Column({
+    select: false,
+    insert: false,
+    update: false,
+    name: 'is_author',
+    nullable: true,
+  })
+  public isAuthor?: boolean;
+
+  @Column({
+    select: false,
+    insert: false,
+    update: false,
+    name: 'vote_count',
+    nullable: true,
+  })
+  public voteCount?: number;
+  /**
+   * END VIRTUAL FIELDS
+   */
+
   @ManyToMany(() => Topic, (topic) => topic.posts)
   @JoinTable({
     name: 'posts_topics',

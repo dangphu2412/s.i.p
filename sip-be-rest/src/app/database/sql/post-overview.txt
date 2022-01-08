@@ -1,20 +1,32 @@
-select posts.id as id, title, posts.slug, thumbnail, posts.updated_at, vote_count
-, users.full_name, topics.id as topic_id, topics.name
-, case users.id
+SELECT "posts"."created_at" AS "posts_created_at", 
+"posts"."updated_at" AS "posts_updated_at", 
+"posts"."deleted_at" AS "posts_deleted_at", 
+"posts"."id" AS "posts_id", "posts"."title" AS "posts_title", 
+"posts"."slug" AS "posts_slug", "posts"."content" AS "posts_content",
+"posts"."summary" AS "posts_summary", "posts"."thumbnail" AS "posts_thumbnail", 
+"posts"."authorId" AS "posts_authorId", "author"."created_at" AS "author_created_at"
+, "author"."updated_at" AS "author_updated_at", 
+"author"."deleted_at" AS "author_deleted_at", "author"."id" AS "author_id", 
+"author"."username" AS "author_username", 
+"author"."full_name" AS "author_full_name", "author"."email" AS "author_email", 
+"author"."password" AS "author_password", "author"."avatar" AS "author_avatar", 
+"topics"."id" AS "topics_id", "topics"."name" AS "topics_name", 
+"topics"."slug" AS "topics_slug", vote_count as "posts_vote_count"
+, case "author".id
 	when 9 then true
 	else false
-  end as is_author
-from posts
-inner join (
-	select posts.id as id
-	, count(votes.id) as vote_count
-	from posts
-	left join votes on votes.post_id = posts.id
-	group by posts.id
-	order by vote_count asc
-	limit 10
-) as post_ordered_by_votes
-on posts.id = post_ordered_by_votes.id
-left join users on users.id = posts."authorId"
-left join posts_topics on posts_topics."posts_id" = posts.id
-left join topics on topics.id = posts_topics."topics_id"
+	end as "posts_is_author"
+FROM "posts" "posts"
+INNER JOIN (SELECT "posts"."id" as id, COUNT(votes.id) as vote_count 
+			FROM "posts" "posts" 
+			LEFT JOIN "votes" on votes.post_id = posts.id
+			WHERE "posts"."deleted_at" IS NULL
+			GROUP BY "posts"."id" 
+			ORDER BY vote_count 
+			ASC LIMIT 10) "post_ordered_by_votes" 
+				ON post_ordered_by_votes.id = "posts"."id"  
+LEFT JOIN "users" "author" ON "author"."id"="posts"."authorId" 
+AND ("author"."deleted_at" IS NULL) 
+LEFT JOIN "posts_topics" "posts_topics" ON "posts_topics"."posts_id"="posts"."id"
+LEFT JOIN "topics" "topics" ON "topics"."id"="posts_topics"."topics_id"
+WHERE "posts"."deleted_at" IS NULL

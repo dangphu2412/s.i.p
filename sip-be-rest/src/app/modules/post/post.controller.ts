@@ -1,6 +1,9 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
-import { Protected } from '@modules/auth/decorator/protected.decorator';
+import {
+  OptionalProtected,
+  Protected,
+} from '@modules/auth/decorator/protected.decorator';
 import { AuthContext } from '@modules/auth/decorator/user-cred.decorator';
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
 import {
@@ -37,11 +40,13 @@ export class PostController {
     return this.postService.upsertVoteOfPost(+postId, author);
   }
 
+  @OptionalProtected
   @Get()
   findAll(
     @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
+    @AuthContext() author: UserCredential | undefined,
   ) {
-    return this.postService.findAll(searchQuery);
+    return this.postService.findAll(searchQuery, author);
   }
 
   @Get(':id')

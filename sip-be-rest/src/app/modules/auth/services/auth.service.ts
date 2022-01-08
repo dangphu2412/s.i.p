@@ -48,7 +48,7 @@ export class AuthService {
   public generateTestToken() {
     return {
       accessToken: this.jwtService.sign(
-        JwtPayloadDto.create('1', 'fus', { ADMIN: 1 }),
+        JwtPayloadDto.create('9', 'fus', { ADMIN: 1 }),
       ),
       profile: {},
     };

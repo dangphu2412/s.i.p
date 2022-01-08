@@ -9,19 +9,18 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { SlugUtils } from '@utils/slug';
-import { Repository } from 'typeorm';
 import { ArrayUtils } from './../../../external/utils/array/array.utils';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';
 import { Post } from './post.entity';
+import { PostRepository } from './post.repository';
 
 @Injectable()
 export class PostService {
   constructor(
-    @InjectRepository(Post) private postRepository: Repository<Post>,
+    private postRepository: PostRepository,
     private voteService: VoteService,
     private userService: UserService,
   ) {}
@@ -45,22 +44,18 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  findAll(searchQuery: SearchCriteria) {
+  findAll(searchQuery: SearchCriteria, author: UserCredential | undefined) {
     if (ArrayUtils.isEmpty(searchQuery.filters)) {
-      return this.postRepository.find({
-        relations: ['author', 'votes'],
-        skip: searchQuery.offset,
-        take: searchQuery.limit,
-      });
+      throw new BadRequestException('Required filter type to get posts');
     }
 
     const fetchPostType = searchQuery.filters[0];
 
     switch (fetchPostType.value) {
       case FetchPostType.HOTTEST:
-        return this.findHottestPosts(searchQuery);
+        return this.postRepository.findHottestPosts(searchQuery, author);
       case FetchPostType.LATEST:
-        return this.findLatestPosts(searchQuery);
+        return this.postRepository.findLatestPosts(searchQuery, author);
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
     }
@@ -68,18 +63,6 @@ export class PostService {
 
   findOne(id: number) {
     return `This action returns a #${id} post`;
-  }
-
-  private findLatestPosts(searchQuery: SearchCriteria) {
-    const queryBuilder = this.postRepository
-      .createQueryBuilder('posts')
-      .leftJoinAndSelect('posts.author', 'author')
-      .getMany();
-    return queryBuilder;
-  }
-
-  private findHottestPosts(searchQuery: SearchCriteria) {
-    return this.postRepository.find();
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

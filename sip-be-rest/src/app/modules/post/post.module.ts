@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
-import { PostService } from './post.service';
-import { PostController } from './post.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Post } from './post.entity';
-import { VoteModule } from '@modules/vote/vote.module';
 import { UserModule } from '@modules/user/user.module';
+import { VoteModule } from '@modules/vote/vote.module';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PostController } from './post.controller';
+import { PostRepository } from './post.repository';
+import { PostService } from './post.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post]), VoteModule, UserModule],
+  imports: [TypeOrmModule.forFeature([PostRepository]), VoteModule, UserModule],
   controllers: [PostController],
   providers: [PostService],
 })
