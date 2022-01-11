@@ -1,6 +1,7 @@
 import { QueryState } from './query/interface';
 import { AuthState } from './auth/auth.reducer';
 import { LangState } from './translations/translation.reducer';
+import { DataHolders } from './data/api/activity';
 
 export type AppError = {
     message?: string;
@@ -17,5 +18,6 @@ export type AppState = {
     loading: AppLoading,
     language: LangState,
     auth: AuthState,
-    query: QueryState
+    query: QueryState;
+    dataHolders: DataHolders;
 }

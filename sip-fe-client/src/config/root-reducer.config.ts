@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { dataHoldersReducer } from 'src/modules/data/data.reducer';
 import { queryReducer } from 'src/modules/query/query.reducer';
 import { authReducer } from '../modules/auth/auth.reducer';
 import { errorReducer } from '../modules/error/error.reducer';
@@ -11,7 +12,8 @@ export default function createReducer() {
         loading: loadingReducer,
         language: languageProviderReducer,
         auth: authReducer,
-        query: queryReducer
+        query: queryReducer,
+        dataHolders: dataHoldersReducer
     });
   
     return rootReducer;

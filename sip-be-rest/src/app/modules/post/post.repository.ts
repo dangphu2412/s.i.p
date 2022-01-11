@@ -12,7 +12,7 @@ export class PostRepository extends Repository<Post> {
   ) {
     const queryBuilder = this.createQueryBuilder('posts')
       .addSelect(
-        `total_votes as "posts_total_votes"
+        `post_ordered_by_votes.total_votes as "posts_total_votes"
         , ${this.getSelectIsAuthorQuery(author)}`,
       )
       .innerJoin(
@@ -21,7 +21,7 @@ export class PostRepository extends Repository<Post> {
             .from(Post, 'posts')
             .leftJoin('votes', 'votes', 'votes.post_id = posts.id')
             .groupBy('posts.id')
-            .orderBy('vote_count', 'DESC')
+            .orderBy('total_votes', 'DESC')
             .limit(searchQuery.limit)
             .offset(searchQuery.offset);
           return qb;
@@ -41,7 +41,7 @@ export class PostRepository extends Repository<Post> {
   ) {
     const queryBuilder = this.createQueryBuilder('posts')
       .addSelect(
-        `total_votes as "posts_total_votes"
+        `post_ordered_by_votes.total_votes as "posts_total_votes"
         , ${this.getSelectIsAuthorQuery(author)}`,
       )
       .innerJoin(

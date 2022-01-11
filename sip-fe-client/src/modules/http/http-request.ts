@@ -74,9 +74,9 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
     }
 
     function* handle () {
-        yield start();
+        yield call(start);
         yield call(doRequest);
-        yield finish();
+        yield call(finish);
         return getData();
     }
 

@@ -1,5 +1,5 @@
 import { Skeleton } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { LoadMore } from '../../../../components/progress/LoadMore';
@@ -7,9 +7,11 @@ import { selectFilter, selectPage } from '../../../../modules/query/query.select
 import { PostOverview } from '../../api/post.api';
 import { fetchPosts } from '../../post.action';
 import { CardItemOverview } from './CardItemOverview';
+import { selectDataHolderByView } from '../../../data/data.selector';
 
 export function CardContainer(): JSX.Element {
     const dispatch = useDispatch();
+    const dataHolder = useSelector(selectDataHolderByView('POST'));
     const [posts, setPosts] = useState<PostOverview>([]);
     const [isLoading, setLoading] = useState(false);
     const filter = useSelector(selectFilter);
@@ -18,16 +20,23 @@ export function CardContainer(): JSX.Element {
     function loadMorePosts() {
         setLoading(true);
         setTimeout(() => {
-            const newPosts = (dispatch(fetchPosts({
+            dispatch(fetchPosts({
                 page,
                 filter
-            })) as unknown) as PostOverview;
-            setPosts(posts.concat(
-                newPosts
-            ));
+            }));
+            if (dataHolder) {
+                setPosts(posts.concat(
+                    dataHolder.data
+                ));
+            }
             setLoading(false);
         }, 1500);
     }
+
+    useEffect(() => {
+        loadMorePosts();
+    }, []);
+
     
     return (
         <div>
