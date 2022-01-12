@@ -23,12 +23,12 @@ export class UserController {
   @PermissionGranted(AccessRights.RootAccess.ADMIN)
   @Protected
   @Get()
-  public async findAll(
+  public async findMany(
     @AuthContext() user: UserCredential,
     @ExtractRuleManager() ruleManager: RuleManager,
     @SearchQuery(FetchUsersOverviewValidator) searchQuery: SearchCriteria,
   ) {
-    return toPage(await this.userService.findAll(searchQuery), searchQuery);
+    return toPage(await this.userService.findMany(searchQuery), searchQuery);
   }
 
   @Post()

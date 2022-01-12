@@ -65,7 +65,7 @@ export class RoleService {
     }
   }
 
-  findAllIncludesPermissions() {
+  findManyIncludesPermissions() {
     return this.roleRepository.find({
       relations: ['permissions'],
     });

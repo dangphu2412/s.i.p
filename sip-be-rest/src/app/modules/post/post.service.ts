@@ -44,7 +44,7 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  findAll(searchQuery: SearchCriteria, author: UserCredential | undefined) {
+  findMany(searchQuery: SearchCriteria, author: UserCredential | undefined) {
     if (ArrayUtils.isEmpty(searchQuery.filters)) {
       throw new BadRequestException('Required filter type to get posts');
     }

@@ -48,7 +48,7 @@ export class RoleController {
 
   @ApiOkResponse()
   @Get()
-  public findAllRolesIncludesPermissions() {
-    return this.roleService.findAllIncludesPermissions();
+  public findManyRolesIncludesPermissions() {
+    return this.roleService.findManyIncludesPermissions();
   }
 }

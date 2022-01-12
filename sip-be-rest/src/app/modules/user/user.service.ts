@@ -78,7 +78,7 @@ export class UserService {
     }
   }
 
-  public findAll(searchQuery: SearchCriteria) {
+  public findMany(searchQuery: SearchCriteria) {
     return this.userRepository.findAndCount({
       order: toOrders(searchQuery.sorts),
     });

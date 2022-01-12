@@ -43,11 +43,11 @@ export class PostController {
 
   @OptionalProtected
   @Get()
-  findAll(
+  findMany(
     @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
   ): Promise<PostOverview> {
-    return this.postService.findAll(searchQuery, author);
+    return this.postService.findMany(searchQuery, author);
   }
 
   @Get(':id')
