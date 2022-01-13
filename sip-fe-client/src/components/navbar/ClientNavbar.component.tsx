@@ -60,9 +60,9 @@ export function ClientNavbar(): JSX.Element {
                 </Col>
                 <Col className='' span={14}>
                     <Menu mode="horizontal" className={'override-line-height-menu'}>
-                        <Menu.Item key="1">Products</Menu.Item>
-                        <Menu.Item key="2">Topics</Menu.Item>
-                        <Menu.Item key="3">Recommend</Menu.Item>
+                        <Menu.Item key="1"><a href='/'>Products</a></Menu.Item>
+                        <Menu.Item key="2"><a href='/topics'>Topics</a></Menu.Item>
+                        <Menu.Item key="3"><a href='/recommend'>Recommend</a></Menu.Item>
                     </Menu>
                 </Col>
                 <Col className='adjust-avatar-to-the-end p-right-container' span={6}>

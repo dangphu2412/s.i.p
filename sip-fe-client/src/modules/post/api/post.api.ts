@@ -13,3 +13,7 @@ export interface PostSummary {
 }
 
 export type PostOverview = PostSummary[];
+
+export interface PostDetail {
+  id: number;
+}
