@@ -9,5 +9,6 @@ define(Topic, (faker: typeof Faker) => {
   const topic = new Topic();
   topic.name = name;
   topic.slug = SlugUtils.normalize(name);
+  topic.summary = faker.lorem.paragraph(2);
   return topic;
 });

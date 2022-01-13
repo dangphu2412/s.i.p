@@ -1,3 +1,4 @@
+import { Topic } from '@modules/topic/topic.entity';
 import { TimeEntityGenerator } from '@database/base/time-entity';
 import { Comment } from '@modules/comment/comment.entity';
 import { Permission } from '@modules/permission/permission.entity';
@@ -57,6 +58,20 @@ export class User extends TimeEntityGenerator() {
 
   @OneToMany(() => Post, (post) => post.author)
   public posts: Post[];
+
+  @ManyToMany(() => Topic, (topic) => topic.followers)
+  @JoinTable({
+    name: 'users_topics',
+    joinColumn: {
+      name: 'users_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'topics_id',
+      referencedColumnName: 'id',
+    },
+  })
+  public followedTopics: Topic[];
 
   static create(partials: Partial<User>) {
     return Object.assign(new User(), partials);
