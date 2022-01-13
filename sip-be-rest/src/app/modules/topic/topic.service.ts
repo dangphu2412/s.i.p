@@ -1,24 +1,42 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Topic } from './topic.entity';
+import { TopicOverview, TopicSummary } from './client/topic-overview.api';
+import { TopicIncludeOptionalAuthor } from './internal/topic-include-optional-author';
+import { TopicRepository } from './topic.repository';
 
 @Injectable()
 export class TopicService {
-  constructor(
-    @InjectRepository(Topic) private topicRepository: Repository<Topic>,
-  ) {}
+  constructor(private topicRepository: TopicRepository) {}
 
-  // Lay ra nhung topic va kiem tra xem user da follow topic chua
   async findMany(
     searchQuery: SearchCriteria,
     author: UserCredential | undefined,
-  ) {
+  ): Promise<TopicOverview> {
+    if (author) {
+      const topics = await this.topicRepository.findTopicsIncludeOptionalAuthor(
+        searchQuery,
+        author,
+      );
+      return topics.map(this.toTopicOverview);
+    }
     const topics = await this.topicRepository.find({
-      relations: ['followers'],
+      skip: searchQuery.offset,
+      take: searchQuery.limit,
     });
-    return topics;
+    return topics.map(this.toTopicOverview);
+  }
+
+  private toTopicOverview(topic: TopicIncludeOptionalAuthor): TopicSummary {
+    let isAuthor = false;
+    if (topic.users_id && topic.topics_id) {
+      isAuthor = true;
+    }
+    delete topic.users_id;
+    delete topic.topics_id;
+    return {
+      ...topic,
+      isAuthor,
+    };
   }
 }

@@ -2,6 +2,7 @@ import { Topic } from '@modules/topic/topic.entity';
 import { User } from '@modules/user/user.entity';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
+import { random } from 'faker';
 
 export default class CreateFollowers implements Seeder {
   public async run(factory: Factory, connection: Connection): Promise<any> {
@@ -9,7 +10,9 @@ export default class CreateFollowers implements Seeder {
     const followers = await connection.getRepository(User).find();
 
     followers.forEach((follower) => {
-      follower.followedTopics = topics;
+      follower.followedTopics = [
+        ...new Set([random.arrayElement(topics), random.arrayElement(topics)]),
+      ];
     });
 
     await Promise.all(
