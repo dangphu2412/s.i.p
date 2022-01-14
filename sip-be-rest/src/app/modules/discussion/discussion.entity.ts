@@ -1,15 +1,19 @@
 import { TimeEntityGenerator, TimeType } from '@database/base/time-entity';
+import { Post } from '@modules/post/post.entity';
 import { User } from '@modules/user/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('comments')
-export class Comment extends TimeEntityGenerator(TimeType.TimeTracker) {
+@Entity('discussions')
+export class Discussion extends TimeEntityGenerator(TimeType.TimeTracker) {
   @PrimaryGeneratedColumn()
   public id: string;
 
   @Column({ name: 'content', type: 'text' })
   public content: string;
 
-  @ManyToOne(() => User, (author) => author.comments)
+  @ManyToOne(() => User, (author) => author.discussions)
   public author: User;
+
+  @ManyToOne(() => Post, (post) => post.discussions)
+  public post: Post;
 }

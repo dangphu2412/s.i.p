@@ -1,3 +1,4 @@
+import { DiscussionModule } from '@modules/discussion/discussion.module';
 import { UserModule } from '@modules/user/user.module';
 import { VoteModule } from '@modules/vote/vote.module';
 import { Module } from '@nestjs/common';
@@ -7,7 +8,12 @@ import { PostRepository } from './post.repository';
 import { PostService } from './post.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PostRepository]), VoteModule, UserModule],
+  imports: [
+    TypeOrmModule.forFeature([PostRepository]),
+    VoteModule,
+    UserModule,
+    DiscussionModule,
+  ],
   controllers: [PostController],
   providers: [PostService],
 })

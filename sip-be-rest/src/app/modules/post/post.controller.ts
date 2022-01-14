@@ -33,12 +33,12 @@ export class PostController {
   }
 
   @Protected
-  @Post('/:postId/votes')
+  @Post('/:id/votes')
   upsertVoteOfPost(
-    @Param('postId') postId: string,
+    @Param('id') id: string,
     @AuthContext() author: UserCredential,
   ) {
-    return this.postService.upsertVoteOfPost(+postId, author);
+    return this.postService.upsertVoteOfPost(+id, author);
   }
 
   @OptionalProtected
@@ -50,9 +50,21 @@ export class PostController {
     return this.postService.findMany(searchQuery, author);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @OptionalProtected
+  @Get(':slug')
+  findOne(
+    @Param('slug') slug: string,
+    @AuthContext() author: UserCredential | undefined,
+  ) {
+    return this.postService.findOne(slug, author);
+  }
+
+  @Get(':id/discussions')
+  findRelatedDiscussions(
+    @Param('id') id: string,
+    @SearchQuery() searchCriteria: SearchCriteria,
+  ) {
+    return this.postService.findRelatedDiscussions(+id, searchCriteria);
   }
 
   @Patch(':id')

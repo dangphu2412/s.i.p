@@ -1,3 +1,5 @@
+import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { Post } from '@modules/post/post.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -22,5 +24,12 @@ export class VoteService {
         'ON CONSTRAINT once_per_author DO UPDATE SET is_voted = NOT votes.is_voted',
       )
       .execute();
+  }
+
+  public async didUserVoteForPost(
+    author: UserCredential,
+    post: Post,
+  ): Promise<boolean> {
+    return false;
   }
 }

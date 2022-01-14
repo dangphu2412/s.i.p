@@ -1,10 +1,12 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
+import { Discussion } from '@modules/discussion/discussion.entity';
 import { Topic } from '@modules/topic/topic.entity';
 import { User } from '@modules/user/user.entity';
 import { Vote } from '@modules/vote/vote.entity';
 import {
   Column,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -13,6 +15,7 @@ import {
 } from 'typeorm';
 
 @Entity('posts')
+@Index(['slug'])
 export class Post extends TimeEntityGenerator() {
   @PrimaryGeneratedColumn()
   public id: string;
@@ -31,6 +34,18 @@ export class Post extends TimeEntityGenerator() {
 
   @Column({ name: 'thumbnail', nullable: false })
   public thumbnail: string;
+
+  @Column({ name: 'preview_gallery', nullable: false, type: 'simple-array' })
+  public previewGalleryImg: string;
+
+  @Column({ name: 'gallery_images', nullable: false, type: 'simple-array' })
+  public galleryImages: string[];
+
+  @Column({ name: 'video_demo', nullable: true })
+  public videoDemo: string;
+
+  @Column({ name: 'product_link', nullable: false })
+  public productLink: string;
 
   /**
    * START VIRTUAL FIELDS
@@ -73,6 +88,9 @@ export class Post extends TimeEntityGenerator() {
 
   @OneToMany(() => Vote, (vote) => vote.post)
   public votes: Vote[];
+
+  @OneToMany(() => Discussion, (discussion) => discussion.author)
+  public discussions: Discussion[];
 
   @ManyToOne(() => User, (author) => author.posts)
   public author: User;

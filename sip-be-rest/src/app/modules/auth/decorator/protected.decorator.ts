@@ -1,4 +1,4 @@
-import { OptionalJwtAuthGuard } from './../guard/optional-jwt.guard';
+import { OptionalJwtAuthGuard } from '../guard/optional-jwt.guard';
 import { applyDecorators, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guard/jwt.guard';

@@ -1,5 +1,6 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { DiscussionService } from '@modules/discussion/discussion.service';
 import { UserService } from '@modules/user/user.service';
 import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';
 import { VoteService } from '@modules/vote/vote.service';
@@ -20,9 +21,10 @@ import { PostRepository } from './post.repository';
 @Injectable()
 export class PostService {
   constructor(
-    private postRepository: PostRepository,
-    private voteService: VoteService,
-    private userService: UserService,
+    private readonly postRepository: PostRepository,
+    private readonly voteService: VoteService,
+    private readonly userService: UserService,
+    private readonly discussionService: DiscussionService,
   ) {}
 
   async create(createPostDto: CreatePostDto) {
@@ -40,6 +42,7 @@ export class PostService {
 
     const post = Post.create(createPostDto);
     post.slug = SlugUtils.normalize(post.title);
+    post.previewGalleryImg = post.galleryImages[0];
 
     return this.postRepository.save(post);
   }
@@ -61,8 +64,39 @@ export class PostService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  /**
+   * Need to get:
+   * - Basic information: title, slug, summary,
+   * - voteStatus
+   * - projectMember
+   * - topics related
+   * - thumbnails
+   * - mainThumbnail
+   */
+  async findOne(slug: string, author: UserCredential | undefined) {
+    const post = await this.postRepository.findOne({
+      where: {
+        slug,
+      },
+    });
+
+    post.isVoted = author
+      ? await this.voteService.didUserVoteForPost(author, post)
+      : false;
+
+    return post;
+  }
+
+  async findRelatedDiscussions(postId: number, searchCriteria: SearchCriteria) {
+    const post = await this.postRepository.findOne(postId);
+
+    if (!post) {
+      throw new UnprocessableEntityException(
+        `Post with id: ${postId} does not exist that cannot find discussions`,
+      );
+    }
+
+    return this.discussionService.findRelatedDiscussions(post, searchCriteria);
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

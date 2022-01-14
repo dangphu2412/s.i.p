@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
-export class UpdateCommentDto {
+export class CreateDiscussionDto {
   @ApiProperty()
   @IsString()
   public content: string;
