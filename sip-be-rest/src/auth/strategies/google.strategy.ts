@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator'
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
 import { AuthService } from '../services/auth.service';
-import { GoogleUserExtractedDto } from '../types/google-user-extracted';
+import { GoogleUserExtractedDto } from '../internal/google-user-extracted';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {

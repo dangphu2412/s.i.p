@@ -1,4 +1,4 @@
-import { BcryptService } from '@modules/auth/services/bcrypt.service';
+import { BcryptService } from 'src/auth/services/bcrypt.service';
 import { PermissionModule } from '@modules/permission/permission.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';

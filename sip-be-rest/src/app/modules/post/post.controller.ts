@@ -3,9 +3,9 @@ import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import {
   OptionalProtected,
   Protected,
-} from '@modules/auth/decorator/protected.decorator';
-import { AuthContext } from '@modules/auth/decorator/user-cred.decorator';
-import { UserCredential } from '@modules/auth/types/user-cred.interface';
+} from 'src/auth/decorator/protected.decorator';
+import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
+import { UserCredential } from 'src/auth/client/user-cred';
 import {
   Body,
   Controller,

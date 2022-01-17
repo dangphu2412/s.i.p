@@ -1,5 +1,5 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { UserCredential } from 'src/auth/client/user-cred';
 import { EntityRepository, Repository } from 'typeorm';
 import { PostOverview } from './client/post-overview.api';
 import { Post } from './post.entity';

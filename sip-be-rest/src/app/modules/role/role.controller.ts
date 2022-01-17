@@ -1,6 +1,6 @@
-import { Protected } from '@modules/auth/decorator/protected.decorator';
-import { AuthContext } from '@modules/auth/decorator/user-cred.decorator';
-import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { Protected } from 'src/auth/decorator/protected.decorator';
+import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
+import { UserCredential } from 'src/auth/client/user-cred';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   ApiBody,

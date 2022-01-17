@@ -1,5 +1,5 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { UserCredential } from 'src/auth/client/user-cred';
 import { EntityRepository, Repository } from 'typeorm';
 import { TopicIncludeOptionalAuthor } from './internal/topic-include-optional-author';
 import { Topic } from './topic.entity';

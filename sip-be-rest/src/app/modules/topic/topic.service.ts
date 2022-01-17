@@ -1,5 +1,5 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { UserCredential } from 'src/auth/client/user-cred';
 import { Injectable } from '@nestjs/common';
 import { TopicOverview, TopicSummary } from './client/topic-overview.api';
 import { TopicIncludeOptionalAuthor } from './internal/topic-include-optional-author';

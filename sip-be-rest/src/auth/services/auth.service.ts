@@ -2,11 +2,11 @@ import { PermissionService } from '@modules/permission/permission.service';
 import { User } from '@modules/user/user.entity';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../../user/user.service';
+import { UserService } from '../../app/modules/user/user.service';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
 import { LoginDto } from '../dto/login.dto';
-import { LoginSuccessResponse } from '../interface';
-import { GoogleUserExtractedDto } from '../types/google-user-extracted';
+import { LoginSuccessResponse } from '../client/login-success';
+import { GoogleUserExtractedDto } from '../internal/google-user-extracted';
 import { BcryptService } from './bcrypt.service';
 
 @Injectable()
@@ -35,14 +35,18 @@ export class AuthService {
   public async loginWithGoogle(
     createUserDto: GoogleUserExtractedDto,
   ): Promise<LoginSuccessResponse> {
-    let user = await this.userService.findByEmail(createUserDto.email);
+    let userWithPermissions = await this.userService.findByEmail(
+      createUserDto.email,
+    );
 
-    if (!user) {
+    if (!userWithPermissions) {
       await this.userService.createByGooglePayload(createUserDto);
-      user = await this.userService.findByEmail(createUserDto.email);
+      userWithPermissions = await this.userService.findByEmail(
+        createUserDto.email,
+      );
     }
 
-    return this.toLoginSuccessResponse(user);
+    return this.toLoginSuccessResponse(userWithPermissions);
   }
 
   public generateTestToken() {

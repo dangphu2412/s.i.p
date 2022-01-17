@@ -1,5 +1,5 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { UserCredential } from 'src/auth/client/user-cred';
 import { DiscussionService } from '@modules/discussion/discussion.service';
 import { UserService } from '@modules/user/user.service';
 import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';

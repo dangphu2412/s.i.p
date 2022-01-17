@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PERMISSION_REFLECTOR_KEY } from '../constants';
-import { UserCredential } from '../types/user-cred.interface';
+import { UserCredential } from '../client/user-cred';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {

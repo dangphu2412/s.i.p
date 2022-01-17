@@ -10,7 +10,7 @@ import { Response } from 'express';
 import { AuthContext } from './decorator/user-cred.decorator';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './services/auth.service';
-import { GoogleUserExtractedDto } from './types/google-user-extracted';
+import { GoogleUserExtractedDto } from './internal/google-user-extracted';
 
 @ApiTags('auth')
 @Controller('v1/auth')

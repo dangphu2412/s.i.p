@@ -1,4 +1,4 @@
-import { UserCredential } from '@modules/auth/types/user-cred.interface';
+import { UserCredential } from 'src/auth/client/user-cred';
 import { PermissionService } from '@modules/permission/permission.service';
 import {
   Injectable,

@@ -1,5 +1,5 @@
 import { ConfigService } from '@external/config/config.service';
-import { LoginSuccessResponse } from '@modules/auth/interface';
+import { LoginSuccessResponse } from 'src/auth/client/login-success';
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 
 @Injectable()

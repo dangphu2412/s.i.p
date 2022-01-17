@@ -2,9 +2,9 @@ import { ConfigService } from '@external/config/config.service';
 import { toOrders } from '@external/crud/common/pipes/order.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayUtils } from '@external/utils/array/array.utils';
-import { Profile } from '@modules/auth/interface';
-import { BcryptService } from '@modules/auth/services/bcrypt.service';
-import { GoogleUserExtractedDto } from '@modules/auth/types/google-user-extracted';
+import { Profile } from 'src/auth/client/login-success';
+import { BcryptService } from 'src/auth/services/bcrypt.service';
+import { GoogleUserExtractedDto } from 'src/auth/internal/google-user-extracted';
 import { ErrorAssertion } from '@modules/error/error-assertion';
 import { PermissionService } from '@modules/permission/permission.service';
 import {
