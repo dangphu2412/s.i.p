@@ -1,7 +1,7 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
 import { Discussion } from '@modules/discussion/discussion.entity';
 import { Topic } from '@modules/topic/topic.entity';
-import { User } from '@modules/user/user.entity';
+import { User } from 'src/user/user.entity';
 import { Vote } from '@modules/vote/vote.entity';
 import {
   Column,

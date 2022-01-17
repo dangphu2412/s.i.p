@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigService } from '../external/config/config.service';
-import { UserModule } from '../app/modules/user/user.module';
+import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
 import { BcryptService } from './services/bcrypt.service';

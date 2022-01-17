@@ -2,7 +2,7 @@ import { AccessRights } from '@constants/access-rights.enum';
 import { ConfigService } from '@external/config/config.service';
 import { BcryptService } from 'src/auth/services/bcrypt.service';
 import { Permission } from '@modules/permission/permission.entity';
-import { User } from '@modules/user/user.entity';
+import { User } from 'src/user/user.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class initUser1638197881588 implements MigrationInterface {

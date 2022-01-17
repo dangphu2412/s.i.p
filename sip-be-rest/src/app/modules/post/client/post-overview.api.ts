@@ -1,5 +1,5 @@
 import { Topic } from '@modules/topic/topic.entity';
-import { User } from '@modules/user/user.entity';
+import { User } from 'src/user/user.entity';
 
 export interface PostSummary {
   id: string;

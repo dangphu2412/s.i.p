@@ -1,7 +1,7 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { DiscussionService } from '@modules/discussion/discussion.service';
-import { UserService } from '@modules/user/user.service';
+import { UserService } from 'src/user/user.service';
 import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';
 import { VoteService } from '@modules/vote/vote.service';
 import {

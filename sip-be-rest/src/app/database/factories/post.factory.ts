@@ -4,7 +4,7 @@ import { Post } from '@modules/post/post.entity';
 import { randomUUID } from 'crypto';
 import { SlugUtils } from '@utils/slug';
 import { Topic } from '@modules/topic/topic.entity';
-import { User } from '@modules/user/user.entity';
+import { User } from 'src/user/user.entity';
 
 define(
   Post,

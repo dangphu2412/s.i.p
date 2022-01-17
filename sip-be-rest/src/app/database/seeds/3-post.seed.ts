@@ -1,6 +1,6 @@
 import { Post } from '@modules/post/post.entity';
 import { Topic } from '@modules/topic/topic.entity';
-import { User } from '@modules/user/user.entity';
+import { User } from 'src/user/user.entity';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
 

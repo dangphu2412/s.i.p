@@ -11,7 +11,7 @@ import { TopicModule } from '@modules/topic/topic.module';
 import { VoteModule } from '@modules/vote/vote.module';
 import { Module } from '@nestjs/common';
 import { AuthModule } from '../auth/auth.module';
-import { UserModule } from './modules/user/user.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { DiscussionModule } from '@modules/discussion/discussion.module';
-import { UserModule } from '@modules/user/user.module';
+import { UserModule } from 'src/user/user.module';
 import { VoteModule } from '@modules/vote/vote.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
