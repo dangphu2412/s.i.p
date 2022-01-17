@@ -1,5 +1,5 @@
 import { UserCredential } from 'src/auth/client/user-cred';
-import { PermissionService } from '@modules/permission/permission.service';
+import { PermissionService } from '@modules/../../../permission/permission.service';
 import {
   Injectable,
   Logger,

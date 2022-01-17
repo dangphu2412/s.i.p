@@ -1,4 +1,4 @@
-import { PermissionModule } from '@modules/permission/permission.module';
+import { PermissionModule } from '@modules/../../../permission/permission.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleController } from './role.controller';

@@ -1,5 +1,5 @@
 import { UnprocessableEntityException } from '@nestjs/common';
-import { RecordKey } from '../../../../global';
+import { RecordKey } from '../../../global';
 
 export class ErrorAssertion {
   // TODO: Compare the difference between two array

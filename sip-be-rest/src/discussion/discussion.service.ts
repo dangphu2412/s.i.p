@@ -1,7 +1,7 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { AccessRights } from '@constants/access-rights.enum';
 import { RuleManager } from '@external/racl/core/rule.manager';
-import { Post } from '@modules/post/post.entity';
+import { Post } from 'src/post/post.entity';
 import { UserService } from 'src/user/user.service';
 import {
   BadRequestException,

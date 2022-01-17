@@ -5,8 +5,8 @@ import { ArrayUtils } from '@external/utils/array/array.utils';
 import { Profile } from 'src/auth/client/login-success';
 import { BcryptService } from 'src/auth/services/bcrypt.service';
 import { GoogleUserExtractedDto } from 'src/auth/internal/google-user-extracted';
-import { ErrorAssertion } from '@modules/error/error-assertion';
-import { PermissionService } from '@modules/permission/permission.service';
+import { ErrorAssertion } from '@modules/../external/error/error-assertion';
+import { PermissionService } from '@modules/../permission/permission.service';
 import {
   Injectable,
   InternalServerErrorException,

@@ -1,4 +1,4 @@
-import { Permission } from '@modules/permission/permission.entity';
+import { Permission } from '@modules/../../../permission/permission.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('roles')

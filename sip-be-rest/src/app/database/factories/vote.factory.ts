@@ -1,7 +1,7 @@
 import Faker from 'faker';
 import { define } from 'typeorm-seeding';
-import { Vote } from '@modules/vote/vote.entity';
-import { Post } from '@modules/post/post.entity';
+import { Vote } from '@modules/../../../vote/vote.entity';
+import { Post } from 'src/post/post.entity';
 import { User } from 'src/user/user.entity';
 
 define(

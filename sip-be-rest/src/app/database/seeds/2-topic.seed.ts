@@ -1,4 +1,4 @@
-import { Topic } from '@modules/topic/topic.entity';
+import { Topic } from 'src/topic/topic.entity';
 import { Factory, Seeder } from 'typeorm-seeding';
 
 export default class CreateTopics implements Seeder {

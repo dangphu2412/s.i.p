@@ -1,9 +1,9 @@
 import Faker, { fake } from 'faker';
 import { define } from 'typeorm-seeding';
-import { Post } from '@modules/post/post.entity';
+import { Post } from 'src/post/post.entity';
 import { randomUUID } from 'crypto';
 import { SlugUtils } from '@utils/slug';
-import { Topic } from '@modules/topic/topic.entity';
+import { Topic } from 'src/topic/topic.entity';
 import { User } from 'src/user/user.entity';
 
 define(

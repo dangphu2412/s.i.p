@@ -1,9 +1,9 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from 'src/auth/client/user-cred';
-import { DiscussionService } from '@modules/discussion/discussion.service';
+import { DiscussionService } from 'src/discussion/discussion.service';
 import { UserService } from 'src/user/user.service';
-import { UpsertVoteDto } from '@modules/vote/dto/upsert-vote.dto';
-import { VoteService } from '@modules/vote/vote.service';
+import { UpsertVoteDto } from '@modules/../vote/dto/upsert-vote.dto';
+import { VoteService } from '@modules/../vote/vote.service';
 import {
   BadRequestException,
   ConflictException,
@@ -11,7 +11,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { SlugUtils } from '@utils/slug';
-import { ArrayUtils } from './../../../external/utils/array/array.utils';
+import { ArrayUtils } from '../external/utils/array/array.utils';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';

@@ -1,6 +1,6 @@
-import { DiscussionModule } from '@modules/discussion/discussion.module';
+import { DiscussionModule } from 'src/discussion/discussion.module';
 import { UserModule } from 'src/user/user.module';
-import { VoteModule } from '@modules/vote/vote.module';
+import { VoteModule } from '@modules/../vote/vote.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostController } from './post.controller';

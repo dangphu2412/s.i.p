@@ -1,4 +1,4 @@
-import { Topic } from '@modules/topic/topic.entity';
+import { Topic } from 'src/topic/topic.entity';
 import { User } from 'src/user/user.entity';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';

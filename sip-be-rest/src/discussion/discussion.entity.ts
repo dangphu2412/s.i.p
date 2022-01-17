@@ -1,5 +1,5 @@
 import { TimeEntityGenerator, TimeType } from '@database/base/time-entity';
-import { Post } from '@modules/post/post.entity';
+import { Post } from 'src/post/post.entity';
 import { User } from 'src/user/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 

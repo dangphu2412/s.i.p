@@ -1,6 +1,6 @@
 import { AccessRights } from '@constants/access-rights.enum';
-import { Permission } from '@modules/permission/permission.entity';
-import { Role } from '@modules/role/role.entity';
+import { Permission } from '@modules/../../../permission/permission.entity';
+import { Role } from '@modules/../../../role/role.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class initRole1621481393237 implements MigrationInterface {

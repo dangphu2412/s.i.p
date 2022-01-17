@@ -1,4 +1,4 @@
-import { UrlProvider } from '@modules/url/url.provider';
+import { UrlProvider } from '@modules/../url/url.provider';
 import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {

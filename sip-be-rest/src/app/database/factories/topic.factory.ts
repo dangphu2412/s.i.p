@@ -1,4 +1,4 @@
-import { Topic } from '@modules/topic/topic.entity';
+import { Topic } from 'src/topic/topic.entity';
 import { SlugUtils } from '@utils/slug';
 import { randomUUID } from 'crypto';
 import Faker from 'faker';

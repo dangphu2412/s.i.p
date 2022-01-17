@@ -1,4 +1,4 @@
-import { PermissionService } from '@modules/permission/permission.service';
+import { PermissionService } from '@modules/../../permission/permission.service';
 import { User } from 'src/user/user.entity';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';

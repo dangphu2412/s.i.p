@@ -1,5 +1,5 @@
 import { UserCredential } from 'src/auth/client/user-cred';
-import { Post } from '@modules/post/post.entity';
+import { Post } from 'src/post/post.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
