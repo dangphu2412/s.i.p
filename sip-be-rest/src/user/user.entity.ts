@@ -1,9 +1,9 @@
-import { Topic } from 'src/topic/topic.entity';
 import { TimeEntityGenerator } from '@database/base/time-entity';
-import { Discussion } from 'src/discussion/discussion.entity';
-import { Permission } from '@modules/../permission/permission.entity';
-import { Post } from 'src/post/post.entity';
-import { Vote } from '@modules/../vote/vote.entity';
+import { Discussion } from '@discussion/discussion.entity';
+import { Permission } from '@permission/permission.entity';
+import { Post } from '@post/post.entity';
+import { Topic } from '@topic/topic.entity';
+import { Vote } from '@vote/vote.entity';
 import {
   Column,
   Entity,

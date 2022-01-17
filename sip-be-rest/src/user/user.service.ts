@@ -5,8 +5,6 @@ import { ArrayUtils } from '@external/utils/array/array.utils';
 import { Profile } from 'src/auth/client/login-success';
 import { BcryptService } from 'src/auth/services/bcrypt.service';
 import { GoogleUserExtractedDto } from 'src/auth/internal/google-user-extracted';
-import { ErrorAssertion } from '@modules/../external/error/error-assertion';
-import { PermissionService } from '@modules/../permission/permission.service';
 import {
   Injectable,
   InternalServerErrorException,
@@ -21,6 +19,8 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
 import { User } from './user.entity';
+import { ErrorAssertion } from '@external/error/error-assertion';
+import { PermissionService } from '@permission/permission.service';
 
 @Injectable()
 export class UserService {

@@ -9,13 +9,13 @@ export = [
     password: ConfigService.get('DB_PASSWORD'),
     port: ConfigService.getInt('DB_PORT'),
     database: ConfigService.get('DB_DATABASE'),
+    entities: ['src/**/*.entity{.ts,.js}'],
     migrations: ['src/app/database/migrations/*.ts'],
-    entities: ['src/app/**/*.entity{.ts,.js}'],
     factories: ['src/app/database/factories/**/*.factory{.ts,.js}'],
     seeds: [`src/app/database/seeds/**/*.seed{.ts,.js}`],
     cli: {
       migrationsDir: 'src/app/database/migrations',
-      subscribersDir: 'src/subscriber',
+      subscribersDir: 'src/**/*.subscriber.{.ts,.js}',
     },
   },
 ];

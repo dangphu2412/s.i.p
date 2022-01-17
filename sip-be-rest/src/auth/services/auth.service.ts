@@ -1,4 +1,3 @@
-import { PermissionService } from '@modules/../../permission/permission.service';
 import { User } from 'src/user/user.entity';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -8,6 +7,7 @@ import { LoginDto } from '../dto/login.dto';
 import { LoginSuccessResponse } from '../client/login-success';
 import { GoogleUserExtractedDto } from '../internal/google-user-extracted';
 import { BcryptService } from './bcrypt.service';
+import { PermissionService } from '@permission/permission.service';
 
 @Injectable()
 export class AuthService {

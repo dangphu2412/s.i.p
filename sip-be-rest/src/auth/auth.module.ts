@@ -1,8 +1,8 @@
-import { PermissionModule } from '@modules/../permission/permission.module';
-import { UrlModule } from '@modules/../url/url.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { PermissionModule } from '@permission/permission.module';
+import { UrlModule } from '@url/url.module';
 import { ConfigService } from '../external/config/config.service';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';

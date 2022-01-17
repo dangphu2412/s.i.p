@@ -1,4 +1,3 @@
-import { UrlProvider } from '@modules/../url/url.provider';
 import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -11,6 +10,7 @@ import { AuthContext } from './decorator/user-cred.decorator';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './services/auth.service';
 import { GoogleUserExtractedDto } from './internal/google-user-extracted';
+import { UrlProvider } from '@url/url.provider';
 
 @ApiTags('auth')
 @Controller('v1/auth')

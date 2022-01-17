@@ -1,10 +1,10 @@
 import { ConfigService } from '@external/config/config.service';
-import { UrlProvider } from '@modules/../../url/url.provider';
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
 import { AuthService } from '../services/auth.service';
 import { GoogleUserExtractedDto } from '../internal/google-user-extracted';
+import { UrlProvider } from '@url/url.provider';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {

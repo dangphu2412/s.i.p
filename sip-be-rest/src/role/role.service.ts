@@ -1,5 +1,4 @@
 import { UserCredential } from 'src/auth/client/user-cred';
-import { PermissionService } from '@modules/../../../permission/permission.service';
 import {
   Injectable,
   Logger,
@@ -11,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreatePermissionDto } from './dto/create-permissions.dto';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { Role } from './role.entity';
+import { PermissionService } from '@permission/permission.service';
 
 @Injectable()
 export class RoleService {

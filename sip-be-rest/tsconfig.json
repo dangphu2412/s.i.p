@@ -22,8 +22,17 @@
       "@config/*": ["./src/app/configs/*"],
       "@constants/*": ["./src/app/constants/*"],
       "@database/*": ["./src/app/database/*"],
-      "@modules/*": ["./src/app/modules/*"],
-      "@utils/*": ["./src/app/utils/*"]
+      "@utils/*": ["./src/app/utils/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@user/*": ["./src/user/*"],
+      "@discussion/*": ["./src/discussion/*"],
+      "@media/*": ["./src/media/*"],
+      "@permission/*": ["./src/permission/*"],
+      "@post/*": ["./src/post/*"],
+      "@role/*": ["./src/role/*"],
+      "@topic/*": ["./src/topic/*"],
+      "@url/*": ["./src/url/*"],
+      "@vote/*": ["./src/vote/*"]
     }
   }
 }

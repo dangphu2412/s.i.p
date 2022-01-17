@@ -1,8 +1,8 @@
+import { UserCredential } from '@auth/client/user-cred';
+import { Protected } from '@auth/decorator/protected.decorator';
+import { AuthContext } from '@auth/decorator/user-cred.decorator';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
-import { Protected } from 'src/auth/decorator/protected.decorator';
-import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
-import { UserCredential } from 'src/auth/client/user-cred';
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DiscussionService } from './discussion.service';

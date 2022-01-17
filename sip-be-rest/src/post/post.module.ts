@@ -1,11 +1,11 @@
 import { DiscussionModule } from 'src/discussion/discussion.module';
-import { UserModule } from 'src/user/user.module';
-import { VoteModule } from '@modules/../vote/vote.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostController } from './post.controller';
 import { PostRepository } from './post.repository';
 import { PostService } from './post.service';
+import { UserModule } from '@user/user.module';
+import { VoteModule } from '@vote/vote.module';
 
 @Module({
   imports: [

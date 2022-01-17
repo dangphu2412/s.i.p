@@ -1,10 +1,10 @@
 import { BcryptService } from 'src/auth/services/bcrypt.service';
-import { PermissionModule } from '@modules/../permission/permission.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { UserService } from './user.service';
+import { PermissionModule } from '@permission/permission.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), PermissionModule],

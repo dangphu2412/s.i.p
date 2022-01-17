@@ -1,7 +1,7 @@
 import { AccessRights } from '@constants/access-rights.enum';
 import { ConfigService } from '@external/config/config.service';
+import { Permission } from '@permission/permission.entity';
 import { BcryptService } from 'src/auth/services/bcrypt.service';
-import { Permission } from '@modules/../../../permission/permission.entity';
 import { User } from 'src/user/user.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 

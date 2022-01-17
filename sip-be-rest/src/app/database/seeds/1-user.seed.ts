@@ -1,6 +1,6 @@
 import { AccessRights } from '@constants/access-rights.enum';
+import { Permission } from '@permission/permission.entity';
 import { BcryptService } from 'src/auth/services/bcrypt.service';
-import { Permission } from '@modules/../../../permission/permission.entity';
 import { User } from 'src/user/user.entity';
 import { Connection, In } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';

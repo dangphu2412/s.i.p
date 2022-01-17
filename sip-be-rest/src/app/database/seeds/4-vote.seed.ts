@@ -1,6 +1,6 @@
+import { Vote } from '@vote/vote.entity';
 import { Post } from 'src/post/post.entity';
 import { User } from 'src/user/user.entity';
-import { Vote } from '@modules/../../../vote/vote.entity';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
 

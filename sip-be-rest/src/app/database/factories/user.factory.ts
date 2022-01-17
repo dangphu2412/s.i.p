@@ -1,7 +1,7 @@
-import { Permission } from '@modules/../../../permission/permission.entity';
 import { User } from 'src/user/user.entity';
 import Faker from 'faker';
 import { define } from 'typeorm-seeding';
+import { Permission } from '@permission/permission.entity';
 
 define(
   User,

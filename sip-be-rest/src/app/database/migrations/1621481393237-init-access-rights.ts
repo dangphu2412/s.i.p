@@ -1,6 +1,6 @@
 import { AccessRights } from '@constants/access-rights.enum';
-import { Permission } from '@modules/../../../permission/permission.entity';
-import { Role } from '@modules/../../../role/role.entity';
+import { Permission } from '@permission/permission.entity';
+import { Role } from '@role/role.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class initRole1621481393237 implements MigrationInterface {
@@ -8,11 +8,11 @@ export class initRole1621481393237 implements MigrationInterface {
     let rootAccessRole = new Role();
     rootAccessRole.name = 'Root access';
 
-    let bussinessRole = new Role();
-    bussinessRole.name = 'Business';
+    let businessRole = new Role();
+    businessRole.name = 'Business';
 
     rootAccessRole = await queryRunner.manager.save(Role, rootAccessRole);
-    bussinessRole = await queryRunner.manager.save(Role, bussinessRole);
+    businessRole = await queryRunner.manager.save(Role, businessRole);
 
     const newRootAccessPermissions: Permission[] = Object.values(
       AccessRights.RootAccess,
@@ -29,7 +29,7 @@ export class initRole1621481393237 implements MigrationInterface {
       const permission = new Permission();
       permission.name = accessRight;
       permission.priority = 0;
-      permission.role = bussinessRole;
+      permission.role = businessRole;
       return permission;
     });
 

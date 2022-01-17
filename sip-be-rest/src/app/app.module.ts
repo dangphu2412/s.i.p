@@ -1,17 +1,17 @@
+import { AuthModule } from '@auth/auth.module';
 import '@config/crud.config';
 import { RuleConfig } from '@config/rule.config';
 import { getTypeOrmModule } from '@config/typeorm.config';
+import { DiscussionModule } from '@discussion/discussion.module';
 import { RaclModule } from '@external/racl/rule.module';
-import { DiscussionModule } from 'src/discussion/discussion.module';
-import { MediaModule } from '@modules/../media/media.module';
-import { PermissionModule } from '@modules/../permission/permission.module';
-import { PostModule } from 'src/post/post.module';
-import { RoleModule } from '@modules/../role/role.module';
-import { TopicModule } from 'src/topic/topic.module';
-import { VoteModule } from '@modules/../vote/vote.module';
+import { MediaModule } from '@media/media.module';
 import { Module } from '@nestjs/common';
-import { AuthModule } from '../auth/auth.module';
-import { UserModule } from '../user/user.module';
+import { PermissionModule } from '@permission/permission.module';
+import { PostModule } from '@post/post.module';
+import { RoleModule } from '@role/role.module';
+import { TopicModule } from '@topic/topic.module';
+import { UserModule } from '@user/user.module';
+import { VoteModule } from '@vote/vote.module';
 
 @Module({
   imports: [

@@ -1,13 +1,13 @@
+import { UserCredential } from '@auth/client/user-cred';
+import { PermissionGranted } from '@auth/decorator/granted-permission.decorator';
+import { Protected } from '@auth/decorator/protected.decorator';
+import { AuthContext } from '@auth/decorator/user-cred.decorator';
 import { AccessRights } from '@constants/access-rights.enum';
 import { toPage } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
-import { PermissionGranted } from 'src/auth/decorator/granted-permission.decorator';
-import { Protected } from 'src/auth/decorator/protected.decorator';
-import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
-import { UserCredential } from 'src/auth/client/user-cred';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';

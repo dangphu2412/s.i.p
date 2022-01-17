@@ -1,9 +1,8 @@
+import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { DiscussionService } from 'src/discussion/discussion.service';
 import { UserService } from 'src/user/user.service';
-import { UpsertVoteDto } from '@modules/../vote/dto/upsert-vote.dto';
-import { VoteService } from '@modules/../vote/vote.service';
 import {
   BadRequestException,
   ConflictException,
@@ -17,6 +16,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
+import { VoteService } from '@vote/vote.service';
 
 @Injectable()
 export class PostService {
