@@ -21,7 +21,7 @@ function App(): JSX.Element {
                 <Routes>
                     {
                         AuthRouteMapper.toRoutes([
-                            { path: '/login/success', element: LoginSuccessPage },
+                            { path: '/success', element: LoginSuccessPage },
                             { path: '/:postId', element: PostDetailPage },
                             { path: '/', element: HomePage },
                             { path: '/topics', element: TopicOverviewPage,

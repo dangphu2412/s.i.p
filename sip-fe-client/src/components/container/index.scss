@@ -9,26 +9,26 @@
 }
 @media (min-width: 476px){
   .container{
-    padding-right:15px;
-    padding-left:15px
+    padding-right: $container-right;
+    padding-left: $container-left;
   }
 }
 @media (min-width: 768px){
   .container{
-    padding-right:15px;
-    padding-left:15px
+    padding-right: $container-right;
+    padding-left: $container-left;
   }
 }
 @media (min-width: 992px){
   .container{
-    padding-right:15px;
-    padding-left:15px
+    padding-right: $container-right;
+    padding-left: $container-left;
   }
 }
 @media (min-width: 1200px){
   .container{
-    padding-right:15px;
-    padding-left:15px
+    padding-right: $container-right;
+    padding-left: $container-left;
   }
 }
 @media (min-width: 476px){

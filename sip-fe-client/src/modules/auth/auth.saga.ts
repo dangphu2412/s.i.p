@@ -34,7 +34,9 @@ function* handleAuthRestore() {
     if (authProps) {
         const request = getMe();
         yield call(request.doRequest);
-        if (!request.getErrorMessage()) {
+        if (request.getErrorMessage()) {
+            yield put(logoutAction());
+        } else {
             yield put(loggedInAction({
                 profile: authProps
             }));
