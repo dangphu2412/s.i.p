@@ -8,6 +8,7 @@ import { LoginSuccessPage } from '../modules/auth/pages/LoginSuccessPage';
 import { HomePage } from './home/HomePage';
 import { NotFoundPage } from './not-found/NotFoundPage';
 import { PostDetailPage } from './post/PostDetailPage';
+import { CreatePostPage } from './post/CreatePostPage';
 import { TopicDetailPage } from './topic/TopicDetailPage';
 import { TopicOverviewPage } from './topic/TopicOverviewPage';
 
@@ -21,14 +22,15 @@ function App(): JSX.Element {
                 <Routes>
                     {
                         AuthRouteMapper.toRoutes([
-                            { path: '/success', element: LoginSuccessPage },
-                            { path: '/:postId', element: PostDetailPage },
-                            { path: '/', element: HomePage },
+                            { path: '/login/success', element: LoginSuccessPage },
+                            { path: '/posts/:postId', element: PostDetailPage },
+                            { path: '/posts/new', element: CreatePostPage },
                             { path: '/topics', element: TopicOverviewPage,
                                 children: [
                                     { path: '/topics/:topicId', element: TopicDetailPage }
                                 ] 
-                            }
+                            },
+                            { path: '/', element: HomePage }
                         ], {
                             noPublicGuard: true
                         })

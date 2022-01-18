@@ -48,7 +48,7 @@ export function CardContainer(): JSX.Element {
                 {
                     posts.map((post, index) => {
                         return <a
-                            href={'/' + post.slug}
+                            href={'/posts/' + post.slug}
                             key={index}
                         >
                             <CardItemOverview

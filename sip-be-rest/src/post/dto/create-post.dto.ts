@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length, Max } from 'class-validator';
+import { IsOptional, IsString, Length, Max } from 'class-validator';
 
 export class CreatePostDto {
   @ApiProperty()
@@ -8,21 +8,28 @@ export class CreatePostDto {
   public title: string;
 
   @ApiProperty()
+  @IsString()
   public content: string;
 
   @ApiProperty()
   @Max(260)
+  @IsString()
   public summary: string;
 
   @ApiProperty()
+  @IsString()
   public thumbnail: string;
 
   @ApiProperty()
-  public videoDemo: string;
+  @IsOptional()
+  @IsString()
+  public videoDemo?: string;
 
   @ApiProperty()
   public galleryImages: string[];
 
   @ApiProperty()
+  @IsOptional()
+  @IsString()
   public productLink: string;
 }

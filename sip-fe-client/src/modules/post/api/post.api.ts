@@ -15,5 +15,20 @@ export interface PostSummary {
 export type PostOverview = PostSummary[];
 
 export interface PostDetail {
-  id: number;
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  summary: string;
+  thumbnail: string;
+  previewGalleryImg: string;
+  galleryImages: string[];
+  videoDemo: string;
+  productLink: string;
+  isVoted: boolean;
+  totalVotes: number;
+  topics: Topic[];
+  author: Author;
+
+  ranking: string;
 }
