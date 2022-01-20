@@ -32,3 +32,15 @@ export interface PostDetail {
 
   ranking: string;
 }
+
+export interface ProjectMember {
+  id: string,
+  avatar: string,
+  name: string,
+  position: string
+}
+
+export interface ProjectMembers {
+  hunter: ProjectMember,
+  makers: ProjectMember[]
+}

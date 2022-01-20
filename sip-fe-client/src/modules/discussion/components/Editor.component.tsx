@@ -11,11 +11,11 @@ export interface DiscussionEditorProps {
 export const DiscussionEditor = ({ onChange, onSubmit, submitting, value }: DiscussionEditorProps) => (
     <>
         <Form.Item>
-            <Input.TextArea rows={4} onChange={onChange} value={value} />
+            <Input.TextArea onChange={onChange} value={value} />
         </Form.Item>
         <Form.Item>
             <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-                Add Comment
+                Send
             </Button>
         </Form.Item>
     </>

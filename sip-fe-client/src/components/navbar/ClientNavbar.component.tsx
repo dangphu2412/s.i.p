@@ -50,15 +50,15 @@ export function ClientNavbar(): JSX.Element {
     return (
         <div className='shadow-md'>
             <Row className='header-wrapper'>
-                <Col className='p-left-container' span={1}>
+                <Col className='p-left-container' span={2}>
                     <Button type="primary" shape="circle" size='large'>
                         <a href='/'>S.I.P</a>
                     </Button>
                 </Col>
-                <Col className='f-center p-left-container my-3' span={3}>
+                <Col className='f-center my-3' span={3}>
                     <Input  placeholder="Search Products ..." />
                 </Col>
-                <Col className='' span={14}>
+                <Col className='' span={13}>
                     <Menu mode="horizontal" className={'override-line-height-menu'}>
                         <Menu.Item key="1"><a href='/'>Products</a></Menu.Item>
                         <Menu.Item key="2"><a href='/topics'>Topics</a></Menu.Item>
@@ -66,6 +66,16 @@ export function ClientNavbar(): JSX.Element {
                     </Menu>
                 </Col>
                 <Col className='adjust-avatar-to-the-end p-right-container' span={6}>
+                    <Dropdown overlay={
+                        <Menu mode={'horizontal'}>
+                            <Menu.Item key="1"><a href='/posts/new'>Create new product</a></Menu.Item>
+                        </Menu>
+                    }
+                    >
+                        <div>
+                            Let&#39;s hunt
+                        </div>
+                    </Dropdown>
                     {
                         authState === AuthType.LOGGED_IN
                             ? <Dropdown overlay={

@@ -1,3 +1,4 @@
+import './post-detail.scss';
 import { Button, Col, Divider, Image, Row, Comment, Avatar } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import { isEmpty } from 'lodash';
@@ -11,11 +12,12 @@ import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { TopFeatureBadge } from 'src/modules/post/components/badge/TopFeatureBadge';
 import { fetchPostDetail } from 'src/modules/post/post.action';
-import { PostDetail } from '../../modules/post/api/post.api';
+import { PostDetail, ProjectMembers } from '../../modules/post/api/post.api';
 import { ArrayUtils } from 'src/utils/array.utils';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { DiscussionEditor } from 'src/modules/discussion/components/Editor.component';
-
+import { FacebookFilled, GithubFilled } from '@ant-design/icons';
+import { SimpleCard } from '../../components/card/SimpleCard';
 const contentStyle: React.CSSProperties = {
     color: '#fff',
     textAlign: 'center',
@@ -43,6 +45,37 @@ const data: PostDetail = {
     totalVotes: 10,
     videoDemo: 'https://www.youtube.com/embed/0ENKBcckukM',
     ranking: '1',
+};
+
+const makers = [
+    {
+        id: '1',
+        avatar: 'https://joeschmoe.io/api/v1/random',
+        name: 'Fus dep trai',
+        position: 'Marketer'
+    },
+    {
+        id: '2',
+        avatar: 'https://joeschmoe.io/api/v1/random',
+        name: 'Fus suck trai',
+        position: 'DevOps'
+    },
+    {
+        id: '3',
+        avatar: 'https://joeschmoe.io/api/v1/random',
+        name: 'Fus suck trai',
+        position: 'Super backend'
+    }
+];
+
+const projectMembers: ProjectMembers = {
+    hunter: {
+        id: '1',
+        avatar: 'https://joeschmoe.io/api/v1/random',
+        name: 'Fus dep trai',
+        position: 'Marketer'
+    },
+    makers
 };
 
 export function PostDetailPage(): JSX.Element {
@@ -206,7 +239,45 @@ export function PostDetailPage(): JSX.Element {
                         </Row>
 
                         <Row>
-                            Owner information
+                            <FacebookFilled/>
+                            <GithubFilled />
+                        </Row>
+
+                        {/* Hunter and maker */}
+                        <div>
+                            <div>
+                                Hunter
+                            </div>
+                            <SimpleCard 
+                                title={projectMembers.hunter.name}
+                                description={projectMembers.hunter.position}
+                                image={projectMembers.hunter.avatar}
+                            />
+                            <div>
+                                4 Makers
+                            </div>
+
+                            <div className='maker-container'>
+                                {
+                                    projectMembers.makers.map(maker => {
+                                        return (
+                                            <SimpleCard 
+                                                key={maker.id}
+                                                title={maker.name}
+                                                description={maker.position}
+                                                image={maker.avatar}
+                                            />
+                                        );
+                                    })
+                                }
+                            </div>
+                        </div>
+
+                        {/* Related products */}
+                        <Row>
+                            <h3>
+                                Related products
+                            </h3>
                         </Row>
                     </Col>
                 </Row>
