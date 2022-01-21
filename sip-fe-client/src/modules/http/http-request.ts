@@ -30,7 +30,7 @@ export function registerErrors(errorCodeToMsgMap: Record<string, string>, option
         .forEach((code: string) => {
             ErrorCodeToMsgMap.set(code, errorCodeToMsgMap[code]);
         });
-} 
+}
 
 export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosResponse<DataResponse, DataRequest>>) {
     let data: DataResponse;

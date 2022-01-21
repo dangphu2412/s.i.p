@@ -1,3 +1,5 @@
+@import 'src/scss/variables.scss';
+
 .logo {
     float: left;
     width: 120px;
@@ -15,10 +17,13 @@
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-    line-height: 74px;
 }
 
 .adjust-avatar-to-the-end {
     display: flex;
     justify-content: flex-end;
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover::after {
+    border-bottom: 2px solid $button !important;
 }

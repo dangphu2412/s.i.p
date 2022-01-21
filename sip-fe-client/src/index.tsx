@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from 'react-dom';
-import './index.css';
 import App from './views/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';

@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../scss/global.scss';
 import './index.scss';
 import { GoogleOutlined } from '@ant-design/icons';
 import { Button, Col, Dropdown, Input, Menu, message, Row, Avatar, Image  } from 'antd';
@@ -48,31 +47,31 @@ export function ClientNavbar(): JSX.Element {
     }
 
     return (
-        <div className='shadow-md'>
+        <div className='shadow-sm cover-bg'>
             <Row className='header-wrapper'>
                 <Col className='p-left-container' span={2}>
-                    <Button type="primary" shape="circle" size='large'>
+                    <Button className='btn-bg btn-bg-hover' shape="circle" size='large'>
                         <a href='/'>S.I.P</a>
                     </Button>
                 </Col>
                 <Col className='f-center my-3' span={3}>
-                    <Input  placeholder="Search Products ..." />
+                    <Input style={{backgroundColor: '#F0F9FF'}} className='bg-sky-light' placeholder="Search Products ..." />
                 </Col>
-                <Col className='' span={13}>
-                    <Menu mode="horizontal" className={'override-line-height-menu'}>
-                        <Menu.Item key="1"><a href='/'>Products</a></Menu.Item>
-                        <Menu.Item key="2"><a href='/topics'>Topics</a></Menu.Item>
-                        <Menu.Item key="3"><a href='/recommend'>Recommend</a></Menu.Item>
+                <Col span={13}>
+                    <Menu mode="horizontal" className='override-line-height-menu cover-bg'>
+                        <Menu.Item className='cover-bg' key="1"><a href='/'>Products</a></Menu.Item>
+                        <Menu.Item className='cover-bg' key="2"><a href='/topics'>Topics</a></Menu.Item>
+                        <Menu.Item className='cover-bg' key="3"><a href='/recommend'>Recommend</a></Menu.Item>
                     </Menu>
                 </Col>
-                <Col className='adjust-avatar-to-the-end p-right-container' span={6}>
+                <Col className='adjust-avatar-to-the-end p-right-container f-center' span={6}>
                     <Dropdown overlay={
                         <Menu mode={'horizontal'}>
                             <Menu.Item key="1"><a href='/posts/new'>Create new product</a></Menu.Item>
                         </Menu>
                     }
                     >
-                        <div>
+                        <div className='mr-5 text-lg button-text-color cursor-pointer'>
                             Let&#39;s hunt
                         </div>
                     </Dropdown>
@@ -94,8 +93,7 @@ export function ClientNavbar(): JSX.Element {
                                 />
                             </Dropdown>
                             : <Button
-                                className="ant-dropdown-link" 
-                                type="primary"
+                                className="ant-dropdown-link btn-bg btn-bg-hover"
                                 shape="circle"
                                 size='large' 
                                 onClick={() => loginGoogle()}

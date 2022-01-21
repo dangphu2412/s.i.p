@@ -5,17 +5,17 @@ import { LoadingOverlay } from '../../components/progress/LoadingOverlay';
 import './index.scss';
 
 interface Props {
-    children: React.ReactNode
+    children: React.ReactNode;
 }
 
 export function ClientLayout(props: Props): JSX.Element {
     return (
-        <>
+        <div>
             <ErrorBoundary/>
             <LoadingOverlay>
                 <ClientNavbar/>
                 {props.children}
             </LoadingOverlay>
-        </>
+        </div>
     );
 }

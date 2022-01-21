@@ -10,7 +10,7 @@ export interface SimpleCardProps {
 export function SimpleCard(props: SimpleCardProps) {
     return (
         <Row>
-            <Col>
+            <Col span={4}>
                 <Image
                     src={props.image}
                     style={{ width: 30, height: 30 }}
@@ -18,8 +18,10 @@ export function SimpleCard(props: SimpleCardProps) {
                 />
             </Col>
 
-            <Col>
-                <h3>{props.title}</h3>
+            <Col span={20}>
+                <a href='#'>
+                    {props.title}
+                </a>
                 <div>{props.description}</div>
             </Col>
         </Row>

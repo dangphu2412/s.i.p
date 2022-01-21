@@ -1,5 +1,55 @@
 @import './variables.scss';
 
+.cover-bg {
+    background-color: $background !important;
+}
+
+.content-bg {
+    background-color: $content !important; 
+}
+
+.p-bg {
+    background-color: $paragraph !important;
+}
+
+.btn-bg {
+    background-color: $button !important;
+}
+
+.btn-bg-hover {
+    &:hover {
+        background-color: $content !important;
+        color: $button !important;
+        border: $button  1px solid !important;
+    }
+}
+
+.btn {
+    background-color: $content !important;
+    color: $button !important;
+    border: $button  1px solid !important;
+}
+
+.btn-color {
+    color: $button !important;
+}
+
+.btn-outline {
+    border: $button  1px solid !important; 
+}
+
+.headline-color {
+    color: $headline !important;
+}
+
+.button-text-color {
+    color: $button-text !important;
+}
+
+.p-color {
+    color: $paragraph !important;
+}
+
 .f-center {
     align-items: center;
     justify-content: center;
@@ -12,4 +62,20 @@
 
 .p-right-container {
     padding-right: 2.5rem;
+}
+
+// Antd global override
+.ant-btn  {
+    &:hover {
+        color: $button;
+        border-color: $button;
+    }
+    &:focus {
+        color: $button;
+        border-color: $button;
+    }
+}
+
+.ant-menu-horizontal > .ant-menu-item a:hover {
+    color: $button;
 }

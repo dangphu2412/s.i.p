@@ -2,12 +2,13 @@ import React from 'react';
 import './index.scss';
 
 interface ContainerProps {
-    children: React.ReactNode
+    children: React.ReactNode;
+    className?: string;
 }
 
 export function Container(props: ContainerProps): JSX.Element {
     return (
-        <div className='container my-10'>
+        <div className={props.className ? `${props.className} container` : 'container '}>
             { props.children }
         </div>
     );

@@ -3,7 +3,6 @@ import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Image, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
-import '../../../../scss/global.scss';
 import './index.scss';
 
 interface CardItemOverviewProps {
@@ -51,10 +50,10 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                         </div>
                     </Col>
                     <Col span={4}>
-                        <Button className='upvote-style' onClick={handleVote}>
+                        <Button className={'upvote-style ' + (isVoted ? 'btn' : '')} onClick={handleVote}>
                             { 
                                 isVoted ?
-                                    <CaretUpOutlined className='isVoted'/> 
+                                    <CaretUpOutlined/> 
                                     : <CaretDownOutlined/>
                             }
                             <div>
