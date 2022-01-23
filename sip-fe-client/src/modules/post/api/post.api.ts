@@ -7,7 +7,7 @@ export interface PostSummary {
   slug: string;
   summary: string;
   isAuthor: boolean;
-  totalVotes: number;
+  totalVotes: string;
   topics: Topic[];
   author: Author;
 }

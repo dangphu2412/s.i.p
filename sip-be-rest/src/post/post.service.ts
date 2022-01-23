@@ -1,8 +1,4 @@
-import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { UserCredential } from 'src/auth/client/user-cred';
-import { DiscussionService } from 'src/discussion/discussion.service';
-import { UserService } from 'src/user/user.service';
 import {
   BadRequestException,
   ConflictException,
@@ -10,13 +6,17 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { SlugUtils } from '@utils/slug';
+import { VoteService } from '@vote/vote.service';
+import { UserCredential } from 'src/auth/client/user-cred';
+import { DiscussionService } from 'src/discussion/discussion.service';
+import { UserService } from 'src/user/user.service';
 import { ArrayUtils } from '../external/utils/array/array.utils';
+import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
-import { VoteService } from '@vote/vote.service';
 
 @Injectable()
 export class PostService {
@@ -55,10 +55,10 @@ export class PostService {
     const fetchPostType = searchQuery.filters[0];
 
     switch (fetchPostType.value) {
-      case FetchPostType.HOTTEST:
-        return this.postRepository.findHottestPosts(searchQuery, author);
       case FetchPostType.LATEST:
         return this.postRepository.findLatestPosts(searchQuery, author);
+      case FetchPostType.HOTTEST:
+        return this.postRepository.findHottestPosts(searchQuery, author);
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
     }

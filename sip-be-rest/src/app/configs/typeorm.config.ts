@@ -19,6 +19,6 @@ export function getTypeOrmModule(): DynamicModule {
     synchronize: isBooleanString(ConfigService.getOptional('DB_SYNC'))
       ? ConfigService.getBoolean('DB_SYNC')
       : isNotProd,
-    logging: isNotProd,
+    logging: !!ConfigService.getOptional('DB_LOG') || isNotProd,
   });
 }

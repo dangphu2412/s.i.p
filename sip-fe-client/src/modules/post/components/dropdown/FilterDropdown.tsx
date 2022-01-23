@@ -1,38 +1,34 @@
-import React, { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { PostFilter } from '../../constants/post-filter.enum';
-import { useDispatch } from 'react-redux';
-import { queryChanged } from 'src/modules/query/query.action';
+import React from 'react';
 
-export function FilterDropdown(): JSX.Element {
-    const [selectedFilter, setSelectedFilter] = useState(PostFilter.HOTTEST);
-    const dispatch = useDispatch();
+interface FilterDropdownProps {
+    selectedValue: string;
+    setSelected: React.Dispatch<React.SetStateAction<any>>;
+    options: string[];
+}
 
+export function FilterDropdown(props: FilterDropdownProps): JSX.Element {
     function handleFilterChosen(e: MenuInfo) {
-        setSelectedFilter(e.key as PostFilter);
-        dispatch(queryChanged({ filter: [{
-            column: 'type',
-            comparator: 'eq',
-            value: e.key
-        }] }));
+        props.setSelected(e.key);
     }
     
     return (
         <div>
             <Dropdown overlay={
                 <Menu onClick={handleFilterChosen}>
-                    <Menu.Item key={PostFilter.HOTTEST}>
-                        {PostFilter.HOTTEST}
-                    </Menu.Item>
-                    <Menu.Item key={PostFilter.NEWEST}>
-                        {PostFilter.NEWEST}
-                    </Menu.Item>
+                    {
+                        props.options.map(option => {
+                            return <Menu.Item key={option}>
+                                {option}
+                            </Menu.Item>;
+                        })
+                    }
                 </Menu>
             }>
-                <a className="ant-dropdown-link text-lg" onClick={e => e.preventDefault()}>
-                    {selectedFilter} <DownOutlined />
+                <a className="btn-color text-lg" onClick={e => e.preventDefault()}>
+                    {props.selectedValue} <DownOutlined />
                 </a>
             </Dropdown>
         </div>

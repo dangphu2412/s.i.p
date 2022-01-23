@@ -1,5 +1,5 @@
 import { DiscussionModule } from 'src/discussion/discussion.module';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostController } from './post.controller';
 import { PostRepository } from './post.repository';
@@ -15,6 +15,6 @@ import { VoteModule } from '@vote/vote.module';
     DiscussionModule,
   ],
   controllers: [PostController],
-  providers: [PostService],
+  providers: [PostService, Logger],
 })
 export class PostModule {}

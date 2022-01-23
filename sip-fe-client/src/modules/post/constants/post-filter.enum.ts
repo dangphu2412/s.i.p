@@ -1,4 +1,4 @@
 export enum PostFilter {
     HOTTEST = 'Hottest',
-    NEWEST = 'Newest'
+    LATEST = 'Latest'
 }

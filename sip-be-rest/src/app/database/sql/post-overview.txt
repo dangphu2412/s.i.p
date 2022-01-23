@@ -4,29 +4,19 @@ SELECT "posts"."created_at" AS "posts_created_at",
 "posts"."id" AS "posts_id", "posts"."title" AS "posts_title", 
 "posts"."slug" AS "posts_slug", "posts"."content" AS "posts_content",
 "posts"."summary" AS "posts_summary", "posts"."thumbnail" AS "posts_thumbnail", 
-"posts"."authorId" AS "posts_authorId", "author"."created_at" AS "author_created_at"
-, "author"."updated_at" AS "author_updated_at", 
-"author"."deleted_at" AS "author_deleted_at", "author"."id" AS "author_id", 
-"author"."username" AS "author_username", 
-"author"."full_name" AS "author_full_name", "author"."email" AS "author_email", 
-"author"."password" AS "author_password", "author"."avatar" AS "author_avatar", 
 "topics"."id" AS "topics_id", "topics"."name" AS "topics_name", 
 "topics"."slug" AS "topics_slug", vote_count as "posts_vote_count"
-, case "author".id
-	when 9 then true
-	else false
-	end as "posts_is_author"
 FROM "posts" "posts"
-INNER JOIN (SELECT "posts"."id" as id, COUNT(votes.id) as vote_count 
-			FROM "posts" "posts" 
-			LEFT JOIN "votes" on votes.post_id = posts.id
-			WHERE "posts"."deleted_at" IS NULL
-			GROUP BY "posts"."id" 
-			ORDER BY vote_count 
-			ASC LIMIT 10) "post_ordered_by_votes" 
-				ON post_ordered_by_votes.id = "posts"."id"  
-LEFT JOIN "users" "author" ON "author"."id"="posts"."authorId" 
-AND ("author"."deleted_at" IS NULL) 
+INNER JOIN (
+	SELECT "posts"."id" as id, COUNT(votes.id) as vote_count 
+	FROM "posts" "posts" 
+	LEFT JOIN "votes" on votes.post_id = posts.id
+	WHERE "posts"."deleted_at" IS NULL  and votes.is_voted = true
+	GROUP BY "posts"."id" 
+	ORDER BY vote_count ASC
+	LIMIT 10
+	) "post_ordered_by_votes"
+ON post_ordered_by_votes.id = "posts"."id"
 LEFT JOIN "posts_topics" "posts_topics" ON "posts_topics"."posts_id"="posts"."id"
 LEFT JOIN "topics" "topics" ON "topics"."id"="posts_topics"."topics_id"
 WHERE "posts"."deleted_at" IS NULL

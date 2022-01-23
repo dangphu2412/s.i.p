@@ -6,10 +6,10 @@ import { Query } from './interface';
 import { queryChanged, queryClear } from './query.action';
 
 const initialState: Query = {
-    filter: [],
+    filters: [],
     page: undefined,
     search: undefined,
-    sort: []
+    sorts: []
 };
 
 export function queryReducer(state = initialState, action: AnyAction) {
@@ -27,19 +27,19 @@ export function queryReducer(state = initialState, action: AnyAction) {
 }
 
 function updateQuery(action: PayloadAction<Query>, draft: WritableDraft<Query>): void {
-    const { filter, page, search, sort } = action.payload;
+    const { filters, page, search, sorts } = action.payload;
 
     if (page) {
         draft.page = page;
     }
 
-    if (Array.isArray(filter)) {
-        draft.filter = filter;
+    if (Array.isArray(filters)) {
+        draft.filters = filters;
     }
 
     
-    if (Array.isArray(sort)) {
-        draft.sort = sort;
+    if (Array.isArray(sorts)) {
+        draft.sorts = sorts;
     }
 
     if (search) {

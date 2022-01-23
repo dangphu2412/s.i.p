@@ -11,6 +11,7 @@ import { getLoginUrl } from '../../modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.config';
 import { fireError } from '../../modules/error/error.action';
 import { setLoading } from '../../modules/loading/loading.action';
+import { Link } from 'react-router-dom';
 
 export function ClientNavbar(): JSX.Element {
     const dispatch = useDispatch();
@@ -59,15 +60,31 @@ export function ClientNavbar(): JSX.Element {
                 </Col>
                 <Col span={13}>
                     <Menu mode="horizontal" className='override-line-height-menu cover-bg'>
-                        <Menu.Item className='cover-bg' key="1"><a href='/'>Products</a></Menu.Item>
-                        <Menu.Item className='cover-bg' key="2"><a href='/topics'>Topics</a></Menu.Item>
-                        <Menu.Item className='cover-bg' key="3"><a href='/recommend'>Recommend</a></Menu.Item>
+                        <Menu.Item className='cover-bg' key="1">
+                            <Link to="/"> 
+                                Products
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item className='cover-bg' key="2">
+                            <Link to="/topics"> 
+                                Topics
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item className='cover-bg' key="3">
+                            <Link to="/recommend"> 
+                                Recommend
+                            </Link>
+                        </Menu.Item>
                     </Menu>
                 </Col>
                 <Col className='adjust-avatar-to-the-end p-right-container f-center' span={6}>
                     <Dropdown overlay={
                         <Menu mode={'horizontal'}>
-                            <Menu.Item key="1"><a href='/posts/new'>Create new product</a></Menu.Item>
+                            <Menu.Item key="1">
+                                <Link to='/posts/new'>
+                                    Create new product
+                                </Link>
+                            </Menu.Item>
                         </Menu>
                     }
                     >

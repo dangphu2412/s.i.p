@@ -1,25 +1,28 @@
-interface Filter {
+export interface Filter {
   column: string;
   value: string;
   comparator: string;
 }
 
-interface Sort {
+export interface Sort {
   direction: string;
   column: string;
 }
 
-interface Page {
+export interface Page {
     page: number;
     size: number;
 }
 
 export interface Query {
-    filter?: Filter[];
-    sort?: Sort[];
+    filters: Filter[];
+    sorts: Sort[];
     search?: string;
     page?: Page;
 }
 
+export type QueryWithPage = Query & {
+  page: Page;
+}
 
 export type QueryState = Required<Query>

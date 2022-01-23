@@ -4,7 +4,7 @@ import { getMe } from './auth.service';
 import { AuthConfig, AuthConfigKeys } from './config/auth.config';
 import { AuthProps } from './pages/LoginSuccessPage';
 
-export function* getAuthSaga() {
+export function* AuthSagaTree() {
     yield takeLatest(
         logoutAction.type,
         handleLogout

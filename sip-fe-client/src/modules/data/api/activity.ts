@@ -3,7 +3,7 @@ import { Query } from 'src/modules/query/interface';
 export interface DataHolder {
     view: string;
     data: any[];
-    query?: Query;
+    query?: Partial<Query>;
 }
 
 export interface DataHolders {

@@ -1,19 +1,38 @@
-import { PostSummary } from '../../api/post.api';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Image, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { voteForPost } from 'src/modules/vote/vote.action';
+import { PostSummary } from '../../api/post.api';
 import './index.scss';
+
+interface VoteState {
+    isVoted: boolean;
+    voteTotal: number;
+}
 
 interface CardItemOverviewProps {
     data: PostSummary
 }
 
 export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
-    const [isVoted, setIsVoted] = useState(props.data.isAuthor);
+    const dispatch = useDispatch();
+    const [vote, setVote] = useState<VoteState>({
+        isVoted: props.data.isAuthor,
+        voteTotal: +props.data.totalVotes
+    });
+
     function handleVote(e: React.MouseEvent<HTMLElement, MouseEvent>): void {
+        dispatch(voteForPost({
+            postId: props.data.id
+        }));
         e.preventDefault();
-        setIsVoted(!isVoted);
+        setVote({
+            isVoted: !vote.isVoted,
+            voteTotal: vote.isVoted ? vote.voteTotal - 1 : vote.voteTotal + 1
+        });
     }
 
     return (
@@ -29,7 +48,7 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                     >
                         <Image
                             src="https://joeschmoe.io/api/v1/random"
-                            style={{ width: 36 }}
+                            style={{ width: 80 }}
                             preview={false}
                         />
                     </Col>
@@ -41,7 +60,11 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                         <div>
                             {props.data.summary}
                         </div>
-                        <div>
+                        <div className='mt-3'>
+                            <span className='mr-3'>
+                                <FontAwesomeIcon icon="comment" className='mr-3'/>
+                                80
+                            </span>
                             {
                                 props.data.topics.map((topic, index) => {
                                     return <span className='mr-2' key={index}>{topic.name}</span>;
@@ -50,14 +73,14 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                         </div>
                     </Col>
                     <Col span={4}>
-                        <Button className={'upvote-style ' + (isVoted ? 'btn' : '')} onClick={handleVote}>
+                        <Button className={'upvote-style ' + (vote.isVoted ? 'btn' : '')} onClick={handleVote}>
                             { 
-                                isVoted ?
+                                vote.isVoted ?
                                     <CaretUpOutlined/> 
                                     : <CaretDownOutlined/>
                             }
                             <div>
-                                { props.data.totalVotes }
+                                { vote.voteTotal }
                             </div>
                             
                         </Button>

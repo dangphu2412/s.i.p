@@ -4,6 +4,10 @@ import App from './views/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { createReduxStore } from './config/store.config';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faComment, faPlusCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faComment, faPlusCircle, faCheckCircle);
 
 render(
     <React.Fragment>

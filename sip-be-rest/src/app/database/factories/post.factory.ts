@@ -1,10 +1,11 @@
-import Faker, { fake } from 'faker';
-import { define } from 'typeorm-seeding';
-import { Post } from 'src/post/post.entity';
-import { randomUUID } from 'crypto';
 import { SlugUtils } from '@utils/slug';
+import Faker from 'faker';
+import { Post } from 'src/post/post.entity';
 import { Topic } from 'src/topic/topic.entity';
 import { User } from 'src/user/user.entity';
+import { define } from 'typeorm-seeding';
+
+let uniqueChar = 0;
 
 define(
   Post,
@@ -12,12 +13,13 @@ define(
     faker: typeof Faker,
     { topics, authors }: { topics: Topic[]; authors: User[] },
   ) => {
-    const title = faker.commerce.productName() + randomUUID();
+    const title = faker.commerce.productName() + uniqueChar;
     const previewGalleryImg = faker.image.city(400, 400);
+    uniqueChar++;
     return Post.create({
-      content: faker.lorem.paragraph(),
+      content: faker.lorem.paragraph(1),
       title,
-      summary: faker.lorem.paragraph(1),
+      summary: faker.lorem.lines(1),
       slug: SlugUtils.normalize(title),
       topics: [
         ...new Set([

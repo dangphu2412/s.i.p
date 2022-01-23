@@ -11,15 +11,16 @@ export class PostRepository extends Repository<Post> {
     author: UserCredential | undefined,
   ) {
     const queryBuilder = this.createQueryBuilder('posts')
-      .addSelect(
-        `post_ordered_by_votes.total_votes as "posts_total_votes"
-        , ${this.getSelectIsAuthorQuery(author)}`,
-      )
+      .addSelect(`post_ordered_by_votes.total_votes as "posts_total_votes"`)
       .innerJoin(
         (qb) => {
           qb.select('posts.id as id, COUNT(votes.id) as total_votes')
             .from(Post, 'posts')
-            .leftJoin('votes', 'votes', 'votes.post_id = posts.id')
+            .leftJoin(
+              'votes',
+              'votes',
+              'votes.post_id = posts.id AND votes.is_voted = true',
+            )
             .groupBy('posts.id')
             .orderBy('total_votes', 'DESC')
             .limit(searchQuery.limit)
@@ -29,26 +30,29 @@ export class PostRepository extends Repository<Post> {
         'post_ordered_by_votes',
         'post_ordered_by_votes.id = posts.id',
       )
-      .leftJoinAndSelect('posts.author', 'author')
       .leftJoinAndSelect('posts.topics', 'topics');
 
     return <Promise<PostOverview>>queryBuilder.getMany();
   }
 
+  /**
+   * Lay ra 20 records nhieu vote nhat bao gom tong so vote va xem user da vote cho bai do hay chua
+   */
   public findHottestPosts(
     searchQuery: SearchCriteria,
     author: UserCredential | undefined,
   ) {
     const queryBuilder = this.createQueryBuilder('posts')
-      .addSelect(
-        `post_ordered_by_votes.total_votes as "posts_total_votes"
-        , ${this.getSelectIsAuthorQuery(author)}`,
-      )
+      .addSelect(`post_ordered_by_votes.total_votes as "posts_total_votes"`)
       .innerJoin(
         (qb) => {
           qb.select('posts.id as id, COUNT(votes.id) as total_votes')
             .from(Post, 'posts')
-            .leftJoin('votes', 'votes', 'votes.post_id = posts.id')
+            .leftJoin(
+              'votes',
+              'votes',
+              'votes.post_id = posts.id AND votes.is_voted = true',
+            )
             .groupBy('posts.id')
             .limit(searchQuery.limit)
             .offset(searchQuery.offset)
@@ -58,7 +62,6 @@ export class PostRepository extends Repository<Post> {
         'post_ordered_by_votes',
         'post_ordered_by_votes.id = posts.id',
       )
-      .leftJoinAndSelect('posts.author', 'author')
       .leftJoinAndSelect('posts.topics', 'topics');
     return <Promise<PostOverview>>queryBuilder.getMany();
   }

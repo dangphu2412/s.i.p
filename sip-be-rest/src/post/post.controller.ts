@@ -1,12 +1,6 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import {
-  OptionalProtected,
-  Protected,
-} from 'src/auth/decorator/protected.decorator';
-import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
-import { UserCredential } from 'src/auth/client/user-cred';
-import {
   Body,
   Controller,
   Delete,
@@ -14,8 +8,15 @@ import {
   Param,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { UserCredential } from 'src/auth/client/user-cred';
+import {
+  OptionalProtected,
+  Protected,
+} from 'src/auth/decorator/protected.decorator';
+import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
 import { PostOverview } from './client/post-overview.api';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -33,7 +34,7 @@ export class PostController {
   }
 
   @Protected
-  @Post('/:id/votes')
+  @Put('/:id/votes')
   upsertVoteOfPost(
     @Param('id') id: string,
     @AuthContext() author: UserCredential,
