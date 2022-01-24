@@ -1,5 +1,5 @@
 import './post-detail.scss';
-import { Button, Col, Divider, Image, Row, Comment, Avatar, Tooltip } from 'antd';
+import { Button, Col, Divider, Image, Row, Comment, Avatar, Tooltip, List } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -363,22 +363,21 @@ export function PostDetailPage(): JSX.Element {
                                     image={projectMembers.hunter.avatar}
                                 />
                                 <div>
-                                    4 Makers
+                                    4 Sip-ers
                                 </div>
 
                                 <div className='mt-5 maker-container'>
-                                    {
-                                        projectMembers.makers.map(maker => {
-                                            return (
-                                                <SimpleCard 
-                                                    key={maker.id}
-                                                    title={maker.name}
-                                                    description={maker.position}
-                                                    image={maker.avatar}
-                                                />
-                                            );
-                                        })
-                                    }
+                                    <List
+                                        dataSource={projectMembers.makers}
+                                        itemLayout="horizontal"
+                                        renderItem={maker => (
+                                            <List.Item.Meta
+                                                avatar={<Avatar src={maker.avatar} />}
+                                                title={<a href="https://ant.design">{maker.name}</a>}
+                                                description={maker.position}
+                                            />
+                                        )}
+                                    />
                                 </div>
                             </div>
 

@@ -1,7 +1,8 @@
-import { Skeleton, Spin } from 'antd';
+import { Button, Skeleton, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Page } from 'src/modules/query/interface';
 import { selectDataHolderByView } from '../../../data/data.selector';
 import { PostOverview } from '../../api/post.api';
@@ -13,6 +14,7 @@ import { CardItemOverview } from './CardItemOverview';
 // UI to load posts
 export function CardContainer(): JSX.Element {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [posts, setPosts] = useState<PostOverview>([]);
     const [isLoading, setLoading] = useState(false);
@@ -74,15 +76,16 @@ export function CardContainer(): JSX.Element {
             >
                 {
                     posts.map((post, index) => {
-                        return <a
-                            href={'/posts/' + post.slug}
+                        return <div
+                            onClick={() => { navigate('/posts/' + post.slug); }}
                             key={index}
+                            className='cursor-pointer hover:shadow my-2 transition delay-50'
                         >
                             <CardItemOverview
                                 key={index}
                                 data={post}
                             />
-                        </a>;
+                        </div>;
                     })
                 }
                 <Skeleton loading={isLoading} />

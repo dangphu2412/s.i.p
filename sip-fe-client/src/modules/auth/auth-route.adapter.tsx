@@ -12,24 +12,24 @@ interface RouteMapper {
 
 export class AuthRouteMapper {
     static toRoutes(mappers: RouteMapper[], options = { noPublicGuard: false }): JSX.Element[] {
-        return mappers.map(i => {
-            if (i.protected) {
-                return <Route key={Math.random()} path={i.path} element={
-                    <AuthenticatorGuard element={<i.element/>} />
+        return mappers.map(mapper => {
+            if (mapper.protected) {
+                return <Route key={Math.random()} path={mapper.path} element={
+                    <AuthenticatorGuard element={<mapper.element/>} />
                 }>
                     {
-                        i.children ? 
-                            AuthRouteMapper.toRoutes(i.children, options)
+                        mapper.children ? 
+                            AuthRouteMapper.toRoutes(mapper.children, options)
                             : undefined
                     }
                 </Route>;
             }
-            return <Route key={Math.random()} path={i.path} element={
-                options.noPublicGuard ? <i.element/>: <PublicGuard element={<i.element/>}/>
+            return <Route key={Math.random()} path={mapper.path} element={
+                options.noPublicGuard ? <mapper.element/>: <PublicGuard element={<mapper.element/>}/>
             }>
                 {
-                    i.children ? 
-                        AuthRouteMapper.toRoutes(i.children, options)
+                    mapper.children ? 
+                        AuthRouteMapper.toRoutes(mapper.children, options)
                         : undefined
                 }
             </Route>;

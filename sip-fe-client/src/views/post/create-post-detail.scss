@@ -1,0 +1,7 @@
+@import '../../scss//variables.scss';
+
+.menu-item {
+    &:hover {
+        background-color: $paragraph !important;
+    }
+}

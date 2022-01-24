@@ -3,7 +3,7 @@ import { createRequest } from '../http/http-request';
 import { Query } from '../query/interface';
 import { parseToSearchParams } from '../query/search-parser';
 import { PostDetail, PostOverview } from './api/post.api';
-import { PostDetailRequest } from './post.action';
+import { InitPost, PostDetailRequest } from './post.action';
 
 export function getPostsOverview(query: Query) {
     return createRequest<PostOverview, Query>(axios.get('/v1/posts', {
@@ -13,4 +13,8 @@ export function getPostsOverview(query: Query) {
 
 export function getPostDetail(postId: string) {
     return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${postId}`));
+}
+
+export function saveInitialPost(data: InitPost) {
+    return createRequest<Record<string, unknown>, InitPost>(axios.post('/v1/posts', data));
 }

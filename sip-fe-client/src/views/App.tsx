@@ -13,6 +13,7 @@ import { PostDetailPage } from './post/PostDetailPage';
 import { CreatePostPage } from './post/CreatePostPage';
 import { TopicDetailPage } from './topic/TopicDetailPage';
 import { TopicOverviewPage } from './topic/TopicOverviewPage';
+import { CreateDetailPostPage } from './post/CreateDetailPostPage';
 
 configApp();
 
@@ -25,6 +26,7 @@ function App(): JSX.Element {
                         AuthRouteMapper.toRoutes([
                             { path: '/success', element: LoginSuccessPage },
                             { path: '/posts/:postId', element: PostDetailPage },
+                            { path: '/posts/new/:slug', element: CreateDetailPostPage },
                             { path: '/posts/new', element: CreatePostPage },
                             { path: '/topics', element: TopicOverviewPage,
                                 children: [

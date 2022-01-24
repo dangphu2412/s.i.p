@@ -1,10 +1,11 @@
 import { Button, Col, Divider, Form, Input, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { CreatePostType } from 'src/modules/post/constants/create-type';
-import { initPost } from 'src/modules/post/post.action';
+import { InitPost } from 'src/modules/post/post.action';
+import { saveInitialPost } from 'src/modules/post/post.service';
 import './create-post.scss';
 
 interface CreateSelection {
@@ -13,13 +14,11 @@ interface CreateSelection {
 }
 
 export function CreatePostPage() {
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [createSelection, setCreateSeleciton] = useState<CreateSelection>({
         selected: false,
         type: null
     });
-
-   
 
     function handleCreation(createPostType: CreatePostType) {
         setCreateSeleciton({
@@ -28,13 +27,19 @@ export function CreatePostPage() {
         });
     }
 
-    function submitPost(values: any) {
+    async function submitPost(values: Omit<InitPost, 'postType'>) {
         if (!createSelection.type) {
             throw new Error('Missing create post type');
         }
-        dispatch(initPost({
-            postType: createSelection.type
-        }));
+
+        const request = saveInitialPost({
+            postType: createSelection.type,
+            ...values
+        });
+
+        await request.doRequest();
+        navigate('/posts/new/here_is_slug');
+        
         return;
     }
     
