@@ -44,3 +44,24 @@ export interface ProjectMembers {
   hunter: ProjectMember,
   makers: ProjectMember[]
 }
+
+export interface PatchPostDetail {
+    name: string;
+    tagLine: string;
+    summary: string;
+    links: {
+        product?: string;
+        facebook?: string;
+    },
+    topics: any[],
+    thumbnail: string;
+    gallery: {
+        video?: string;
+        images: string;
+    },
+    isHunter: boolean;
+    sipers: any[];
+    pricingType: string;
+    content: string;
+    launchSchedule: Date;
+}

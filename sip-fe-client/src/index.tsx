@@ -7,10 +7,15 @@ import { createReduxStore } from './config/store.config';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faComment, faPlusCircle, faCheckCircle,
-    faInfoCircle, faPhotoVideo, faUser, faRocket
+    faInfoCircle, faPhotoVideo, faUser, faRocket,
+    faMinusCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faComment, faPlusCircle, faCheckCircle, faInfoCircle, faPhotoVideo, faUser, faRocket);
+library.add(
+    faComment, faPlusCircle, faCheckCircle,
+    faInfoCircle, faPhotoVideo, faUser, faRocket,
+    faMinusCircle
+);
 
 render(
     <React.Fragment>

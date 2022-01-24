@@ -13,15 +13,15 @@ interface CreateSelection {
     type: CreatePostType | null;
 }
 
-export function CreatePostPage() {
+export function CreatePostPage(): JSX.Element {
     const navigate = useNavigate();
-    const [createSelection, setCreateSeleciton] = useState<CreateSelection>({
+    const [createSelection, setCreateSelection] = useState<CreateSelection>({
         selected: false,
         type: null
     });
 
     function handleCreation(createPostType: CreatePostType) {
-        setCreateSeleciton({
+        setCreateSelection({
             selected: true,
             type: createPostType
         });
@@ -39,10 +39,10 @@ export function CreatePostPage() {
 
         await request.doRequest();
         navigate('/posts/new/here_is_slug');
-        
+
         return;
     }
-    
+
     return (
         <ClientLayout>
             <Row>
@@ -77,7 +77,7 @@ export function CreatePostPage() {
                             </Button>
                         </div>
                     }
-                    
+
                     {
                         createSelection.type === CreatePostType.CREATE_IDEA
                         && <div
@@ -92,11 +92,11 @@ export function CreatePostPage() {
                                 You&#39;sre in the right place.
                                 So relax and follow the steps.
                             </div>
-                            
+
                         </div>
                     }
 
-                    
+
                     {
                         createSelection.type === CreatePostType.CREATE_PRODUCT
                         && <div
@@ -111,11 +111,11 @@ export function CreatePostPage() {
                                 You&#39;sre in the right place.
                                 So relax and follow the steps.
                             </div>
-                            
+
                         </div>
                     }
 
-                    
+
 
                     <Form
                         labelCol={{span: 4}}
@@ -155,7 +155,7 @@ export function CreatePostPage() {
                                 <Button htmlType='submit'>Get started</Button>
                                 <Button
                                     className='ml-3'
-                                    onClick={() => setCreateSeleciton({
+                                    onClick={() => setCreateSelection({
                                         selected: false,
                                         type: null
                                     })}

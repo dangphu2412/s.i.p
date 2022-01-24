@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 
-export function TopicDetailPage() {
+export function TopicDetailPage(): JSX.Element {
     const { topicId } = useParams();
 
     if (!topicId) {
