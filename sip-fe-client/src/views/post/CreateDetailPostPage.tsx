@@ -1,4 +1,4 @@
-import {Avatar, Button, Col, Divider, Form, Input, List, Menu, Row} from 'antd';
+import {Avatar, Button, Col, Divider, Form, Input, List, Menu, Row, Upload} from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -7,7 +7,9 @@ import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './create-post-detail.scss';
 import { PatchPostDetail } from 'src/modules/post/api/post.api';
-
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { setLoading } from 'src/modules/loading/loading.action';
+import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 interface MenuProps {
     key: DetailMenu;
     title: string;
@@ -47,6 +49,7 @@ export function CreateDetailPostPage() {
 
     const { slug } = useParams();
     const [menuSelected, setMenuSelected] = useState<DetailMenu>(menuData[0].key);
+    const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<PatchPostDetail>({
         name: '',
         tagLine: '',
@@ -79,6 +82,31 @@ export function CreateDetailPostPage() {
 
     function onTopicSearchEvent() {  return; }
 
+    function beforeUpload() {  return; }
+
+    function getBase64(img: RcFile, callback: (imageUrl: string) => void) {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result as string));
+        reader.readAsDataURL(img);
+    }
+      
+    function handleUpload(info: UploadChangeParam<UploadFile<any>>) {  
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done' && info.file.originFileObj) {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj, (imageUrl: string) => {
+                setData({
+                    ...data,
+                    thumbnail: imageUrl
+                });
+                setLoading(false);
+            });
+        }
+    }
+
     return <ClientLayout>
         <div className='py-10'>
             <Container>
@@ -98,15 +126,17 @@ export function CreateDetailPostPage() {
                     <Col span={6} className='pr-5'>
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={['1']}
+                            defaultSelectedKeys={[menuSelected]}
+                            selectedKeys={[menuSelected]}
                             style={{ height: '100%' }}
-                            onClick={e => console.log(e)}
+                            onClick={e => {
+                                setMenuSelected(e.key as DetailMenu);
+                            }}
                         >
                             {
                                 menuData.map(item => {
                                     return <Menu.Item
                                         key={item.key}
-                                        onClick={() => setMenuSelected(item.key)}
                                     >
                                         <span className='mr-2'>
                                             {item.icon}
@@ -224,9 +254,29 @@ export function CreateDetailPostPage() {
                                     <div className='button-text-color'>
                                         Pick a cool picture for your product
                                     </div>
+
+                                    <Upload
+                                        name="avatar"
+                                        listType="picture-card"
+                                        className="avatar-uploader"
+                                        showUploadList={false}
+                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        beforeUpload={beforeUpload}
+                                        onChange={handleUpload}
+                                    >
+                                        {
+                                            data.thumbnail
+                                                ? <img src={data.thumbnail} alt="avatar" style={{ width: '100%' }} />
+                                                : <div>
+                                                    {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                                </div>
+                                        }
+                                    </Upload>
                                 </div>
 
                                 <Divider />
+
                                 <div>
                                     <Title level={4}>
                                         Gallery
@@ -236,10 +286,140 @@ export function CreateDetailPostPage() {
                                         The first image will be used as the social preview when your link is shared online.
                                         We recommend at least 3 or more images.
                                     </div>
+                                    
+                                    <Upload
+                                        name="avatar"
+                                        listType="picture-card"
+                                        className="avatar-uploader"
+                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                    >
+                                        {
+                                            data.thumbnail
+                                                ? <img src={data.thumbnail} alt="avatar" style={{ width: '100%' }} />
+                                                : <div>
+                                                    {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                                </div>
+                                        }
+                                    </Upload>
 
                                 </div>
+
+                                <Divider />
+
+                                <div>
+                                    <Title level={4}>
+                                        Youtube video
+                                    </Title>
+                                </div>
+
+                                <div className='button-text-color'>
+                                This is optional but we find that showing how your product works is helpful to convince people. If you do add a video, it will appear as the first item in your gallery when you launch.
+                                </div>
+
+                                <Form.Item label="Product video">
+                                    <Input placeholder="Video of product" />
+                                </Form.Item>
+
+                                <Button
+                                    className='mt-5'
+                                    onClick={() => setMenuSelected(DetailMenu.SIP_ERS)}
+                                >
+                                    Next step: Sip-ers
+                                </Button>
                             </Form>
                         }
+
+                        {
+                            menuSelected === DetailMenu.SIP_ERS &&
+                            <Form
+                                layout="vertical"
+                                requiredMark={false}
+                            >
+                                <div>
+                                    <Title level={4}>
+                                        Did you work on this product?
+                                    </Title>
+
+                                    <div className='button-text-color'>
+                                        It’s fine either way. Just need to know.
+                                    </div>
+
+                                    
+                                </div>
+
+                                <Divider />
+
+                                <div>
+                                    <Title level={4}>
+                                    Who worked on this product?
+                                    </Title>
+
+                                    <div className='button-text-color'>
+                                        You’re free to add anyone who worked on this product.
+                                    </div>
+                                </div>
+
+                                <Divider />
+
+                                <Button
+                                    className='mt-5'
+                                    onClick={() => setMenuSelected(DetailMenu.REVIEW_AND_LAUNCH)}
+                                >
+                                    Next step: Review and launch
+                                </Button>
+                            </Form>
+                        }
+
+                        {
+                            menuSelected === DetailMenu.REVIEW_AND_LAUNCH &&
+                            <Form
+                                layout="vertical"
+                                requiredMark={false}
+                            >
+                                <div>
+                                    <Title level={4}>
+                                        Required info
+                                    </Title>
+
+                                    <div className='button-text-color'>
+                                        Check that you’ve completed all of the required information.
+                                    </div>
+
+                                    
+                                </div>
+
+                                <Divider />
+
+                                <div>
+                                    <Title level={4}>
+                                        Suggested
+                                    </Title>
+
+                                    <div className='button-text-color'>
+                                        Go the extra mile and add suggested information. Successful launches usually do.
+                                    </div>
+                                </div>
+
+                                <Divider />
+
+                                <Button
+                                    className='mt-5'
+                                    onClick={() => alert('Submitting product')}
+                                >
+                                    Launch now
+                                </Button>
+
+                                <Button
+                                    className='mt-5'
+                                    onClick={() => alert('Post this idea')}
+                                >
+                                    Post this idea
+                                </Button>
+                            </Form>
+                        }
+
+
                     </Col>
                 </Row>
             </Container>
