@@ -72,4 +72,14 @@ export class PostRepository extends Repository<Post> {
       ELSE false
     END as "posts_is_author"`;
   }
+
+  public async isTitleConflict(title: string): Promise<boolean> {
+    return (
+      (await this.count({
+        where: {
+          title,
+        },
+      })) === 0
+    );
+  }
 }

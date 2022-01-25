@@ -1,10 +1,10 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
-import { OptionalProtected } from 'src/auth/decorator/protected.decorator';
-import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
-import { UserCredential } from 'src/auth/client/user-cred';
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { UserCredential } from 'src/auth/client/user-cred';
+import { OptionalProtected } from 'src/auth/decorator/protected.decorator';
+import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
 import { FetchTopicsOverviewValidator } from './pipes/overview.validator';
 import { TopicService } from './topic.service';
 

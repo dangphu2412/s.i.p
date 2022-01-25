@@ -1,6 +1,6 @@
 export class ArrayUtils {
-  public static isPresent<T>(array: T[]): boolean {
-    return array?.length > 0;
+  public static isPresent<T>(array: T[]): array is T[] {
+    return Array.isArray(array) && array.length > 0;
   }
 
   public static isEmpty<T>(array: T[]) {

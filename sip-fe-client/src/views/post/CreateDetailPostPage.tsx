@@ -89,7 +89,7 @@ export function CreateDetailPostPage() {
         reader.addEventListener('load', () => callback(reader.result as string));
         reader.readAsDataURL(img);
     }
-      
+
     function handleUpload(info: UploadChangeParam<UploadFile<any>>) {  
         if (info.file.status === 'uploading') {
             setLoading(true);

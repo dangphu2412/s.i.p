@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { MediaService } from './media.service';
 import { MediaController } from './media.controller';
 import { MulterModule } from '@nestjs/platform-express/multer';
@@ -12,6 +12,6 @@ import { CloudinaryProvider } from './providers/cloudinary.provider';
     }),
   ],
   controllers: [MediaController],
-  providers: [MediaService, CloudinaryProvider],
+  providers: [MediaService, CloudinaryProvider, Logger],
 })
 export class MediaModule {}

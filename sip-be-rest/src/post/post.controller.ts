@@ -1,3 +1,4 @@
+import { toPage } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import {
@@ -17,9 +18,8 @@ import {
   Protected,
 } from 'src/auth/decorator/protected.decorator';
 import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
-import { PostOverview } from './client/post-overview.api';
-import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { InitPostDto } from './dto/init-post.dto';
 import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
 import { PostService } from './post.service';
 
@@ -29,8 +29,13 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+  initializePost(@Body() initPostDto: InitPostDto) {
+    return this.postService.init(initPostDto);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.postService.update(+id, updatePostDto);
   }
 
   @Protected
@@ -44,11 +49,12 @@ export class PostController {
 
   @OptionalProtected
   @Get()
-  findMany(
+  async findMany(
     @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
-  ): Promise<PostOverview> {
-    return this.postService.findMany(searchQuery, author);
+  ) {
+    const posts = await this.postService.findMany(searchQuery, author);
+    return toPage(posts, searchQuery);
   }
 
   @OptionalProtected
@@ -61,16 +67,15 @@ export class PostController {
   }
 
   @Get(':id/discussions')
-  findRelatedDiscussions(
+  async findRelatedDiscussions(
     @Param('id') id: string,
     @SearchQuery() searchCriteria: SearchCriteria,
   ) {
-    return this.postService.findRelatedDiscussions(+id, searchCriteria);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+    const discussions = await this.postService.findRelatedDiscussions(
+      +id,
+      searchCriteria,
+    );
+    return toPage(discussions, searchCriteria);
   }
 
   @Delete(':id')

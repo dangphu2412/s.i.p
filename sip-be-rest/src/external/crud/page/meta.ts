@@ -15,7 +15,10 @@ export class Meta {
     if (meta) {
       return {
         ...meta,
-        pageCount: Math.ceil(meta.totalCount / meta.size),
+        pageCount:
+          meta.totalCount && meta.size
+            ? Math.ceil(meta.totalCount / meta.size)
+            : undefined,
       };
     }
 

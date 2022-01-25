@@ -13,6 +13,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { PostStatus, ProductRunningStatus } from './enums/post-status.enum';
 
 @Entity('posts')
 @Index(['slug'])
@@ -46,6 +47,12 @@ export class Post extends TimeEntityGenerator() {
 
   @Column({ name: 'product_link', nullable: false })
   public productLink: string;
+
+  @Column({ name: 'status', type: 'enum', default: PostStatus.DRAFT })
+  public status: PostStatus;
+
+  @Column({ name: 'running_status', type: 'enum' })
+  public runningStatus: ProductRunningStatus;
 
   /**
    * START VIRTUAL FIELDS

@@ -3,8 +3,10 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { TopicService } from '@topic/topic.service';
 import { SlugUtils } from '@utils/slug';
 import { VoteService } from '@vote/vote.service';
 import { UserCredential } from 'src/auth/client/user-cred';
@@ -12,9 +14,10 @@ import { DiscussionService } from 'src/discussion/discussion.service';
 import { UserService } from 'src/user/user.service';
 import { ArrayUtils } from '../external/utils/array/array.utils';
 import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
-import { CreatePostDto } from './dto/create-post.dto';
+import { InitPostDto } from './dto/init-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';
+import { PostStatus, ProductRunningStatus } from './enums/post-status.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
 
@@ -25,26 +28,59 @@ export class PostService {
     private readonly voteService: VoteService,
     private readonly userService: UserService,
     private readonly discussionService: DiscussionService,
+    private readonly topicService: TopicService,
   ) {}
 
-  async create(createPostDto: CreatePostDto) {
-    const isTitleConflict = await this.postRepository.count({
-      where: {
-        title: createPostDto.title,
-      },
-    });
+  async init(initPostDto: InitPostDto) {
+    const isTitleConflict = await this.postRepository.isTitleConflict(
+      initPostDto.title,
+    );
 
     if (isTitleConflict) {
       throw new ConflictException(
-        `Can not create post which is conflict with title: ${createPostDto.title}`,
+        `Can not create post which is conflict with title: ${initPostDto.title}`,
       );
     }
 
-    const post = Post.create(createPostDto);
+    const post = new Post();
+    post.title = initPostDto.title;
     post.slug = SlugUtils.normalize(post.title);
-    post.previewGalleryImg = post.galleryImages[0];
+    post.status = PostStatus.DRAFT;
+    post.runningStatus = initPostDto.productLink
+      ? ProductRunningStatus.UP_COMING
+      : ProductRunningStatus.STILL_IDEA;
 
     return this.postRepository.save(post);
+  }
+
+  async update(id: number, updatePostDto: UpdatePostDto) {
+    const post = await this.postRepository.findOne(id, {
+      relations: ['topics'],
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post ${id} not found to update`);
+    }
+
+    // Update title and slug
+    if (updatePostDto.title !== post.title) {
+      // --  Can separate this validation logic
+      const isTitleConflict = await this.postRepository.isTitleConflict(
+        updatePostDto.title,
+      );
+
+      if (isTitleConflict) {
+        throw new ConflictException(
+          `Can not update post which is conflict with title: ${updatePostDto.title}`,
+        );
+      }
+      // --
+
+      post.title = updatePostDto.title;
+      post.slug = SlugUtils.normalize(post.title);
+    }
+
+    post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
   }
 
   findMany(searchQuery: SearchCriteria, author: UserCredential | undefined) {
@@ -97,10 +133,6 @@ export class PostService {
     }
 
     return this.discussionService.findRelatedDiscussions(post, searchCriteria);
-  }
-
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
   }
 
   remove(id: number) {

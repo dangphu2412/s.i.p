@@ -27,6 +27,7 @@ export class ConfigService {
     if (ConfigService.cacheStore.has(key)) {
       return ConfigService.cacheStore.get(key);
     }
+    ConfigService.cacheStore.set(key, ConfigService.get(key));
 
     return ConfigService.get(key);
   }

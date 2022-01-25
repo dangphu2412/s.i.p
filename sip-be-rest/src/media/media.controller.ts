@@ -1,4 +1,5 @@
 import { ConfigService } from '@external/config/config.service';
+import { toData } from '@external/crud/extensions/data-wrapper';
 import {
   Controller,
   Post,
@@ -31,6 +32,7 @@ export class MediaController {
     FilesInterceptor('files', +ConfigService.getCache('UPLOAD_MAX_COUNT')),
   )
   async uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
-    return this.mediaService.uploadImages(files);
+    const urls = await this.mediaService.uploadImages(files);
+    return toData(urls);
   }
 }

@@ -1,7 +1,6 @@
 import { ConfigService } from '@external/config/config.service';
 import { Injectable } from '@nestjs/common';
 import { v2 } from 'cloudinary';
-import { DEFAULT_CLOUDINARY_FOLDER } from '../constants';
 
 @Injectable()
 export class CloudinaryProvider {
@@ -17,10 +16,10 @@ export class CloudinaryProvider {
     this.provider = v2.uploader;
   }
 
-  public uploadByFilename(
-    filename: string,
-    folder = DEFAULT_CLOUDINARY_FOLDER,
+  public uploadByFilePath(
+    path: string,
+    folder = ConfigService.getCache('CLOUDINARY_UPLOAD_FOLDER'),
   ) {
-    return this.provider.upload(filename, { folder });
+    return this.provider.upload(path, { folder });
   }
 }

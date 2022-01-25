@@ -11,11 +11,10 @@ import { unlink } from 'fs/promises';
 import { toSecuredUrls } from './mapper/media.mapper';
 @Injectable()
 export class MediaService {
-  private logger: Logger;
-
-  constructor(private cloudinaryProvider: CloudinaryProvider) {
-    this.logger = new Logger(MediaService.name);
-  }
+  constructor(
+    private cloudinaryProvider: CloudinaryProvider,
+    private logger: Logger,
+  ) {}
 
   public async uploadImages(files: Array<Express.Multer.File>) {
     const uploadProcess = this.getUploadProcess(files);
@@ -24,8 +23,10 @@ export class MediaService {
     try {
       uploadedResults = await uploadProcess;
     } catch (error) {
-      this.logger.error(error);
-      await this.handleUploadErrorProcess(error, files);
+      this.logger.error(error, MediaService.name);
+      await this.handleUploadErrorProcess(error);
+    } finally {
+      await this.cleanupProcess(files);
     }
 
     return toSecuredUrls(uploadedResults);
@@ -34,7 +35,7 @@ export class MediaService {
   private getUploadProcess(files: Array<Express.Multer.File>) {
     return Promise.all(
       files.map((file) => {
-        return this.cloudinaryProvider.uploadByFilename(file.path);
+        return this.cloudinaryProvider.uploadByFilePath(file.path);
       }),
     );
   }
@@ -47,11 +48,7 @@ export class MediaService {
     );
   }
 
-  private async handleUploadErrorProcess(
-    error,
-    files: Array<Express.Multer.File>,
-  ) {
-    await this.cleanupProcess(files);
+  private async handleUploadErrorProcess(error) {
     if (error.http_code === HttpStatus.UNAUTHORIZED) {
       throw new InternalServerErrorException(
         'Server got wrong config cloudinary',
