@@ -33,10 +33,10 @@ export class Post extends TimeEntityGenerator() {
   @Column({ name: 'summary', type: 'text' })
   public summary: string;
 
-  @Column({ name: 'thumbnail', nullable: false })
+  @Column({ name: 'thumbnail' })
   public thumbnail: string;
 
-  @Column({ name: 'preview_gallery', nullable: false, type: 'simple-array' })
+  @Column({ name: 'preview_gallery', type: 'simple-array' })
   public previewGalleryImg: string;
 
   @Column({ name: 'gallery_images', nullable: false, type: 'simple-array' })
@@ -48,10 +48,10 @@ export class Post extends TimeEntityGenerator() {
   @Column({ name: 'product_link', nullable: false })
   public productLink: string;
 
-  @Column({ name: 'status', type: 'enum', default: PostStatus.DRAFT })
+  @Column({ name: 'status', type: 'enum', enum: PostStatus })
   public status: PostStatus;
 
-  @Column({ name: 'running_status', type: 'enum' })
+  @Column({ name: 'running_status', type: 'enum', enum: ProductRunningStatus })
   public runningStatus: ProductRunningStatus;
 
   /**

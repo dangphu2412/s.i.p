@@ -1,3 +1,4 @@
+import { PostStatus, ProductRunningStatus } from '@post/enums/post-status.enum';
 import { SlugUtils } from '@utils/slug';
 import Faker from 'faker';
 import { Post } from 'src/post/post.entity';
@@ -16,6 +17,8 @@ define(
     const title = faker.commerce.productName() + uniqueChar;
     const previewGalleryImg = faker.image.city(400, 400);
     uniqueChar++;
+    const postStatusValues = Object.values(PostStatus);
+    const runningStatusValues = Object.values(ProductRunningStatus);
     return Post.create({
       content: faker.lorem.paragraph(1),
       title,
@@ -33,6 +36,8 @@ define(
       previewGalleryImg: previewGalleryImg,
       productLink: faker.internet.avatar(),
       videoDemo: 'https://www.youtube.com/watch?v=nTtpHxnO9zA',
+      status: faker.random.arrayElement(postStatusValues),
+      runningStatus: faker.random.arrayElement(runningStatusValues),
     });
   },
 );

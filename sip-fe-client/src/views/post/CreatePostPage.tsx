@@ -1,8 +1,10 @@
 import { Button, Col, Divider, Form, Input, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
+import { fireError } from 'src/modules/error/error.action';
 import { CreatePostType } from 'src/modules/post/constants/create-type';
 import { InitPost } from 'src/modules/post/post.action';
 import { saveInitialPost } from 'src/modules/post/post.service';
@@ -15,6 +17,7 @@ interface CreateSelection {
 
 export function CreatePostPage(): JSX.Element {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [createSelection, setCreateSelection] = useState<CreateSelection>({
         selected: false,
         type: null
@@ -38,7 +41,12 @@ export function CreatePostPage(): JSX.Element {
         });
 
         await request.doRequest();
-        navigate('/posts/new/here_is_slug');
+        if (request.getErrorMessage()) {
+            dispatch(fireError({message: request.getErrorMessage() }));
+            return;
+        }
+
+        navigate(`/posts/new/${request.getData().slug}`);
 
         return;
     }
@@ -126,11 +134,11 @@ export function CreatePostPage(): JSX.Element {
                         {
                             createSelection.selected
                             && <Form.Item
-                                name='name'
-                                label='Idea name'
+                                name='title'
+                                label='Idea title'
                             >
                                 <Input
-                                    placeholder='Your idea name'
+                                    placeholder='Your idea title'
                                     required
                                 />
                             </Form.Item>

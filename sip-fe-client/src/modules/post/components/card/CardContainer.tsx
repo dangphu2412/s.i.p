@@ -76,8 +76,8 @@ export function CardContainer(): JSX.Element {
             >
                 {
                     posts.map((post, index) => {
-                        return <div
-                            onClick={() => { navigate('/posts/' + post.slug); }}
+                        return <a
+                            href={'/posts/' + post.slug}
                             key={index}
                             className='cursor-pointer hover:shadow my-2 transition delay-50'
                         >
@@ -85,7 +85,7 @@ export function CardContainer(): JSX.Element {
                                 key={index}
                                 data={post}
                             />
-                        </div>;
+                        </a>;
                     })
                 }
                 <Skeleton loading={isLoading} />

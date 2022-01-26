@@ -1,10 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, Length, Max } from 'class-validator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class InitPostDto {
   @ApiProperty()
-  @IsString()
-  @Length(40)
+  @MaxLength(40)
   public title: string;
 
   @ApiProperty()

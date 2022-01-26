@@ -8,7 +8,7 @@ export interface PostDetailRequest {
 
 export interface InitPost {
     postType: CreatePostType;
-    name?: string;
+    title: string;
     productLink?: string;
 }
 

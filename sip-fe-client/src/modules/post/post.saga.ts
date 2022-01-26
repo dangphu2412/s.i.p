@@ -26,7 +26,7 @@ function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
     });
     const data = yield call(request.handle);
     yield put(saveData({
-        data,
+        data: data.data,
         query: {},
         view: 'POST'
     }));

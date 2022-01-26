@@ -49,6 +49,13 @@ export class PostService {
     post.runningStatus = initPostDto.productLink
       ? ProductRunningStatus.UP_COMING
       : ProductRunningStatus.STILL_IDEA;
+    post.content = '';
+    post.productLink = '';
+    post.summary = '';
+    post.previewGalleryImg = '';
+    post.thumbnail = '';
+    post.galleryImages = [];
+    post.videoDemo = '';
 
     return this.postRepository.save(post);
   }

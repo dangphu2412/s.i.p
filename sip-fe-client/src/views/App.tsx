@@ -14,10 +14,12 @@ import { CreatePostPage } from './post/CreatePostPage';
 import { TopicDetailPage } from './topic/TopicDetailPage';
 import { TopicOverviewPage } from './topic/TopicOverviewPage';
 import { CreateDetailPostPage } from './post/CreateDetailPostPage';
+import { registerErrors } from 'src/modules/http/http-request';
 
 configApp();
 
 function App(): JSX.Element {
+    registerErrors({});
     return <>
         <AuthRestoreGuard>
             <BrowserRouter>

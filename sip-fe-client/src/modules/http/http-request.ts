@@ -15,6 +15,7 @@ const DEFAULT_ERROR_MAPPING = {
     401: 'You are required to be authenticate first',
     403: 'You are not allowed to access this resource. Please contact your admin',
     404: 'Resource not found',
+    409: 'Some data conflict',
     500: 'Internal server error',
 
     UNEXPECTED_ERROR_CODE: 'Unexpected error happened'
@@ -24,11 +25,13 @@ export function registerErrors(errorCodeToMsgMap: Record<string, string>, option
     let newMap: Record<string, string> | undefined = undefined;
     if (options.allowMerge) {
         newMap = merge(DEFAULT_ERROR_MAPPING, errorCodeToMsgMap);
+    } else {
+        newMap = errorCodeToMsgMap;
     }
 
-    Object.keys(newMap ? newMap : errorCodeToMsgMap)
+    Object.keys(newMap)
         .forEach((code: string) => {
-            ErrorCodeToMsgMap.set(code, errorCodeToMsgMap[code]);
+            ErrorCodeToMsgMap.set(code, (newMap as Record<string, string>)[code]);
         });
 }
 
@@ -58,8 +61,13 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
     }
 
     function _getErrorMessage(error: AxiosError): string {
-        if (ErrorCodeToMsgMap.has(error.code as string)) {
-            return ErrorCodeToMsgMap.get(error.code as string) as string;
+        if (error.response) {
+            ErrorCodeToMsgMap.forEach(val => {
+                console.log(val);
+            });
+            if (ErrorCodeToMsgMap.has(`${error.response.status}`)) {
+                return ErrorCodeToMsgMap.get(`${error.response.status}`) as string;
+            }
         }
 
         return DEFAULT_ERROR_MAPPING.UNEXPECTED_ERROR_CODE;

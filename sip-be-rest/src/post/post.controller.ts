@@ -28,8 +28,12 @@ import { PostService } from './post.service';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @Protected
   @Post()
-  initializePost(@Body() initPostDto: InitPostDto) {
+  initializePost(
+    @Body() initPostDto: InitPostDto,
+    @AuthContext() authContext: UserCredential,
+  ) {
     return this.postService.init(initPostDto);
   }
 

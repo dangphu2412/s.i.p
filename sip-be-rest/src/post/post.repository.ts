@@ -79,7 +79,7 @@ export class PostRepository extends Repository<Post> {
         where: {
           title,
         },
-      })) === 0
+      })) !== 0
     );
   }
 }
