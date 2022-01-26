@@ -34,7 +34,7 @@ export class PostController {
     @Body() initPostDto: InitPostDto,
     @AuthContext() authContext: UserCredential,
   ) {
-    return this.postService.init(initPostDto);
+    return this.postService.init(initPostDto, authContext);
   }
 
   @Patch(':id')

@@ -9,7 +9,7 @@ export class ArrayMapper {
     });
   }
 
-  public static mapByKey<T>(array: T[], key: string) {
-    return array.map((i) => i[key]);
+  public static mapByKey<T, K>(array: T[], key: string): K[] {
+    return array.map((i) => i[key] as K);
   }
 }

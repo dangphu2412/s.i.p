@@ -9,3 +9,9 @@ export enum ProductRunningStatus {
   UP_COMING = 'UP_COMING',
   RELEASED = 'RELEASED',
 }
+
+export enum PricingType {
+  FREE = 'FREE',
+  PAID = 'PAID',
+  PAID_WITH_FREE_PLANS = 'PAID_WITH_FREE_PLANS',
+}

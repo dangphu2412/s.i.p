@@ -1,5 +1,10 @@
-import { GalleryDto } from '@media/dto/gallery.dto';
+import { SocialMediaDto } from '@media/dto/gallery.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  PostStatus,
+  PricingType,
+  ProductRunningStatus,
+} from '@post/enums/post-status.enum';
 import {
   IsArray,
   IsDate,
@@ -21,9 +26,9 @@ export class UpdatePostDto {
   public title: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  public content: string;
+  public description: string;
 
   @ApiProperty()
   @Max(260)
@@ -34,12 +39,12 @@ export class UpdatePostDto {
   @ApiProperty()
   @IsObject()
   @ValidateNested({ each: true })
-  public gallery: GalleryDto;
+  public gallery: SocialMediaDto;
 
   @ApiProperty()
   @IsObject()
   @ValidateNested({ each: true })
-  public productLink: ProductLinkDto;
+  public links: ProductLinkDto;
 
   @ApiProperty()
   @IsArray({
@@ -48,15 +53,24 @@ export class UpdatePostDto {
   public topicIds: string[];
 
   @ApiProperty()
-  public siper: string;
+  public isAuthorAlsoMaker: boolean;
 
   @ApiProperty()
   @IsArray({
     each: true,
   })
-  public makers: string[];
+  public makerIds: string[];
 
   @ApiProperty()
   @IsDate()
   public launchSchedule: Date;
+
+  @ApiProperty()
+  public status: PostStatus;
+
+  @ApiProperty()
+  public runningStatus: ProductRunningStatus;
+
+  @ApiProperty()
+  public pricingType: PricingType;
 }

@@ -17,6 +17,7 @@ export class initUser1638197881588 implements MigrationInterface {
     user.username = 'admin@gmail.com';
     user.email = 'admin@gmail.com';
     user.fullName = 'admin';
+    user.hashTag = 'admin';
     user.password = await new BcryptService().hash('Sgroup123@@');
     user.permissions = [adminPermission];
     user.avatar = ConfigService.get('DEFAULT_AVATAR');

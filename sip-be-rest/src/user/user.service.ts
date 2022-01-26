@@ -14,13 +14,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SlugUtils } from '@utils/slug';
-import { pick } from 'lodash';
+import { isEqual, pick } from 'lodash';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
 import { User } from './user.entity';
 import { ErrorAssertion } from '@external/error/error-assertion';
 import { PermissionService } from '@permission/permission.service';
+import { ArrayMapper } from '@external/mappers/array.mapper';
 
 @Injectable()
 export class UserService {
@@ -48,7 +49,7 @@ export class UserService {
     }
 
     const newUser = User.create(createUserDto);
-
+    newUser.hashTag = createUserDto.username;
     newUser.password = await this.bcryptService.hash(newUser.password);
     newUser.avatar = newUser.avatar || ConfigService.getCache('DEFAULT_AVATAR');
 
@@ -59,6 +60,7 @@ export class UserService {
     const fullName = `${payload.firstName} ${payload.lastName}`;
     const newUser = User.create({
       username: SlugUtils.normalize(fullName),
+      hashTag: payload.email,
       email: payload.email,
       fullName,
       avatar: payload.picture,
@@ -97,6 +99,12 @@ export class UserService {
     return this.userRepository.findOne(id);
   }
 
+  public findByIds(ids: string[]) {
+    return this.userRepository.find({
+      where: ids,
+    });
+  }
+
   public getBasicProfile(user: User): Profile {
     return pick(user, ['id', 'username', 'fullName', 'avatar']) as Profile;
   }
@@ -120,10 +128,13 @@ export class UserService {
       throw new NotFoundException('No permissions found to grant for user');
     }
 
-    ErrorAssertion.assertKeysNotDiff(
-      permissions,
-      grantPermissionDto.permissionIds,
-    );
+    const oldPermissionIds = ArrayMapper.mapByKey(permissions, 'id');
+
+    if (!isEqual(oldPermissionIds, grantPermissionDto.permissionIds)) {
+      throw new UnprocessableEntityException(
+        `Invalid permissionIds: ${grantPermissionDto.permissionIds.toString()}`,
+      );
+    }
 
     user.permissions = permissions;
     await this.userRepository.save(user);

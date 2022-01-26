@@ -15,6 +15,7 @@ define(
     user.avatar = faker.image.avatar();
     user.fullName = fullName;
     user.username = fullName;
+    user.hashTag = fullName;
     user.permissions = permissions;
     user.password = password;
 

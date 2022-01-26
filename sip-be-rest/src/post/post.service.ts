@@ -1,4 +1,5 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
+import { SetMapper } from '@external/mappers/set.mapper';
 import {
   BadRequestException,
   ConflictException,
@@ -6,7 +7,9 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { Topic } from '@topic/topic.entity';
 import { TopicService } from '@topic/topic.service';
+import { User } from '@user/user.entity';
 import { SlugUtils } from '@utils/slug';
 import { VoteService } from '@vote/vote.service';
 import { UserCredential } from 'src/auth/client/user-cred';
@@ -31,7 +34,7 @@ export class PostService {
     private readonly topicService: TopicService,
   ) {}
 
-  async init(initPostDto: InitPostDto) {
+  async init(initPostDto: InitPostDto, authContext: UserCredential) {
     const isTitleConflict = await this.postRepository.isTitleConflict(
       initPostDto.title,
     );
@@ -42,6 +45,14 @@ export class PostService {
       );
     }
 
+    const author = await this.userService.findById(+authContext.userId);
+
+    if (!author) {
+      throw new NotFoundException(
+        `User is now not available in the system. Please contact system owner`,
+      );
+    }
+
     const post = new Post();
     post.title = initPostDto.title;
     post.slug = SlugUtils.normalize(post.title);
@@ -49,21 +60,28 @@ export class PostService {
     post.runningStatus = initPostDto.productLink
       ? ProductRunningStatus.UP_COMING
       : ProductRunningStatus.STILL_IDEA;
-    post.content = '';
     post.productLink = '';
+    post.videoLink = '';
+    post.facebookLink = '';
+
     post.summary = '';
-    post.previewGalleryImg = '';
-    post.thumbnail = '';
+    post.content = '';
+
+    post.socialPreviewImage = '';
     post.galleryImages = [];
-    post.videoDemo = '';
+    post.thumbnail = '';
+    post.author = author;
 
     return this.postRepository.save(post);
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.postRepository.findOne(id, {
-      relations: ['topics'],
+      relations: ['topics', 'makers'],
     });
+
+    const oldTopicIds = SetMapper.mapByKey<Topic, string>(post.topics, 'id');
+    const oldMakerIds = SetMapper.mapByKey<User, string>(post.makers, 'id');
 
     if (!post) {
       throw new NotFoundException(`Post ${id} not found to update`);
@@ -82,12 +100,32 @@ export class PostService {
         );
       }
       // --
+    }
 
+    if (post.title !== updatePostDto.title) {
       post.title = updatePostDto.title;
       post.slug = SlugUtils.normalize(post.title);
     }
 
-    post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
+    if (!ArrayUtils.compareUnsorted(oldTopicIds, updatePostDto.topicIds)) {
+      post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
+    }
+
+    if (!ArrayUtils.compareUnsorted(oldMakerIds, updatePostDto.makerIds)) {
+      post.makers = await this.userService.findByIds(updatePostDto.makerIds);
+    }
+
+    post.description = updatePostDto.description;
+    post.summary = updatePostDto.summary;
+    post.facebookLink = updatePostDto.gallery.facebookLink;
+    post.videoLink = updatePostDto.gallery.videoLink;
+    post.galleryImages = updatePostDto.gallery.galleryImages;
+    post.socialPreviewImage = updatePostDto.gallery.socialPreviewImage;
+    post.thumbnail = updatePostDto.gallery.thumbnail;
+    post.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
+    post.pricingType = updatePostDto.pricingType;
+    // post.runningStatus
+    // post.status
   }
 
   findMany(searchQuery: SearchCriteria, author: UserCredential | undefined) {

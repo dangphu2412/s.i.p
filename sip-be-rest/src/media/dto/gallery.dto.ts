@@ -1,16 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class GalleryDto {
+export class SocialMediaDto {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
+  @IsString()
+  public videoLink?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  public facebookLink?: string;
+
+  @ApiProperty()
+  @IsOptional()
   @IsString()
   public thumbnail: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  public videoDemo?: string;
+  public socialPreviewImage: string;
 
   @ApiProperty()
   @IsArray({

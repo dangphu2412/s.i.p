@@ -27,6 +27,10 @@ export class User extends TimeEntityGenerator() {
   public fullName: string;
 
   @Index()
+  @Column({ name: 'hash_tag' })
+  public hashTag: string;
+
+  @Index()
   @Column({ name: 'email', unique: true })
   public email: string;
 
@@ -72,6 +76,9 @@ export class User extends TimeEntityGenerator() {
     },
   })
   public followedTopics: Topic[];
+
+  @ManyToMany(() => Post, (post) => post.makers)
+  public joinedProducts: Post[];
 
   static create(partials: Partial<User>) {
     return Object.assign(new User(), partials);
