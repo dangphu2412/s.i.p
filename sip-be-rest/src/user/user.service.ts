@@ -15,11 +15,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { SlugUtils } from '@utils/slug';
 import { isEqual, pick } from 'lodash';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
 import { User } from './user.entity';
-import { ErrorAssertion } from '@external/error/error-assertion';
 import { PermissionService } from '@permission/permission.service';
 import { ArrayMapper } from '@external/mappers/array.mapper';
 
@@ -101,7 +100,9 @@ export class UserService {
 
   public findByIds(ids: string[]) {
     return this.userRepository.find({
-      where: ids,
+      where: {
+        id: In(ids),
+      },
     });
   }
 

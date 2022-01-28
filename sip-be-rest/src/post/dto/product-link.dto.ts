@@ -6,9 +6,4 @@ export class ProductLinkDto {
   @IsOptional()
   @IsString()
   public productLink: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  public videoLink: string;
 }

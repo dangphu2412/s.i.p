@@ -11,10 +11,14 @@ export function getPostsOverview(query: Query) {
     }));
 }
 
-export function getPostDetail(postId: string) {
-    return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${postId}`));
+export function getPostDetail(slug: string) {
+    return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`));
 }
 
 export function saveInitialPost(data: InitPost) {
     return createRequest<Record<string, unknown>, InitPost>(axios.post('/v1/posts', data));
+}
+
+export function getPatchPostData(slug: string) {
+    return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`));
 }

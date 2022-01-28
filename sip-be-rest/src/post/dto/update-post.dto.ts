@@ -1,19 +1,19 @@
 import { SocialMediaDto } from '@media/dto/gallery.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  PostStatus,
   PricingType,
   ProductRunningStatus,
 } from '@post/enums/post-status.enum';
 import {
   IsArray,
+  IsBoolean,
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsObject,
   IsOptional,
   IsString,
   Length,
-  Max,
   ValidateNested,
 } from 'class-validator';
 import { ProductLinkDto } from './product-link.dto';
@@ -22,7 +22,7 @@ export class UpdatePostDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @Length(40)
+  @Length(0, 40)
   public title: string;
 
   @ApiProperty()
@@ -31,15 +31,15 @@ export class UpdatePostDto {
   public description: string;
 
   @ApiProperty()
-  @Max(260)
   @IsNotEmpty()
   @IsString()
+  @Length(0, 260)
   public summary: string;
 
   @ApiProperty()
   @IsObject()
   @ValidateNested({ each: true })
-  public gallery: SocialMediaDto;
+  public socialMedia: SocialMediaDto;
 
   @ApiProperty()
   @IsObject()
@@ -47,30 +47,31 @@ export class UpdatePostDto {
   public links: ProductLinkDto;
 
   @ApiProperty()
-  @IsArray({
-    each: true,
-  })
+  @IsArray()
   public topicIds: string[];
 
   @ApiProperty()
   public isAuthorAlsoMaker: boolean;
 
   @ApiProperty()
-  @IsArray({
-    each: true,
-  })
+  @IsArray()
   public makerIds: string[];
 
   @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  public isLookingForMakers: boolean;
+
+  @ApiProperty()
+  @IsOptional()
   @IsDate()
   public launchSchedule: Date;
 
   @ApiProperty()
-  public status: PostStatus;
-
-  @ApiProperty()
+  @IsEnum(ProductRunningStatus)
   public runningStatus: ProductRunningStatus;
 
   @ApiProperty()
+  @IsEnum(PricingType)
   public pricingType: PricingType;
 }

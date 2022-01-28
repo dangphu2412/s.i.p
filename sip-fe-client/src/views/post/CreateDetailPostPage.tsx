@@ -1,7 +1,7 @@
 import {Avatar, Button, Col, Divider, Form, Input, List, Menu, Row, Upload} from 'antd';
 import Title from 'antd/lib/typography/Title';
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,10 @@ import { PatchPostDetail } from 'src/modules/post/api/post.api';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { setLoading } from 'src/modules/loading/loading.action';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectDataHolderByView } from 'src/modules/data/data.selector';
+import { fetchPatchPostData } from 'src/modules/post/post.action';
+import { setData } from 'src/modules/data/data.action';
 interface MenuProps {
     key: DetailMenu;
     title: string;
@@ -47,17 +51,17 @@ export function CreateDetailPostPage() {
         },
     ];
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const { slug } = useParams();
     const [menuSelected, setMenuSelected] = useState<DetailMenu>(menuData[0].key);
     const [loading, setLoading] = useState<boolean>(false);
-    const [data, setData] = useState<PatchPostDetail>({
+    const dataHolder = useSelector(selectDataHolderByView('PATCH_POST'));
+    const [data, setData] = useState<PatchPostDetail>(dataHolder?.data ? dataHolder.data : {
         name: '',
-        tagLine: '',
         summary: '',
-        links: {
-            product: '',
-            facebook: '',
-        },
+        description: '',
         topics: [
             {
                 avatar: 'https://joeschmoe.io/api/v1/random',
@@ -69,16 +73,25 @@ export function CreateDetailPostPage() {
             }
         ],
         thumbnail: '',
-        gallery: {
-            video: '',
-            images: '',
-        },
-        isHunter: true,
-        sipers: [],
+        galleryImages: '',
+        runningStatus: '',
+        socialPreviewImage: '',
+        status : '',
+        facebookLink: '',
+        productLink: '',
+        videoLink: '',
+        isAuthorAlsoMaker: true,
+        makers: [],
         pricingType: '',
-        content: '',
         launchSchedule: new Date(),
     });
+
+    useEffect(() => {
+        if (!slug) {
+            throw new Error('You must provide a slug in url');
+        }
+        dispatch(fetchPatchPostData({ slug }));
+    }, []);
 
     function onTopicSearchEvent() {  return; }
 

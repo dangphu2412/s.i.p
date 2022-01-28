@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserCredential } from 'src/auth/client/user-cred';
@@ -22,6 +23,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { InitPostDto } from './dto/init-post.dto';
 import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
 import { PostService } from './post.service';
+import { PostStatus } from './enums/post-status.enum';
 
 @ApiTags('posts')
 @Controller('v1/posts')
@@ -37,9 +39,14 @@ export class PostController {
     return this.postService.init(initPostDto, authContext);
   }
 
+  @Protected
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @Query('status') status: PostStatus,
+  ) {
+    return this.postService.update(+id, status, updatePostDto);
   }
 
   @Protected

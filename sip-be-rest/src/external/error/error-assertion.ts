@@ -1,31 +1,17 @@
-import { UnprocessableEntityException } from '@nestjs/common';
-import { RecordKey } from '../../../global';
+import { BadRequestException } from '@nestjs/common';
 
-export class ErrorAssertion {
-  // TODO: Compare the difference between two array
-  public static isDiffInKeys<K = RecordKey, T = Record<RecordKey, unknown>>(
-    rootArrayDict: T[],
-    arrayKeys: K[],
-  ): boolean {
-    return rootArrayDict.length !== arrayKeys.length;
-  }
-
-  public static assertKeysNotDiff<
-    K = RecordKey,
-    T = Record<RecordKey, unknown>,
-  >(
-    rootArrayDict: T[],
-    arrayKeys: K[],
-    customErrorConsumer?: () => Error,
-  ): void {
-    if (ErrorAssertion.isDiffInKeys(rootArrayDict, arrayKeys)) {
-      if (customErrorConsumer) {
-        throw customErrorConsumer();
+export class Assert {
+  public static isTrue(condition: boolean, consumer?: () => Error): void {
+    if (condition) {
+      if (consumer) {
+        throw consumer();
       } else {
-        throw new UnprocessableEntityException(
-          `Invalid keys: ${arrayKeys.toString()}`,
-        );
+        throw new BadRequestException();
       }
     }
+  }
+
+  public static isFalse(condition: boolean, consumer?: () => Error): void {
+    Assert.isTrue(!condition, consumer);
   }
 }

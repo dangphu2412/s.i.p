@@ -3,8 +3,8 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { saveData } from '../data/data.action';
 import { Query } from '../query/interface';
-import { fetchPostDetail, fetchPosts, PostDetailRequest } from './post.action';
-import { getPostDetail, getPostsOverview } from './post.service';
+import { fetchPatchPostData, fetchPostDetail, fetchPosts, PostDetailRequest } from './post.action';
+import { getPatchPostData, getPostDetail, getPostsOverview } from './post.service';
 
 export function* PostSagaTree() {
     yield takeLatest(
@@ -15,6 +15,11 @@ export function* PostSagaTree() {
     yield takeLatest(
         fetchPostDetail.type,
         handleFetchPostDetail
+    );
+
+    yield takeLatest(
+        fetchPatchPostData.type,
+        handleFetchPatchPostData
     );
 }
 
@@ -33,10 +38,19 @@ function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
 }
 
 function* handleFetchPostDetail(action: PayloadAction<PostDetailRequest>): SagaIterator {
-    const request = getPostDetail(action.payload.postId);
+    const request = getPostDetail(action.payload.slug);
     const data = yield call(request.handle);
     yield put(saveData({
         data,
         view: 'POST_DETAIL'
+    }));
+}
+
+function* handleFetchPatchPostData(action: PayloadAction<PostDetailRequest>): SagaIterator {
+    const request = getPatchPostData(action.payload.slug);
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data,
+        view: 'PATCH_POST'
     }));
 }

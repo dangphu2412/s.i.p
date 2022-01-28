@@ -47,21 +47,19 @@ export interface ProjectMembers {
 
 export interface PatchPostDetail {
     name: string;
-    tagLine: string;
     summary: string;
-    links: {
-        product?: string;
-        facebook?: string;
-    },
+    description: string;
+    productLink?: string;
+    facebookLink?: string;
     topics: any[],
+    makers: any[];
     thumbnail: string;
-    gallery: {
-        video?: string;
-        images: string;
-    },
-    isHunter: boolean;
-    sipers: any[];
+    videoLink?: string;
+    socialPreviewImage: string;
+    galleryImages: string[];
+    isAuthorAlsoMaker: boolean;
+    status: string;
+    runningStatus: string;
     pricingType: string;
-    content: string;
     launchSchedule: Date;
 }

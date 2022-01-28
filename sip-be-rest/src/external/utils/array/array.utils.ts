@@ -10,7 +10,7 @@ export class ArrayUtils {
   /**
    * Two input arrays are unsorted
    */
-  public static compareUnsorted<T>(arr1: T[], arr2: T[]) {
+  public static isDiff<T>(arr1: T[], arr2: T[]) {
     if (arr1.length !== arr2.length) return false;
 
     const uniqueMap = new Map();

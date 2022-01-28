@@ -1,5 +1,5 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { SetMapper } from '@external/mappers/set.mapper';
+import { ArrayMapper } from '@external/mappers/array.mapper';
 import {
   BadRequestException,
   ConflictException,
@@ -20,7 +20,11 @@ import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
 import { InitPostDto } from './dto/init-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';
-import { PostStatus, ProductRunningStatus } from './enums/post-status.enum';
+import {
+  PostStatus,
+  PricingType,
+  ProductRunningStatus,
+} from './enums/post-status.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
 
@@ -65,67 +69,16 @@ export class PostService {
     post.facebookLink = '';
 
     post.summary = '';
-    post.content = '';
+    post.description = '';
 
+    post.isAuthorAlsoMaker = false;
+    post.pricingType = PricingType.FREE;
     post.socialPreviewImage = '';
     post.galleryImages = [];
     post.thumbnail = '';
     post.author = author;
 
     return this.postRepository.save(post);
-  }
-
-  async update(id: number, updatePostDto: UpdatePostDto) {
-    const post = await this.postRepository.findOne(id, {
-      relations: ['topics', 'makers'],
-    });
-
-    const oldTopicIds = SetMapper.mapByKey<Topic, string>(post.topics, 'id');
-    const oldMakerIds = SetMapper.mapByKey<User, string>(post.makers, 'id');
-
-    if (!post) {
-      throw new NotFoundException(`Post ${id} not found to update`);
-    }
-
-    // Update title and slug
-    if (updatePostDto.title !== post.title) {
-      // --  Can separate this validation logic
-      const isTitleConflict = await this.postRepository.isTitleConflict(
-        updatePostDto.title,
-      );
-
-      if (isTitleConflict) {
-        throw new ConflictException(
-          `Can not update post which is conflict with title: ${updatePostDto.title}`,
-        );
-      }
-      // --
-    }
-
-    if (post.title !== updatePostDto.title) {
-      post.title = updatePostDto.title;
-      post.slug = SlugUtils.normalize(post.title);
-    }
-
-    if (!ArrayUtils.compareUnsorted(oldTopicIds, updatePostDto.topicIds)) {
-      post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
-    }
-
-    if (!ArrayUtils.compareUnsorted(oldMakerIds, updatePostDto.makerIds)) {
-      post.makers = await this.userService.findByIds(updatePostDto.makerIds);
-    }
-
-    post.description = updatePostDto.description;
-    post.summary = updatePostDto.summary;
-    post.facebookLink = updatePostDto.gallery.facebookLink;
-    post.videoLink = updatePostDto.gallery.videoLink;
-    post.galleryImages = updatePostDto.gallery.galleryImages;
-    post.socialPreviewImage = updatePostDto.gallery.socialPreviewImage;
-    post.thumbnail = updatePostDto.gallery.thumbnail;
-    post.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
-    post.pricingType = updatePostDto.pricingType;
-    // post.runningStatus
-    // post.status
   }
 
   findMany(searchQuery: SearchCriteria, author: UserCredential | undefined) {
@@ -159,7 +112,12 @@ export class PostService {
       where: {
         slug,
       },
+      relations: ['topics', 'makers'],
     });
+
+    if (!post) {
+      throw new NotFoundException('Not found post with slug ' + slug);
+    }
 
     post.isVoted = author
       ? await this.voteService.didUserVoteForPost(author, post)
@@ -182,6 +140,21 @@ export class PostService {
 
   remove(id: number) {
     return `This action removes a #${id} post`;
+  }
+
+  update(id: number, status: PostStatus, updatePostDto: UpdatePostDto) {
+    switch (status) {
+      case PostStatus.DRAFT:
+        return this.saveAsDraft(id, updatePostDto);
+        break;
+      case PostStatus.PUBLISH:
+        return this.publish(id, updatePostDto);
+        break;
+      default:
+        throw new BadRequestException(
+          `Cannot do update post with this action: ${status}`,
+        );
+    }
   }
 
   async upsertVoteOfPost(postId: number, author: UserCredential) {
@@ -208,5 +181,209 @@ export class PostService {
     voteDto.post = post;
 
     return this.voteService.upsertOne(voteDto);
+  }
+
+  async saveAsDraft(id: number, updatePostDto: UpdatePostDto) {
+    const post = await this.postRepository.findOne(id, {
+      relations: ['topics', 'makers'],
+    });
+
+    const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(post.topics, 'id');
+    const oldMakerIds = ArrayMapper.mapByKey<User, string>(post.makers, 'id');
+    const newTopicIds = [...new Set(updatePostDto.topicIds)];
+    const newMakerIds = [...new Set(updatePostDto.makerIds)];
+
+    if (!post) {
+      throw new NotFoundException(`Post ${id} not found to update`);
+    }
+
+    if (post.status !== PostStatus.DRAFT) {
+      throw new UnprocessableEntityException(
+        `Post is not in status draft. Current status is : ${post.status}`,
+      );
+    }
+
+    if (updatePostDto.title !== post.title) {
+      const isTitleConflict = await this.postRepository.isTitleConflict(
+        updatePostDto.title,
+      );
+
+      if (isTitleConflict) {
+        throw new ConflictException(
+          `Can not update post which is conflict with title: ${updatePostDto.title}`,
+        );
+      }
+    }
+
+    if (updatePostDto.runningStatus === ProductRunningStatus.STILL_IDEA) {
+      if (
+        updatePostDto.links.productLink &&
+        ArrayUtils.isPresent(updatePostDto.makerIds)
+      ) {
+        throw new UnprocessableEntityException(
+          `Product is in idea status that we dont need product link and maker. Should it be updated to ${ProductRunningStatus.UP_COMING}`,
+        );
+      }
+    }
+
+    if (
+      updatePostDto.runningStatus === ProductRunningStatus.LOOKING_FOR_MEMBERS
+    ) {
+      if (
+        updatePostDto.isAuthorAlsoMaker &&
+        updatePostDto.makerIds.length > 1
+      ) {
+        throw new UnprocessableEntityException(
+          'Product is looking for members. Cannot contains makers. Only author be maker because of you picked isAuthorAlsoMaker option',
+        );
+      }
+    }
+
+    if (updatePostDto.runningStatus === ProductRunningStatus.UP_COMING) {
+      if (!updatePostDto.launchSchedule) {
+        throw new UnprocessableEntityException(
+          'Required launch schedule date to prepare for this upcoming product',
+        );
+      }
+    }
+
+    if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
+      if (!updatePostDto.links.productLink) {
+        throw new UnprocessableEntityException(
+          'Missing product link that we cannot find your product',
+        );
+      }
+    }
+
+    if (post.title !== updatePostDto.title) {
+      post.title = updatePostDto.title;
+      post.slug = SlugUtils.normalize(post.title);
+    }
+
+    if (!ArrayUtils.isDiff(oldTopicIds, newTopicIds)) {
+      post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
+    }
+
+    if (!ArrayUtils.isDiff(oldMakerIds, newMakerIds)) {
+      post.makers = await this.userService.findByIds(updatePostDto.makerIds);
+    }
+
+    post.description = updatePostDto.description;
+    post.summary = updatePostDto.summary;
+    post.facebookLink = updatePostDto.socialMedia.facebookLink;
+    post.videoLink = updatePostDto.socialMedia.videoLink;
+    post.galleryImages = updatePostDto.socialMedia.galleryImages;
+    post.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
+    post.thumbnail = updatePostDto.socialMedia.thumbnail;
+    post.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
+    post.pricingType = updatePostDto.pricingType;
+
+    if (updatePostDto.isLookingForMakers) {
+      post.runningStatus = ProductRunningStatus.LOOKING_FOR_MEMBERS;
+    }
+
+    return this.postRepository.save(post);
+  }
+
+  async publish(id: number, updatePostDto: UpdatePostDto) {
+    const post = await this.postRepository.findOne(id, {
+      relations: ['topics', 'makers'],
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post ${id} not found to update`);
+    }
+
+    const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(post.topics, 'id');
+    const oldMakerIds = ArrayMapper.mapByKey<User, string>(post.makers, 'id');
+    const newTopicIds = [...new Set(updatePostDto.topicIds)];
+    const newMakerIds = [...new Set(updatePostDto.makerIds)];
+
+    // Update title and slug
+    if (updatePostDto.title !== post.title) {
+      // --  Can separate this validation logic
+      const isTitleConflict = await this.postRepository.isTitleConflict(
+        updatePostDto.title,
+      );
+
+      if (isTitleConflict) {
+        throw new ConflictException(
+          `Can not update post which is conflict with title: ${updatePostDto.title}`,
+        );
+      }
+      // --
+    }
+
+    if (!ArrayUtils.isEmpty(updatePostDto.topicIds)) {
+      throw new UnprocessableEntityException(
+        'Required topicIds to run this product',
+      );
+    }
+
+    if (updatePostDto.runningStatus === ProductRunningStatus.STILL_IDEA) {
+      if (
+        updatePostDto.links.productLink &&
+        ArrayUtils.isPresent(updatePostDto.makerIds)
+      ) {
+        throw new UnprocessableEntityException(
+          'Product is in idea status that we dont need product link and maker. Should it be updated to ',
+        );
+      }
+    }
+
+    if (
+      updatePostDto.runningStatus === ProductRunningStatus.LOOKING_FOR_MEMBERS
+    ) {
+      if (
+        updatePostDto.isAuthorAlsoMaker &&
+        updatePostDto.makerIds.length > 1
+      ) {
+        throw new UnprocessableEntityException(
+          'Product is looking for members. Cannot contains makers. Only author be maker because of you picked isAuthorAlsoMaker option',
+        );
+      }
+    }
+
+    if (updatePostDto.runningStatus === ProductRunningStatus.UP_COMING) {
+      if (!updatePostDto.launchSchedule) {
+        throw new UnprocessableEntityException(
+          'Required launch schedule date to prepare for this upcoming product',
+        );
+      }
+    }
+
+    if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
+      if (!updatePostDto.links.productLink) {
+        throw new UnprocessableEntityException(
+          'Missing product link that we cannot find your product',
+        );
+      }
+    }
+
+    if (post.title !== updatePostDto.title) {
+      post.title = updatePostDto.title;
+      post.slug = SlugUtils.normalize(post.title);
+    }
+
+    if (!ArrayUtils.isDiff(oldTopicIds, newTopicIds)) {
+      post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
+    }
+
+    if (!ArrayUtils.isDiff(oldMakerIds, newMakerIds)) {
+      post.makers = await this.userService.findByIds(updatePostDto.makerIds);
+    }
+
+    post.description = updatePostDto.description;
+    post.summary = updatePostDto.summary;
+    post.facebookLink = updatePostDto.socialMedia.facebookLink;
+    post.videoLink = updatePostDto.socialMedia.videoLink;
+    post.galleryImages = updatePostDto.socialMedia.galleryImages;
+    post.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
+    post.thumbnail = updatePostDto.socialMedia.thumbnail;
+    post.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
+    post.pricingType = updatePostDto.pricingType;
+
+    post.status = PostStatus.PUBLISH;
+    return this.postRepository.save(post);
   }
 }
