@@ -28,8 +28,8 @@ function App(): JSX.Element {
                         AuthRouteMapper.toRoutes([
                             { path: '/success', element: LoginSuccessPage },
                             { path: '/posts/:postId', element: PostDetailPage },
-                            { path: '/posts/new/:slug', element: CreateDetailPostPage },
-                            { path: '/posts/new', element: CreatePostPage },
+                            { path: '/posts/new/:slug', element: CreateDetailPostPage, protected: true },
+                            { path: '/posts/new', element: CreatePostPage, protected: true },
                             { path: '/topics', element: TopicOverviewPage,
                                 children: [
                                     { path: '/topics/:topicId', element: TopicDetailPage }

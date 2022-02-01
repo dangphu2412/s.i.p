@@ -1,6 +1,6 @@
 import { SagaIterator } from 'redux-saga';
 import { takeLatest, put, call } from 'redux-saga/effects';
-import { loggedOutAction, loggingOutAction, logoutAction, restoreAction, loggedInAction } from './auth.action';
+import { loggedOutAction, loggingOutAction, logoutAction, restoreAction, loggedInAction, restoreSuccessAction, restoreFailedAction, restoreFinishAction } from './auth.action';
 import { getMe } from './auth.service';
 import { AuthConfig, AuthConfigKeys } from './config/auth.config';
 import { AuthProps } from './pages/LoginSuccessPage';
@@ -35,12 +35,20 @@ function* handleAuthRestore(): SagaIterator {
     if (authProps) {
         const request = getMe();
         yield call(request.doRequest);
+
         if (request.getErrorMessage()) {
             yield put(logoutAction());
+            yield put(restoreFailedAction());
         } else {
             yield put(loggedInAction({
                 profile: authProps
             }));
+            yield put(restoreSuccessAction());
         }
+        yield put(restoreFinishAction());
+        return;
     }
+
+    yield put(restoreFailedAction());
+    yield put(restoreFinishAction());
 }

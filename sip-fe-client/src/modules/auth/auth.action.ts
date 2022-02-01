@@ -10,3 +10,6 @@ export const loggingOutAction = createAction('AUTH/LOGGING_OUT');
 export const loggedOutAction = createAction<undefined>('AUTH/LOGGED_OUT');
 
 export const restoreAction = createAction<void>('AUTH/RESTORE');
+export const restoreSuccessAction = createAction<void>('AUTH/RESTORE_SUCCESS');
+export const restoreFailedAction = createAction<void>('AUTH/RESTORE_FAILED');
+export const restoreFinishAction = createAction<void>('AUTH/RESTORE_FINISH');
