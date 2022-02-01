@@ -8,7 +8,7 @@ export interface Profile {
   fullName: string;
 }
 
-export function getLoginUrl() {
+export function getLoginUrl(): string {
     return `${REACT_APP_API_URL}/v1/auth/google`;
 }
 

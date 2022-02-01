@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Footer() {
+export function Footer(): JSX.Element {
     const infoLinks = [
         {
             body: 'Questions',

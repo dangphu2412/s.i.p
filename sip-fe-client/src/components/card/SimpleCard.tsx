@@ -7,7 +7,7 @@ export interface SimpleCardProps {
     description: string;
 }
 
-export function SimpleCard(props: SimpleCardProps) {
+export function SimpleCard(props: SimpleCardProps): JSX.Element {
     return (
         <Row>
             <Col span={4}>

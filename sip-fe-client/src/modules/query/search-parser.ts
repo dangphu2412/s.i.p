@@ -10,7 +10,7 @@ function parseSortToString(sort: Sort): string {
     return `${sort.column}|${sort.direction}`;
 }
 
-export function parseToSearchParams(query: Query) {
+export function parseToSearchParams(query: Query): URLSearchParams {
     const searchParams = new URLSearchParams();
     if (hasPage(query)) {
         searchParams.append('page', query.page.page.toString());

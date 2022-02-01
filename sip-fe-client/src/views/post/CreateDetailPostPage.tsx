@@ -1,4 +1,4 @@
-import {Avatar, Button, Col, Divider, Dropdown, Form, Input, List, Menu, Radio, Row, Space, Upload} from 'antd';
+import {Avatar, Button, Col, Divider, Dropdown, Form, Image, Input, List, Menu, Radio, Row, Space, Upload} from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -13,7 +13,6 @@ import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload/interface
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { PostActions } from 'src/modules/post/post.action';
-import { setData } from 'src/modules/data/data.action';
 import { Topic } from 'src/modules/topic/api/topic.api';
 import { TopicActions } from 'src/modules/topic/topic.action';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
@@ -86,6 +85,7 @@ export function CreateDetailPostPage() {
     const [searchTopics, setSearchTopics] = useState<Topic[]>(searchTopicDataHolder?.data
         ? searchTopicDataHolder.data
         : []);
+    const [topicSearch, setTopicSearch] = useState('');
 
     const searchMakerDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.SEARCH_MAKERS));
     const [makers, setMakers] = useState<Author[]>(searchMakerDataHolder?.data
@@ -119,30 +119,33 @@ export function CreateDetailPostPage() {
     }, [postDetailDataHolder]);
 
     function onTopicSearchEvent(event: React.ChangeEvent<HTMLInputElement>) {
-        dispatch(TopicActions.findMany({
-            filters: [],
-            sorts: [],
-            page: {
-                page: 0,
-                size: 3
-            },
-            search: event.target.value
-        }));
-        return;
+        setTopicSearch(event.target.value);
+        if (event.target.value) {
+            dispatch(TopicActions.findMany({
+                filters: [],
+                sorts: [],
+                page: {
+                    page: 0,
+                    size: 3
+                },
+                search: event.target.value
+            }));
+        }
     }
 
     function onMakerSearchEvent(event: React.ChangeEvent<HTMLInputElement>) {
         setMakerSearch(event.target.value);
-        dispatch(UserActions.findMakers({
-            filters: [],
-            sorts: [],
-            page: {
-                page: 0,
-                size: 5
-            },
-            search: event.target.value
-        }));
-        return;
+        if (event.target.value) {
+            dispatch(UserActions.findMakers({
+                filters: [],
+                sorts: [],
+                page: {
+                    page: 0,
+                    size: 5
+                },
+                search: event.target.value
+            }));
+        }
     }
 
     function updateData(key: string, value: any) {
@@ -154,26 +157,19 @@ export function CreateDetailPostPage() {
 
     function beforeUpload() {  return; }
 
-    function getBase64(img: RcFile, callback: (imageUrl: string) => void) {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result as string));
-        reader.readAsDataURL(img);
-    }
-
-    function handleUpload(info: UploadChangeParam<UploadFile<any>>) {  
+    function handleUpload(info: UploadChangeParam<UploadFile<any>>) {
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
         }
         if (info.file.status === 'done' && info.file.originFileObj) {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, (imageUrl: string) => {
+            if (info.file.response) {
                 setData({
                     ...data,
-                    thumbnail: imageUrl
+                    thumbnail: info.file.response.data[0]
                 });
                 setLoading(false);
-            });
+            }
         }
     }
 
@@ -285,36 +281,37 @@ export function CreateDetailPostPage() {
                                     </Title>
 
                                     <Form.Item label="Select up to three topics" required>
-                                        <Input.Search
-                                            placeholder="Topic"
-                                            onChange={onTopicSearchEvent}
-                                        />
+                                        <Dropdown
+                                            overlay={() => ((
+                                                <Menu>
+                                                    {
+                                                        searchTopics.length > 0  &&
+                                                        searchTopics.map(topic => {
+                                                            return (
+                                                                <Menu.Item
+                                                                    key={topic.id}
+                                                                    onClick={() => {
+                                                                        updateData('topics', [...data.topics, topic]);
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        topic.name
+                                                                    }
+                                                                </Menu.Item>
+                                                            );
+                                                        })
+                                                    }
+                                                </Menu>
+                                            ))}
+                                            visible={searchTopics.length > 0 && !!topicSearch}
+                                        >
+                                            <Input.Search
+                                                placeholder="Topic"
+                                                onChange={onTopicSearchEvent}
+                                                value={topicSearch}
+                                            />
+                                        </Dropdown>
                                     </Form.Item>
-
-                                    {/* List search results */}
-                                    {
-                                        searchTopics.length > 0 &&
-                                        <List
-                                            dataSource={searchTopics}
-                                            renderItem={item => {
-                                                return <List.Item
-                                                    key={item.id}
-                                                    onClick={() => {
-                                                        updateData('topics', [...data.topics, item]);
-                                                    }}
-                                                >
-                                                    <List.Item.Meta
-                                                        avatar={<Avatar src={item.avatar} />}
-                                                        title={item.name}
-                                                    />
-                                                    <FontAwesomeIcon
-                                                        icon='plus-circle'
-                                                        className='cursor-pointer'
-                                                    />
-                                                </List.Item>;
-                                            }}
-                                        />
-                                    }
 
                                     {/* List selected */}
                                     {
@@ -378,11 +375,11 @@ export function CreateDetailPostPage() {
                                     </div>
 
                                     <Upload
-                                        name="avatar"
+                                        name="files"
                                         listType="picture-card"
                                         className="avatar-uploader"
                                         showUploadList={false}
-                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        action="http://localhost:3000/v1/media/upload"
                                         beforeUpload={beforeUpload}
                                         onChange={handleUpload}
                                     >
@@ -409,19 +406,33 @@ export function CreateDetailPostPage() {
                                         We recommend at least 3 or more images.
                                     </div>
                                     
+                                    {
+                                        data.galleryImages.length > 0
+                                        && <div>
+                                            {
+                                                data.galleryImages.map((image, index) => {
+                                                    return <Image
+                                                        key={index}
+                                                        src={image}
+                                                        alt="avatar"
+                                                        style={{ width: '100%' }}
+                                                    />;
+                                                })
+                                            }
+                                        </div>
+                                    }
+                                        
                                     <Upload
-                                        name="avatar"
+                                        name="files"
                                         listType="picture-card"
                                         className="avatar-uploader"
-                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        action="http://localhost:3000/v1/media/upload"
                                     >
                                         {
-                                            data.thumbnail
-                                                ? <img src={data.thumbnail} alt="avatar" style={{ width: '100%' }} />
-                                                : <div>
-                                                    {loading ? <LoadingOutlined /> : <PlusOutlined />}
-                                                    <div style={{ marginTop: 8 }}>Upload</div>
-                                                </div>
+                                            <span>
+                                                {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                                                <span style={{ marginTop: 8 }}>Upload</span>
+                                            </span>
                                         }
                                     </Upload>
 
@@ -497,25 +508,29 @@ export function CreateDetailPostPage() {
 
                                     <Form.Item label="Search full name or gmail ..." required>
                                         <Dropdown
-                                            overlay={() => ((
-                                                <Menu onClick={() => { setMakers([]); setMakerSearch('');}}>
+                                            overlay={() => (
+                                                <Menu>
                                                     {
                                                         makers.length > 0  &&
                                                         makers.map(maker => {
                                                             return (
                                                                 <Menu.Item
                                                                     key={maker.id}
+                                                                    onClick={() => { updateData('makers', [...data.makers, maker]);}}
                                                                 >
                                                                     {
                                                                         maker.fullName
                                                                     }
+                                                                    <FontAwesomeIcon
+                                                                        icon='plus-circle'
+                                                                    />
                                                                 </Menu.Item>
                                                             );
                                                         })
                                                     }
                                                 </Menu>
-                                            ))}
-                                            visible={makers.length > 0}
+                                            )}
+                                            visible={makers.length > 0 && !!makerSearch}
                                         >
                                             <Input.Search
                                                 placeholder="Makers"
@@ -526,26 +541,26 @@ export function CreateDetailPostPage() {
 
                                         {
                                             data.makers.length > 0 && 
-                                             <List
-                                                 dataSource={data.makers}
-                                                 renderItem={item => {
-                                                     return <List.Item
-                                                         key={item.id}
-                                                         onClick={() => {
-                                                             updateData('makers', data.makers.filter(maker => maker.id !== item.id));
-                                                         }}
-                                                     >
-                                                         <List.Item.Meta
-                                                             avatar={<Avatar src={item.avatar} />}
-                                                             title={item.fullName}
-                                                         />
-                                                         <FontAwesomeIcon
-                                                             icon='minus-circle'
-                                                             className='cursor-pointer'
-                                                         />
-                                                     </List.Item>;
-                                                 }}
-                                             />
+                                            <List
+                                                dataSource={data.makers}
+                                                renderItem={item => {
+                                                    return <List.Item
+                                                        key={item.id}
+                                                        onClick={() => {
+                                                            updateData('makers', data.makers.filter(maker => maker.id !== item.id));
+                                                        }}
+                                                    >
+                                                        <List.Item.Meta
+                                                            avatar={<Avatar src={item.avatar} />}
+                                                            title={item.fullName}
+                                                        />
+                                                        <FontAwesomeIcon
+                                                            icon='minus-circle'
+                                                            className='cursor-pointer'
+                                                        />
+                                                    </List.Item>;
+                                                }}
+                                            />
                                         }
                                     </Form.Item>
                                 </div>

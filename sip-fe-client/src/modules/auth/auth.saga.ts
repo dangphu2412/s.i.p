@@ -1,3 +1,4 @@
+import { SagaIterator } from 'redux-saga';
 import { takeLatest, put, call } from 'redux-saga/effects';
 import { loggedOutAction, loggingOutAction, logoutAction, restoreAction, loggedInAction } from './auth.action';
 import { getMe } from './auth.service';
@@ -16,7 +17,7 @@ export function* AuthSagaTree() {
     );
 }
 
-function* handleLogout() {
+function* handleLogout(): SagaIterator {
     yield put(loggingOutAction());
     const authKey = AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY);
     const token = window.localStorage.getItem(authKey);
@@ -27,7 +28,7 @@ function* handleLogout() {
 }
 
 
-function* handleAuthRestore() {
+function* handleAuthRestore(): SagaIterator {
     const authPropsAsString = localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY));
     const authProps: AuthProps = authPropsAsString ? JSON.parse(authPropsAsString): null;
 
