@@ -79,13 +79,6 @@ export class Post extends TimeEntityGenerator() {
    * START VIRTUAL FIELDS
    * FIXME: This is a work around to add virtual field mapping into entity
    */
-  @Column({
-    select: false,
-    insert: false,
-    update: false,
-    name: 'is_author',
-    nullable: true,
-  })
   public isAuthor?: boolean;
 
   @Column({

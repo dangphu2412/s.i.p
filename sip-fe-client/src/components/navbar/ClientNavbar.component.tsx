@@ -12,6 +12,7 @@ import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.confi
 import { fireError } from '../../modules/error/error.action';
 import { setLoading } from '../../modules/loading/loading.action';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export function ClientNavbar(): JSX.Element {
     const dispatch = useDispatch();
@@ -36,6 +37,7 @@ export function ClientNavbar(): JSX.Element {
                 dispatch(loggedInAction({
                     profile: JSON.parse(profile as string)
                 }));
+                axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY)) || '';
                 dispatch(setLoading({ isLoading: false }));
             } 
         }, 5000);

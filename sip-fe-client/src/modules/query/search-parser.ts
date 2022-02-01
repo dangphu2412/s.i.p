@@ -29,5 +29,9 @@ export function parseToSearchParams(query: Query) {
         });
     }
 
+    if (query.search) {
+        searchParams.append('search', query.search);
+    }
+
     return searchParams;
 }

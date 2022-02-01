@@ -16,6 +16,9 @@ export class Topic {
   @Column({ name: 'summary', nullable: false })
   public summary: string;
 
+  @Column({ name: 'avatar', nullable: false })
+  public avatar: string;
+
   @ManyToMany(() => Post, (post) => post.topics)
   public posts: Post[];
 

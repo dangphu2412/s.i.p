@@ -9,7 +9,7 @@ import { FetchPostType } from '../enums/fetch-post-type.enum';
 export class FetchPostsOverviewValidator extends AbstractSearchValidator {
   getSchema(): SearchValidationSchema {
     return {
-      allowFilters: ['type'],
+      allowFilters: ['type', 'topicName'],
       allowSorts: [],
       filterToMatchingMap: {
         type: (val) => Object.values(FetchPostType).includes(val),

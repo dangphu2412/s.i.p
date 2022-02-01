@@ -1,6 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { merge } from 'lodash';
 import { call, put } from 'redux-saga/effects';
+import { fireError } from '../error/error.action';
 import { setLoading } from './../loading/loading.action';
 import { HttpError } from './http-error';
 
@@ -56,6 +57,13 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
         return data;
     }
 
+    function* getDataSafe() {
+        if (errorMsg) {
+            yield put(fireError({ message: errorMsg }));
+        }
+        return data;
+    }
+
     function getErrorMessage() {
         return errorMsg;
     }
@@ -85,7 +93,7 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
         yield call(start);
         yield call(doRequest);
         yield call(finish);
-        return getData();
+        return <DataResponse> (yield call(getDataSafe));
     }
 
     return {
@@ -94,6 +102,7 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
         doRequest,
         handle,
         getData,
+        getDataSafe,
         getErrorMessage
     };
 }

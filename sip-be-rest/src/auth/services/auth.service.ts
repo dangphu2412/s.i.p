@@ -67,7 +67,7 @@ export class AuthService {
       accessToken: this.jwtService.sign(
         JwtPayloadDto.create(user.id, user.fullName, permissions),
       ),
-      profile: this.userService.getBasicProfile(user),
+      profile: this.userService.extractProfile(user),
     };
   }
 }

@@ -11,7 +11,6 @@ import { Container } from 'src/components/container/Container';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { TopFeatureBadge } from 'src/modules/post/components/badge/TopFeatureBadge';
-import { fetchPostDetail } from 'src/modules/post/post.action';
 import { PostDetail, ProjectMembers } from '../../modules/post/api/post.api';
 import { ArrayUtils } from 'src/utils/array.utils';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
@@ -19,6 +18,7 @@ import { DiscussionEditor } from 'src/modules/discussion/components/Editor.compo
 import { FacebookFilled, InstagramFilled } from '@ant-design/icons';
 import { SimpleCard } from '../../components/card/SimpleCard';
 import { CommentContainer } from 'src/modules/discussion/components/CommentContainer';
+import { VIEW_SELECTOR } from 'src/constants/views.constants';
 const contentStyle: React.CSSProperties = {
     color: '#fff',
     textAlign: 'center',
@@ -42,7 +42,7 @@ const data: PostDetail = {
     summary: 'Your personal AI Assistant for creating SEO-friendly content',
     thumbnail: 'https://joeschmoe.io/api/v1/random',
     title: 'This is the hottest one',
-    topics: [{id: '1', name: 'Tech', slug: 'Tech'}],
+    topics: [{id: '1', name: 'Tech', slug: 'Tech', avatar: '', summary: '' }],
     totalVotes: 10,
     videoDemo: 'https://www.youtube.com/embed/0ENKBcckukM',
     ranking: '1',
@@ -140,7 +140,7 @@ export function PostDetailPage(): JSX.Element {
     const dispatch = useDispatch();
     const { postId } = useParams();
     const [postDetail, setPostDetail] = useState<PostDetail | undefined>(data);
-    const dataHolder = useSelector(selectDataHolderByView('POST_DETAIL'));
+    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_DETAIL));
 
     if (!postId) {
         throw new Error('Please recheck your routing. Post detail view is missing postId with key: postId');

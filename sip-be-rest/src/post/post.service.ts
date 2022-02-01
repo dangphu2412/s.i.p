@@ -5,18 +5,22 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Topic } from '@topic/topic.entity';
 import { TopicService } from '@topic/topic.service';
 import { User } from '@user/user.entity';
 import { SlugUtils } from '@utils/slug';
+import { Vote } from '@vote/vote.entity';
 import { VoteService } from '@vote/vote.service';
+import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { DiscussionService } from 'src/discussion/discussion.service';
 import { UserService } from 'src/user/user.service';
 import { ArrayUtils } from '../external/utils/array/array.utils';
 import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
+import { PostOverview } from './client/post-overview.api';
 import { InitPostDto } from './dto/init-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchPostType } from './enums/fetch-post-type.enum';
@@ -81,21 +85,30 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  findMany(searchQuery: SearchCriteria, author: UserCredential | undefined) {
+  public async findMany(
+    searchQuery: SearchCriteria,
+    author: UserCredential | undefined,
+  ): Promise<PostOverview> {
     if (ArrayUtils.isEmpty(searchQuery.filters)) {
       throw new BadRequestException('Required filter type to get posts');
     }
 
     const fetchPostType = searchQuery.filters[0];
 
+    let posts: PostOverview;
     switch (fetchPostType.value) {
       case FetchPostType.LATEST:
-        return this.postRepository.findLatestPosts(searchQuery, author);
+        posts = await this.postRepository.findLatestPosts(searchQuery);
+        break;
       case FetchPostType.HOTTEST:
-        return this.postRepository.findHottestPosts(searchQuery, author);
+        posts = await this.postRepository.findHottestPosts(searchQuery);
+        break;
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
     }
+    await this.markAuthorForPosts(posts, author);
+
+    return posts;
   }
 
   /**
@@ -107,7 +120,7 @@ export class PostService {
    * - thumbnails
    * - mainThumbnail
    */
-  async findOne(slug: string, author: UserCredential | undefined) {
+  async findOne(slug: string, optionalAuthor: UserCredential | undefined) {
     const post = await this.postRepository.findOne({
       where: {
         slug,
@@ -119,9 +132,20 @@ export class PostService {
       throw new NotFoundException('Not found post with slug ' + slug);
     }
 
-    post.isVoted = author
-      ? await this.voteService.didUserVoteForPost(author, post)
-      : false;
+    post.isVoted = false;
+
+    if (optionalAuthor) {
+      const author: User = await this.userService.findById(
+        +optionalAuthor.userId,
+      );
+      const isVoted: boolean = await this.voteService.didUserVoteForPost(
+        author,
+        post,
+      );
+      if (isVoted) {
+        post.isVoted = true;
+      }
+    }
 
     return post;
   }
@@ -138,11 +162,11 @@ export class PostService {
     return this.discussionService.findRelatedDiscussions(post, searchCriteria);
   }
 
-  remove(id: number) {
+  public remove(id: number) {
     return `This action removes a #${id} post`;
   }
 
-  update(id: number, status: PostStatus, updatePostDto: UpdatePostDto) {
+  public update(id: number, status: PostStatus, updatePostDto: UpdatePostDto) {
     switch (status) {
       case PostStatus.DRAFT:
         return this.saveAsDraft(id, updatePostDto);
@@ -385,5 +409,39 @@ export class PostService {
 
     post.status = PostStatus.PUBLISH;
     return this.postRepository.save(post);
+  }
+
+  private async markAuthorForPosts(
+    posts: PostOverview,
+    optionalAuthor: UserCredential | undefined,
+  ): Promise<void> {
+    if (optionalAuthor) {
+      const author = await this.userService.findById(+optionalAuthor.userId);
+
+      if (!author) {
+        throw new UnauthorizedException('Your user is not available now');
+      }
+
+      const votes: Vote[] = await this.voteService.findByAuthorAndPosts(
+        author,
+        <Post[]>posts,
+      );
+
+      const postMap = keyBy(votes, 'post');
+
+      posts.forEach((post) => {
+        if (postMap[`${post.id}`]) {
+          post.isAuthor = true;
+        } else {
+          post.isAuthor = false;
+        }
+      });
+
+      return;
+    }
+
+    posts.forEach((post) => {
+      post.isAuthor = false;
+    });
   }
 }

@@ -12,7 +12,9 @@ export class TopicRepository extends Repository<Topic> {
   ): Promise<TopicIncludeOptionalAuthor[]> {
     const SQL = `
       SELECT * FROM (
-        SELECT * FROM topics LIMIT $1 OFFSET $2
+        SELECT * FROM topics
+        WHERE topics.name ILIKE $4
+        LIMIT $1 OFFSET $2
       ) as topics
       LEFT JOIN (
         SELECT * FROM users_topics
@@ -24,6 +26,7 @@ export class TopicRepository extends Repository<Topic> {
       searchQuery.limit,
       searchQuery.offset,
       author.userId,
+      `%${searchQuery.search || ''}%`,
     ]);
   }
 }

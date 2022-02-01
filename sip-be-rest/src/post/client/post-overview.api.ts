@@ -8,7 +8,7 @@ export interface PostSummary {
   isAuthor: boolean;
   totalVotes: number;
   topics: Topic[];
-  author: User;
+  author?: User;
 }
 
 export type PostOverview = PostSummary[];

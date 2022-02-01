@@ -1,4 +1,4 @@
-import {Avatar, Button, Col, Divider, Form, Input, List, Menu, Row, Upload} from 'antd';
+import {Avatar, Button, Col, Divider, Dropdown, Form, Input, List, Menu, Radio, Row, Space, Upload} from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,8 +12,13 @@ import { setLoading } from 'src/modules/loading/loading.action';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
-import { fetchPatchPostData } from 'src/modules/post/post.action';
+import { PostActions } from 'src/modules/post/post.action';
 import { setData } from 'src/modules/data/data.action';
+import { Topic } from 'src/modules/topic/api/topic.api';
+import { TopicActions } from 'src/modules/topic/topic.action';
+import { VIEW_SELECTOR } from 'src/constants/views.constants';
+import { UserActions } from 'src/modules/user/user.action';
+import { Author } from 'src/modules/user/api/user.api';
 interface MenuProps {
     key: DetailMenu;
     title: string;
@@ -57,23 +62,15 @@ export function CreateDetailPostPage() {
     const { slug } = useParams();
     const [menuSelected, setMenuSelected] = useState<DetailMenu>(menuData[0].key);
     const [loading, setLoading] = useState<boolean>(false);
-    const dataHolder = useSelector(selectDataHolderByView('PATCH_POST'));
-    const [data, setData] = useState<PatchPostDetail>(dataHolder?.data ? dataHolder.data : {
+
+    const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_PATCH_DETAIL));
+    const [data, setData] = useState<PatchPostDetail>({
         name: '',
         summary: '',
         description: '',
-        topics: [
-            {
-                avatar: 'https://joeschmoe.io/api/v1/random',
-                title: 'Web3'
-            },
-            {
-                avatar: 'https://joeschmoe.io/api/v1/random',
-                title: 'Hunter'
-            }
-        ],
+        topics: [],
         thumbnail: '',
-        galleryImages: '',
+        galleryImages: [],
         runningStatus: '',
         socialPreviewImage: '',
         status : '',
@@ -85,15 +82,75 @@ export function CreateDetailPostPage() {
         pricingType: '',
         launchSchedule: new Date(),
     });
+    const searchTopicDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.SEARCH_TOPIC));
+    const [searchTopics, setSearchTopics] = useState<Topic[]>(searchTopicDataHolder?.data
+        ? searchTopicDataHolder.data
+        : []);
+
+    const searchMakerDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.SEARCH_MAKERS));
+    const [makers, setMakers] = useState<Author[]>(searchMakerDataHolder?.data
+        ? searchMakerDataHolder.data
+        : []);
+    const [makerSearch, setMakerSearch] = useState('');
 
     useEffect(() => {
         if (!slug) {
             throw new Error('You must provide a slug in url');
         }
-        dispatch(fetchPatchPostData({ slug }));
+        dispatch(PostActions.getPatchData({ slug }));
     }, []);
 
-    function onTopicSearchEvent() {  return; }
+    useEffect(() => {
+        if (searchTopicDataHolder?.data) {
+            setSearchTopics(searchTopicDataHolder.data);
+        }
+    }, [searchTopicDataHolder]);
+
+    useEffect(() => {
+        if (searchMakerDataHolder?.data) {
+            setMakers(searchMakerDataHolder.data);
+        }
+    }, [searchMakerDataHolder]);
+
+    useEffect(() => {
+        if (postDetailDataHolder?.data) {
+            setData(postDetailDataHolder.data);
+        }
+    }, [postDetailDataHolder]);
+
+    function onTopicSearchEvent(event: React.ChangeEvent<HTMLInputElement>) {
+        dispatch(TopicActions.findMany({
+            filters: [],
+            sorts: [],
+            page: {
+                page: 0,
+                size: 3
+            },
+            search: event.target.value
+        }));
+        return;
+    }
+
+    function onMakerSearchEvent(event: React.ChangeEvent<HTMLInputElement>) {
+        setMakerSearch(event.target.value);
+        dispatch(UserActions.findMakers({
+            filters: [],
+            sorts: [],
+            page: {
+                page: 0,
+                size: 5
+            },
+            search: event.target.value
+        }));
+        return;
+    }
+
+    function updateData(key: string, value: any) {
+        setData({
+            ...data,
+            [key]: value
+        });
+    }
 
     function beforeUpload() {  return; }
 
@@ -179,11 +236,19 @@ export function CreateDetailPostPage() {
                                     </div>
 
                                     <Form.Item label="Product name" required>
-                                        <Input placeholder="Place your cool name here" />
+                                        <Input 
+                                            placeholder="Place your cool name here"
+                                            value={data.name}
+                                            onChange={e => updateData('name', e.target.value)}
+                                        />
                                     </Form.Item>
 
                                     <Form.Item label="Summary" required>
-                                        <Input placeholder="Concise and descriptive for product" />
+                                        <Input
+                                            placeholder="Concise and descriptive for product"
+                                            value={data.summary}
+                                            onChange={e => updateData('summary', e.target.value)}
+                                        />
                                     </Form.Item>
                                 </div>
 
@@ -195,11 +260,20 @@ export function CreateDetailPostPage() {
                                     </Title>
 
                                     <Form.Item label="Product link" required>
-                                        <Input disabled  placeholder="https://..." />
+                                        <Input
+                                            placeholder="https://..."
+                                            value={data.productLink}
+                                            onChange={e => updateData('productLink', e.target.value)}
+                                        />
                                     </Form.Item>
 
                                     <Form.Item label="Facebook page" required>
-                                        <Input addonBefore="https://facebook.com" placeholder='yourfacebook' />
+                                        <Input
+                                            addonBefore="https://facebook.com"
+                                            placeholder='yourfacebook'
+                                            value={data.facebookLink}
+                                            onChange={e => updateData('facebookLink', e.target.value)}
+                                        />
                                     </Form.Item>
                                 </div>
 
@@ -217,23 +291,55 @@ export function CreateDetailPostPage() {
                                         />
                                     </Form.Item>
 
+                                    {/* List search results */}
+                                    {
+                                        searchTopics.length > 0 &&
+                                        <List
+                                            dataSource={searchTopics}
+                                            renderItem={item => {
+                                                return <List.Item
+                                                    key={item.id}
+                                                    onClick={() => {
+                                                        updateData('topics', [...data.topics, item]);
+                                                    }}
+                                                >
+                                                    <List.Item.Meta
+                                                        avatar={<Avatar src={item.avatar} />}
+                                                        title={item.name}
+                                                    />
+                                                    <FontAwesomeIcon
+                                                        icon='plus-circle'
+                                                        className='cursor-pointer'
+                                                    />
+                                                </List.Item>;
+                                            }}
+                                        />
+                                    }
 
-                                    <List
-                                        dataSource={data.topics}
-                                        renderItem={item => {
-                                            return <List.Item>
-                                                <List.Item.Meta
-                                                    avatar={<Avatar src={item.avatar} />}
-                                                    title={item.title}
-                                                />
-                                                <FontAwesomeIcon
-                                                    icon='minus-circle'
-                                                    className='cursor-pointer'
-                                                    onClick={e => alert('Remove')}
-                                                />
-                                            </List.Item>;
-                                        }}
-                                    />
+                                    {/* List selected */}
+                                    {
+                                        data.topics.length > 0 && 
+                                        <List
+                                            dataSource={data.topics}
+                                            renderItem={item => {
+                                                return <List.Item
+                                                    key={item.id}
+                                                    onClick={() => {
+                                                        updateData('topics', data.topics.filter(topic => topic.id !== item.id));
+                                                    }}
+                                                >
+                                                    <List.Item.Meta
+                                                        avatar={<Avatar src={item.avatar} />}
+                                                        title={item.name}
+                                                    />
+                                                    <FontAwesomeIcon
+                                                        icon='minus-circle'
+                                                        className='cursor-pointer'
+                                                    />
+                                                </List.Item>;
+                                            }}
+                                        />
+                                    }
                                 </div>
 
                                 <div>
@@ -241,7 +347,10 @@ export function CreateDetailPostPage() {
                                         Description
                                     </Title>
 
-                                    <Input.TextArea/>
+                                    <Input.TextArea
+                                        value={data.description}
+                                        onChange={e => updateData('description', e.target.value)}
+                                    />
                                 </div>
 
                                 <Button
@@ -331,7 +440,11 @@ export function CreateDetailPostPage() {
                                 </div>
 
                                 <Form.Item label="Product video">
-                                    <Input placeholder="Video of product" />
+                                    <Input
+                                        placeholder="Video of product" 
+                                        value={data.videoLink}
+                                        onChange={e => updateData('videoLink', e.target.value)}
+                                    />
                                 </Form.Item>
 
                                 <Button
@@ -358,6 +471,16 @@ export function CreateDetailPostPage() {
                                         It’s fine either way. Just need to know.
                                     </div>
 
+                                    <Radio.Group
+                                        onChange={() => { updateData('isAuthorAlsoMaker', !data.isAuthorAlsoMaker);}}
+                                        value={data.isAuthorAlsoMaker ? 1 : 2}
+                                    >
+                                        <Space direction="vertical">
+                                            <Radio value={1}>I worked on this product</Radio>
+                                            <Radio value={2}>I didn’t work on this product</Radio>
+                                        </Space>
+                                    </Radio.Group>
+
                                     
                                 </div>
 
@@ -371,6 +494,60 @@ export function CreateDetailPostPage() {
                                     <div className='button-text-color'>
                                         You’re free to add anyone who worked on this product.
                                     </div>
+
+                                    <Form.Item label="Search full name or gmail ..." required>
+                                        <Dropdown
+                                            overlay={() => ((
+                                                <Menu onClick={() => { setMakers([]); setMakerSearch('');}}>
+                                                    {
+                                                        makers.length > 0  &&
+                                                        makers.map(maker => {
+                                                            return (
+                                                                <Menu.Item
+                                                                    key={maker.id}
+                                                                >
+                                                                    {
+                                                                        maker.fullName
+                                                                    }
+                                                                </Menu.Item>
+                                                            );
+                                                        })
+                                                    }
+                                                </Menu>
+                                            ))}
+                                            visible={makers.length > 0}
+                                        >
+                                            <Input.Search
+                                                placeholder="Makers"
+                                                onChange={onMakerSearchEvent}
+                                                value={makerSearch}
+                                            />
+                                        </Dropdown>
+
+                                        {
+                                            data.makers.length > 0 && 
+                                             <List
+                                                 dataSource={data.makers}
+                                                 renderItem={item => {
+                                                     return <List.Item
+                                                         key={item.id}
+                                                         onClick={() => {
+                                                             updateData('makers', data.makers.filter(maker => maker.id !== item.id));
+                                                         }}
+                                                     >
+                                                         <List.Item.Meta
+                                                             avatar={<Avatar src={item.avatar} />}
+                                                             title={item.fullName}
+                                                         />
+                                                         <FontAwesomeIcon
+                                                             icon='minus-circle'
+                                                             className='cursor-pointer'
+                                                         />
+                                                     </List.Item>;
+                                                 }}
+                                             />
+                                        }
+                                    </Form.Item>
                                 </div>
 
                                 <Divider />

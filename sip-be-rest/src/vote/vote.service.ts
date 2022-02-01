@@ -1,8 +1,8 @@
-import { UserCredential } from 'src/auth/client/user-cred';
-import { Post } from 'src/post/post.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { User } from '@user/user.entity';
+import { Post } from 'src/post/post.entity';
+import { In, Repository } from 'typeorm';
 import { UpsertVoteDto } from './dto/upsert-vote.dto';
 import { Vote } from './vote.entity';
 
@@ -26,10 +26,18 @@ export class VoteService {
       .execute();
   }
 
-  public async didUserVoteForPost(
-    author: UserCredential,
-    post: Post,
-  ): Promise<boolean> {
-    return false;
+  public findByAuthorAndPosts(author: User, posts: Post[]) {
+    return this.voteRepository.find({
+      where: {
+        author,
+        post: In(posts.map((post) => post.id)),
+        isVoted: true,
+      },
+      loadRelationIds: true,
+    });
+  }
+
+  public async didUserVoteForPost(author: User, post: Post) {
+    return (await this.findByAuthorAndPosts(author, [post])).length > 0;
   }
 }

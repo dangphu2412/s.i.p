@@ -11,6 +11,7 @@ define(Topic, (faker: typeof Faker) => {
   topic.name = name;
   topic.slug = SlugUtils.normalize(name);
   topic.summary = faker.lorem.paragraph(2);
+  topic.avatar = faker.image.imageUrl();
   uniqueChar++;
   return topic;
 });

@@ -8,7 +8,14 @@ import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
@@ -31,6 +38,12 @@ export class UserController {
     return toPage(await this.userService.findMany(searchQuery), searchQuery);
   }
 
+  @Protected
+  @Get('/makers')
+  public findMakers(@SearchQuery() searchQuery: SearchCriteria) {
+    return this.userService.findMakers(searchQuery);
+  }
+
   @Post()
   public createOne(@Body() createUserDto: CreateUserDto) {
     return this.userService.createOne(createUserDto);
@@ -46,7 +59,11 @@ export class UserController {
 
   @Protected
   @Get('me')
-  public getMe(@AuthContext() user: UserCredential) {
-    return {};
+  public async getMe(@AuthContext() authContext: UserCredential) {
+    const user = await this.userService.findById(+authContext.userId);
+    if (!user) {
+      throw new UnauthorizedException('User is not available now');
+    }
+    return user;
   }
 }

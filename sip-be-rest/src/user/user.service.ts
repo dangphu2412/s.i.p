@@ -15,7 +15,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { SlugUtils } from '@utils/slug';
 import { isEqual, pick } from 'lodash';
-import { In, Repository } from 'typeorm';
+import { In, Repository, ILike } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
 import { User } from './user.entity';
@@ -85,6 +85,22 @@ export class UserService {
     });
   }
 
+  public findMakers(searchQuery: SearchCriteria) {
+    const searchOperator = ILike(`%${searchQuery.search}%`);
+    return this.userRepository.find({
+      where: [
+        {
+          fullName: searchOperator,
+        },
+        {
+          email: searchOperator,
+        },
+      ],
+      skip: searchQuery.offset,
+      take: searchQuery.limit,
+    });
+  }
+
   public findByEmail(email: string) {
     return this.userRepository.findOne({
       where: {
@@ -106,7 +122,7 @@ export class UserService {
     });
   }
 
-  public getBasicProfile(user: User): Profile {
+  public extractProfile(user: User): Profile {
     return pick(user, ['id', 'username', 'fullName', 'avatar']) as Profile;
   }
 

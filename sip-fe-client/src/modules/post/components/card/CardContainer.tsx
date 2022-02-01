@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { Page } from 'src/modules/query/interface';
 import { selectDataHolderByView } from '../../../data/data.selector';
 import { PostOverview } from '../../api/post.api';
 import { PostFilter } from '../../constants/post-filter.enum';
-import { fetchPosts } from '../../post.action';
+import { PostActions } from '../../post.action';
 import { FilterDropdown } from '../dropdown/FilterDropdown';
 import { CardItemOverview } from './CardItemOverview';
 
@@ -24,14 +25,15 @@ export function CardContainer(): JSX.Element {
         size: 20
     });
 
-    const dataHolder = useSelector(selectDataHolderByView('POST'));
+    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_OVERVIEW));
     
     useEffect(() => {
+        setPosts([]);
         loadMorePosts();
     }, [selectedFilter]);
 
     useEffect(() => {
-        if (dataHolder) {
+        if (dataHolder?.data) {
             setPosts(posts.concat(
                 dataHolder.data
             ));
@@ -41,7 +43,7 @@ export function CardContainer(): JSX.Element {
     function loadMorePosts() {
         setLoading(true);
 
-        dispatch(fetchPosts({
+        dispatch(PostActions.getOverviewData({
             page,
             filters: [
                 {
@@ -75,14 +77,14 @@ export function CardContainer(): JSX.Element {
                 loader={<Spin />}
             >
                 {
-                    posts.map((post, index) => {
+                    posts.map(post => {
                         return <a
                             href={'/posts/' + post.slug}
-                            key={index}
+                            key={post.id}
                             className='cursor-pointer hover:shadow my-2 transition delay-50'
                         >
                             <CardItemOverview
-                                key={index}
+                                key={post.id}
                                 data={post}
                             />
                         </a>;

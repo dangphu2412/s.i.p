@@ -12,6 +12,8 @@ export interface InitPost {
     productLink?: string;
 }
 
-export const fetchPosts = createAction<Partial<Query>>('POST/FETCH');
-export const fetchPostDetail = createAction<PostDetailRequest>('POST/FETCH_DETAIL');
-export const fetchPatchPostData = createAction<PostDetailRequest>('POST/FETCH_PATCH');
+export const PostActions = {
+    getOverviewData: createAction<Partial<Query>>('POST/GET_OVERVIEW_DATA'),
+    getDetailData: createAction<PostDetailRequest>('POST/GET_DETAIL_DATA'),
+    getPatchData: createAction<PostDetailRequest>('POST/GET_PATCH_DaTA'),
+};
