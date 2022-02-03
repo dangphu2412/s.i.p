@@ -46,15 +46,16 @@ export interface ProjectMembers {
 }
 
 export interface PatchPostDetail {
-    name: string;
+    id: string;
+    title: string;
     summary: string;
     description: string;
-    productLink?: string;
-    facebookLink?: string;
-    topics: any[],
-    makers: any[];
+    productLink: string;
+    facebookLink: string;
+    topics: Topic[],
+    makers: Author[];
     thumbnail: string;
-    videoLink?: string;
+    videoLink: string;
     socialPreviewImage: string;
     galleryImages: string[];
     isAuthorAlsoMaker: boolean;
@@ -62,4 +63,19 @@ export interface PatchPostDetail {
     runningStatus: string;
     pricingType: string;
     launchSchedule: Date;
+}
+
+export interface UpdatePostDto extends PatchPostDetail {
+  topicIds: string[];
+  makerIds: string[];
+  socialMedia: {
+    videoLink: string;
+    facebookLink: string;
+    thumbnail: string;
+    socialPreviewImage: string;
+    galleryImages: string[];
+  },
+  links: {
+    productLink: string;
+  }
 }

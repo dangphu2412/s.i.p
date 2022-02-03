@@ -239,46 +239,6 @@ export class PostService {
       }
     }
 
-    if (updatePostDto.runningStatus === ProductRunningStatus.STILL_IDEA) {
-      if (
-        updatePostDto.links.productLink &&
-        ArrayUtils.isPresent(updatePostDto.makerIds)
-      ) {
-        throw new UnprocessableEntityException(
-          `Product is in idea status that we dont need product link and maker. Should it be updated to ${ProductRunningStatus.UP_COMING}`,
-        );
-      }
-    }
-
-    if (
-      updatePostDto.runningStatus === ProductRunningStatus.LOOKING_FOR_MEMBERS
-    ) {
-      if (
-        updatePostDto.isAuthorAlsoMaker &&
-        updatePostDto.makerIds.length > 1
-      ) {
-        throw new UnprocessableEntityException(
-          'Product is looking for members. Cannot contains makers. Only author be maker because of you picked isAuthorAlsoMaker option',
-        );
-      }
-    }
-
-    if (updatePostDto.runningStatus === ProductRunningStatus.UP_COMING) {
-      if (!updatePostDto.launchSchedule) {
-        throw new UnprocessableEntityException(
-          'Required launch schedule date to prepare for this upcoming product',
-        );
-      }
-    }
-
-    if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
-      if (!updatePostDto.links.productLink) {
-        throw new UnprocessableEntityException(
-          'Missing product link that we cannot find your product',
-        );
-      }
-    }
-
     if (post.title !== updatePostDto.title) {
       post.title = updatePostDto.title;
       post.slug = SlugUtils.normalize(post.title);
@@ -294,12 +254,16 @@ export class PostService {
 
     post.description = updatePostDto.description;
     post.summary = updatePostDto.summary;
+
+    post.productLink = updatePostDto.links.productLink;
     post.facebookLink = updatePostDto.socialMedia.facebookLink;
     post.videoLink = updatePostDto.socialMedia.videoLink;
+    post.thumbnail = updatePostDto.socialMedia.thumbnail;
     post.galleryImages = updatePostDto.socialMedia.galleryImages;
     post.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
-    post.thumbnail = updatePostDto.socialMedia.thumbnail;
+
     post.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
+
     post.pricingType = updatePostDto.pricingType;
 
     if (updatePostDto.isLookingForMakers) {
@@ -338,7 +302,7 @@ export class PostService {
       // --
     }
 
-    if (!ArrayUtils.isEmpty(updatePostDto.topicIds)) {
+    if (ArrayUtils.isEmpty(updatePostDto.topicIds)) {
       throw new UnprocessableEntityException(
         'Required topicIds to run this product',
       );
@@ -350,7 +314,7 @@ export class PostService {
         ArrayUtils.isPresent(updatePostDto.makerIds)
       ) {
         throw new UnprocessableEntityException(
-          'Product is in idea status that we dont need product link and maker. Should it be updated to ',
+          `Product is in idea status that we dont need product link and maker. Should it be updated to ${ProductRunningStatus.LOOKING_FOR_MEMBERS} or ${ProductRunningStatus.UP_COMING}`,
         );
       }
     }

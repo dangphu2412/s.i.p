@@ -7,7 +7,7 @@ import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { fireError } from 'src/modules/error/error.action';
 import { CreatePostType } from 'src/modules/post/constants/create-type';
 import { InitPost } from 'src/modules/post/post.action';
-import { saveInitialPost } from 'src/modules/post/post.service';
+import { createInitialPost } from 'src/modules/post/post.service';
 import './create-post.scss';
 
 interface CreateSelection {
@@ -35,7 +35,7 @@ export function CreatePostPage(): JSX.Element {
             throw new Error('Missing create post type');
         }
 
-        const request = saveInitialPost({
+        const request = createInitialPost({
             postType: createSelection.type,
             ...values
         });

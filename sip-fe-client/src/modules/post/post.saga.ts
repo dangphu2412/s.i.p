@@ -4,8 +4,10 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { saveData } from '../data/data.action';
 import { Query } from '../query/interface';
+import { fireError } from './../error/error.action';
+import { PatchPostDetail, UpdatePostDto } from './api/post.api';
 import { PostActions, PostDetailRequest } from './post.action';
-import { getPatchPostData, getPostDetail, getPostsOverview } from './post.service';
+import { getPatchPostData, getPostDetail, getPostsOverview, updatePostData } from './post.service';
 
 export function* PostSagaTree() {
     yield takeLatest(
@@ -21,6 +23,11 @@ export function* PostSagaTree() {
     yield takeLatest(
         PostActions.getPatchData.type,
         handleFetchPatchPostData
+    );
+
+    yield takeLatest(
+        PostActions.saveData.type,
+        handleSavePostData
     );
 }
 
@@ -54,4 +61,31 @@ function* handleFetchPatchPostData(action: PayloadAction<PostDetailRequest>): Sa
         data,
         view: VIEW_SELECTOR.POST_PATCH_DETAIL
     }));
+}
+
+function* handleSavePostData(action: PayloadAction<PatchPostDetail>): SagaIterator {
+    function toUpdatePostDto(patchPostDetail: PatchPostDetail): UpdatePostDto {
+        return {
+            ...patchPostDetail,
+            makerIds: patchPostDetail.makers.map(maker => maker.id),
+            topicIds: patchPostDetail.topics.map(topic => topic.id),
+            socialMedia: {
+                videoLink: patchPostDetail.videoLink,
+                facebookLink: patchPostDetail.facebookLink,
+                thumbnail: patchPostDetail.thumbnail,
+                socialPreviewImage: patchPostDetail.socialPreviewImage,
+                galleryImages: patchPostDetail.galleryImages
+            },
+            links: {
+                productLink: patchPostDetail.productLink || ''
+            }
+        };
+    }
+
+    const request = updatePostData(toUpdatePostDto(action.payload));
+    yield call(request.doRequest);
+    if (request.getErrorMessage()) {
+        yield put(fireError({ message: request.getErrorMessage() }));
+    }
+    return;
 }

@@ -9,7 +9,6 @@ import {
   IsBoolean,
   IsDate,
   IsEnum,
-  IsNotEmpty,
   IsObject,
   IsOptional,
   IsString,
@@ -20,7 +19,6 @@ import { ProductLinkDto } from './product-link.dto';
 
 export class UpdatePostDto {
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   @Length(0, 40)
   public title: string;
@@ -31,7 +29,6 @@ export class UpdatePostDto {
   public description: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   @Length(0, 260)
   public summary: string;

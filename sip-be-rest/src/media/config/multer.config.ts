@@ -9,6 +9,8 @@ import { ALLOW_MIMETYPE, UPLOAD_DIR } from '../constants';
 @Injectable()
 export class MulterConfig implements MulterOptionsFactory {
   createMulterOptions(): MulterModuleOptions {
+    console.log(UPLOAD_DIR);
+
     return {
       dest: UPLOAD_DIR,
       fileFilter: (req, file, cb) => {

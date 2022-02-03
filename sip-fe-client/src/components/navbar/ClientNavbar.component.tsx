@@ -6,7 +6,7 @@ import { MenuInfo } from 'rc-menu/lib/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { loggedInAction, loggingAction, logoutAction } from '../../modules/auth/auth.action';
 import { AuthType } from '../../modules/auth/auth.reducer';
-import { selectAuthState } from '../../modules/auth/auth.selector';
+import { selectAuthState, selectProfile } from '../../modules/auth/auth.selector';
 import { getLoginUrl } from '../../modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.config';
 import { fireError } from '../../modules/error/error.action';
@@ -17,6 +17,7 @@ import axios from 'axios';
 export function ClientNavbar(): JSX.Element {
     const dispatch = useDispatch();
     const authState = useSelector(selectAuthState);
+    const profile = useSelector(selectProfile);
 
     function loginGoogle() {
         dispatch(loggingAction());
@@ -98,11 +99,20 @@ export function ClientNavbar(): JSX.Element {
                         authState === AuthType.LOGGED_IN
                             ? <Dropdown overlay={
                                 <Menu mode={'horizontal'}>
-                                    <Menu.Item key="1">Profile</Menu.Item>
-                                    <Menu.Item key="2">Your products</Menu.Item>
+                                    <Menu.Item key="1">
+                                        <Link to={`/siper/${profile?.username}`}>
+                                            Profile
+                                        </Link>
+                                    </Menu.Item>
+                                    <Menu.Item key="2">
+                                        <Link to='/me/products'>
+                                            My ideas
+                                        </Link>
+                                    </Menu.Item>
                                     <Menu.Item key="3" onClick={onLogout}>Logout</Menu.Item>
                                 </Menu>
-                            }>
+                            }
+                            >
                                 <Avatar src={
                                     <Image
                                         src="https://joeschmoe.io/api/v1/random"
