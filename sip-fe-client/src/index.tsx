@@ -8,13 +8,13 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faComment, faPlusCircle, faCheckCircle,
     faInfoCircle, faPhotoVideo, faUser, faRocket,
-    faMinusCircle
+    faMinusCircle, faFire
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
     faComment, faPlusCircle, faCheckCircle,
     faInfoCircle, faPhotoVideo, faUser, faRocket,
-    faMinusCircle
+    faMinusCircle, faFire
 );
 
 render(

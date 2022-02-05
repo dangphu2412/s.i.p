@@ -1,13 +1,17 @@
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button, Col, Divider, Dropdown, Form, Image, Input, List, Menu, Radio, Row, Space, Upload } from 'antd';
+import {
+    Avatar, Button, Col, Divider, Dropdown, Form, Image,
+    Input, List, Menu, Radio, Row, Space, Upload, Checkbox, Modal,
+    Steps
+} from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import Title from 'antd/lib/typography/Title';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Carousel } from 'react-responsive-carousel';
-import { useParams } from 'react-router-dom';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
@@ -15,6 +19,7 @@ import { selectProfile } from 'src/modules/auth/auth.selector';
 import { Profile } from 'src/modules/auth/auth.service';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { PatchPostDetail } from 'src/modules/post/api/post.api';
+import { PostStatus, PricingType, ProductRunningStatus } from 'src/modules/post/constants/post-status.enum';
 import { PostActions } from 'src/modules/post/post.action';
 import { Topic } from 'src/modules/topic/api/topic.api';
 import { TopicActions } from 'src/modules/topic/topic.action';
@@ -22,18 +27,27 @@ import { Author } from 'src/modules/user/api/user.api';
 import { UserActions } from 'src/modules/user/user.action';
 import { ArrayUtils } from 'src/utils/array.utils';
 import './create-post-detail.scss';
-
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { getUploadUrl } from 'src/modules/post/post.service';
 
 interface MenuProps {
     key: DetailMenu;
     title: string;
-    icon: any;
+    icon: JSX.Element;
+}
+
+interface ProductPlan {
+    key: ProductRunningStatus;
+    title: string;
+    description: string;
+    detail: string;
 }
 
 enum DetailMenu {
     MAIN_INFO = 'MAIN_INFO',
     MEDIA = 'MEDIA',
     SIP_ERS = 'SIP_ERS',
+    EXTRAS = 'EXTRAS',
     REVIEW_AND_LAUNCH = 'REVIEW_AND_LAUNCH'
 }
 
@@ -55,13 +69,46 @@ export function CreateDetailPostPage() {
             icon: <FontAwesomeIcon icon='user'/>
         },
         {
+            key: DetailMenu.EXTRAS,
+            title: 'Extras',
+            icon: <FontAwesomeIcon icon='fire'/>
+        },
+        {
             key: DetailMenu.REVIEW_AND_LAUNCH,
             title: 'Reviews and launch',
             icon: <FontAwesomeIcon icon='rocket'/>
         },
     ];
 
+    const productRunningPlans: ProductPlan[] = [
+        {
+            key: ProductRunningStatus.STILL_IDEA,
+            title: 'Idea phase',
+            description: 'This is a still idea',
+            detail: 'This is still an idea phase. You need to add product link to get started looking for members.'
+        },
+        {
+            key: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+            title: 'Looking for makers',
+            description: 'You are looking for makers to make your idea come true',
+            detail: 'Oh now you are looking for makers. Wait for them to join your project. You can add them to your project in Sip-ers Tab.'
+        },
+        {
+            key: ProductRunningStatus.UP_COMING,
+            title: 'Upcoming',
+            description: 'You scheduled your product to be launched',
+            detail: 'You scheduled your product to be launched. Be ready for it!'
+        },
+        {
+            key: ProductRunningStatus.RELEASED,
+            title: 'Released',
+            description: 'Your product is ready for the community to use',
+            detail: 'Your product is running now. You can share it with your friends and family.'
+        }
+    ];
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { slug } = useParams();
     const [selectedMenu, setSelectedMenu] = useState<DetailMenu>(menuData[0].key);
@@ -77,20 +124,18 @@ export function CreateDetailPostPage() {
         topics: [],
         thumbnail: '',
         galleryImages: [],
-        runningStatus: '',
+        runningStatus: ProductRunningStatus.STILL_IDEA,
         socialPreviewImage: '',
-        status : '',
+        status : PostStatus.DRAFT,
         facebookLink: '',
         productLink: '',
         videoLink: '',
         isAuthorAlsoMaker: true,
         makers: [],
-        pricingType: '',
+        pricingType: PricingType.FREE,
         launchSchedule: new Date(),
+        firstComment: ''
     });
-    const [authorAlsoMaker, setAuthorAlsoMaker] = useState<1 | 2>(data.isAuthorAlsoMaker ? 1 : 2);
-
-    const [galleryImages, setGalleryImages] = useState<UploadFile<any>[]>([]);
 
     const searchTopicDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.SEARCH_TOPIC));
     const [searchTopics, setSearchTopics] = useState<Topic[]>(searchTopicDataHolder?.data
@@ -103,6 +148,9 @@ export function CreateDetailPostPage() {
         ? searchMakerDataHolder.data
         : []);
     const [makerSearch, setMakerSearch] = useState('');
+
+    const [galleryImages, setGalleryImages] = useState<UploadFile[]>([]);
+    const [runningStatus, setRunningStatus] = useState(0);
 
     useEffect(() => {
         if (!slug) {
@@ -131,8 +179,11 @@ export function CreateDetailPostPage() {
 
     useEffect(() => {
         if (postDetailDataHolder?.data) {
+            const runningStatus = getCurrentRunningStatus((postDetailDataHolder.data as PatchPostDetail).runningStatus);
+            if (runningStatus === -1) {
+                throw new Error('Invalid running status');
+            }
             setData(postDetailDataHolder.data);
-            setAuthorAlsoMaker(postDetailDataHolder.data.isAuthorAlsoMaker ? 1 : 2);
             setGalleryImages((postDetailDataHolder.data as PatchPostDetail)
                 .galleryImages.map((image, index) => {
                     return {
@@ -140,8 +191,9 @@ export function CreateDetailPostPage() {
                         name: 'image.png',
                         status: 'done',
                         url: image,
-                    } as UploadFile<any>;
+                    } as UploadFile;
                 }));
+            setRunningStatus(runningStatus);
         }
     }, [postDetailDataHolder]);
 
@@ -175,14 +227,14 @@ export function CreateDetailPostPage() {
         }
     }
 
-    function updateData(key: string, value: any) {
+    function updateData<T>(key: string, value: T) {
         setData({
             ...data,
             [key]: value
         });
     }
 
-    function handleUploadThumbnail(info: UploadChangeParam<UploadFile<any>>) {
+    function handleUploadThumbnail(info: UploadChangeParam<UploadFile>) {
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
@@ -198,7 +250,7 @@ export function CreateDetailPostPage() {
         }
     }
 
-    function handleGalleryUpload(info: UploadChangeParam<UploadFile<any>>) {
+    function handleGalleryUpload(info: UploadChangeParam<UploadFile>) {
         setGalleryImages(info.fileList);
 
         if (info.file.status === 'uploading') {
@@ -218,22 +270,70 @@ export function CreateDetailPostPage() {
         }
     }
 
+    function handleGalleryRemoval(file: UploadFile) {
+        setGalleryImages(galleryImages.filter(image => image.uid !== file.uid));
+        const newGalleryImages = data.galleryImages.filter(image => image !== file.url);
+        setData({
+            ...data,
+            galleryImages: newGalleryImages,
+            socialPreviewImage: newGalleryImages[0] || ''
+        });
+    }
+
+    function showPublishConfirmation() {
+        Modal.confirm({
+            title: 'Do you want to publish this product?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'You are about to publish this product. Once published, it will be visible to all users.',
+            onOk() {
+                dispatch(PostActions.saveData({
+                    ...data,
+                    status: PostStatus.PUBLISH
+                }));
+            }
+        });
+    }
+
+    function showScheduleModal() {
+        Modal.confirm({
+            title: 'Schedule this product to launch?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'You are about to schedule this product to launch.',
+            onOk() {
+                alert('Scheduling');
+            }
+        });
+    }
+
+    function getCurrentRunningStatus(status: ProductRunningStatus): number {
+        return productRunningPlans.findIndex(plan => plan.key === status);
+    }
+
     return <ClientLayout>
         <div className='py-10'>
             <Container>
                 {/* Header */}
-                <div>
-                    <Title level={4}>
-                        {
-                            data.title
-                        }
-                    </Title>
+                <div className='flex justify-between'>
                     <div>
+                        <Title level={3}>
+                            {
+                                data.title
+                            }
+                        </Title>
+                        <div>
                         Status: { data.status }
-                    </div>
-                    <div>
+                        </div>
+                        <div>
                         Running Status: { data.runningStatus }
+                        </div>
                     </div>
+
+                    <div>
+                        <div>
+                            Auto saved few minutes ago
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <Divider />
@@ -264,7 +364,7 @@ export function CreateDetailPostPage() {
                         </Menu>
                     </Col>
 
-                    <Col span={18}>
+                    <Col span={18} className='pl-10'>
                         {/*Main Info*/}
                         <Form
                             layout="vertical"
@@ -274,7 +374,7 @@ export function CreateDetailPostPage() {
                                 selectedMenu === DetailMenu.MAIN_INFO &&
                                 <div>
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Tell us more about your product
                                         </Title>
 
@@ -302,7 +402,7 @@ export function CreateDetailPostPage() {
                                     <Divider />
 
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Links
                                         </Title>
 
@@ -312,12 +412,31 @@ export function CreateDetailPostPage() {
                                                 value={data.productLink}
                                                 onChange={e => {
                                                     const productLink = e.target.value;
-                                                    if (!!productLink && data.runningStatus === 'STILL_IDEA') {
-                                                        if (!ArrayUtils.isEmpty(data.makers)) {
-                                                            updateData('runningStatus', 'UP_COMING');
-                                                        }
+                                                    if (!productLink) {
+                                                        setData({
+                                                            ...data,
+                                                            runningStatus: ProductRunningStatus.STILL_IDEA,
+                                                            productLink
+                                                        });
+                                                        return;
                                                     }
-                                                    updateData('productLink', productLink);
+                                                    if (data.runningStatus === ProductRunningStatus.STILL_IDEA) {
+                                                        if (ArrayUtils.isPresent(data.makers)) {
+                                                            setData({
+                                                                ...data,
+                                                                runningStatus: ProductRunningStatus.UP_COMING,
+                                                                productLink
+                                                            });
+                                                            return;
+                                                        }
+
+                                                        setData({
+                                                            ...data,
+                                                            runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+                                                            productLink
+                                                        });
+                                                        setRunningStatus(getCurrentRunningStatus(ProductRunningStatus.LOOKING_FOR_MEMBERS));
+                                                    }
                                                 }}
                                             />
                                         </Form.Item>
@@ -335,7 +454,7 @@ export function CreateDetailPostPage() {
                                     <Divider />
 
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Topics
                                         </Title>
 
@@ -399,7 +518,7 @@ export function CreateDetailPostPage() {
                                     </div>
 
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Description
                                         </Title>
 
@@ -422,7 +541,7 @@ export function CreateDetailPostPage() {
                                 selectedMenu === DetailMenu.MEDIA &&
                                 <div>
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Thumbnail
                                         </Title>
 
@@ -435,7 +554,7 @@ export function CreateDetailPostPage() {
                                             listType="picture-card"
                                             className="avatar-uploader"
                                             showUploadList={false}
-                                            action="http://localhost:3000/v1/media/upload"
+                                            action={getUploadUrl()}
                                             onChange={handleUploadThumbnail}
                                         >
                                             {
@@ -456,7 +575,7 @@ export function CreateDetailPostPage() {
                                     <Divider />
 
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Gallery
                                         </Title>
 
@@ -479,9 +598,10 @@ export function CreateDetailPostPage() {
                                             name="files"
                                             listType="picture-card"
                                             className="avatar-uploader"
-                                            action="http://localhost:3000/v1/media/upload"
-                                            onChange={handleGalleryUpload}
+                                            action={getUploadUrl()}
                                             fileList={galleryImages}
+                                            onChange={handleGalleryUpload}
+                                            onRemove={handleGalleryRemoval}
                                         >
                                             {
                                                 <span>
@@ -496,7 +616,7 @@ export function CreateDetailPostPage() {
                                     <Divider />
 
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Youtube video
                                         </Title>
                                     </div>
@@ -526,7 +646,7 @@ export function CreateDetailPostPage() {
                                 selectedMenu === DetailMenu.SIP_ERS &&
                                 <div>
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Did you work on this product?
                                         </Title>
 
@@ -536,11 +656,10 @@ export function CreateDetailPostPage() {
 
                                         <Radio.Group
                                             onChange={(e) => {
-                                                setAuthorAlsoMaker(e.target.value);
                                                 if (!profile) {
                                                     throw new Error('Profile is not set');
                                                 }
-                                                if (e.target.value === 1) {
+                                                if (e.target.value) {
                                                     setData({
                                                         ...data,
                                                         isAuthorAlsoMaker: !data.isAuthorAlsoMaker,
@@ -559,11 +678,11 @@ export function CreateDetailPostPage() {
                                                 }
                                                 
                                             }}
-                                            value={authorAlsoMaker}
+                                            value={data.isAuthorAlsoMaker}
                                         >
                                             <Space direction="vertical">
-                                                <Radio value={1}>I worked on this product</Radio>
-                                                <Radio value={2}>I didn’t work on this product</Radio>
+                                                <Radio value={true}>I worked on this product</Radio>
+                                                <Radio value={false}>I didn’t work on this product</Radio>
                                             </Space>
                                         </Radio.Group>
 
@@ -573,7 +692,7 @@ export function CreateDetailPostPage() {
                                     <Divider />
 
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                         Who worked on this product?
                                         </Title>
 
@@ -627,7 +746,6 @@ export function CreateDetailPostPage() {
                                                                 }
                                                                 const newMakers = data.makers.filter(maker => maker.id !== item.id);
                                                                 if (item.id === profile.id) {
-                                                                    setAuthorAlsoMaker(2);
                                                                     setData({
                                                                         ...data,
                                                                         makers: newMakers,
@@ -655,6 +773,61 @@ export function CreateDetailPostPage() {
 
                                     <Button
                                         className='mt-5'
+                                        onClick={() => setSelectedMenu(DetailMenu.EXTRAS)}
+                                    >
+                                        Next step: Extra things
+                                    </Button>
+                                </div>
+                            }
+
+                            {
+                                selectedMenu === DetailMenu.EXTRAS &&
+                                <div>
+                                    <div>
+                                        <Title level={3}>
+                                            Pricing
+                                        </Title>
+
+                                        <div className='button-text-color mb-5'>
+                                            Optional, but the community really appreciates knowing.
+                                        </div>
+
+                                        <Radio.Group
+                                            onChange={(e) => {
+                                                setData({
+                                                    ...data,
+                                                    pricingType: e.target.value
+                                                });
+                                            }}
+                                            value={data.pricingType}
+                                        >
+                                            <Space direction="vertical">
+                                                <Radio value={PricingType.FREE}>Free</Radio>
+                                                <Radio value={PricingType.PAID}>Paid</Radio>
+                                                <Radio value={PricingType.PAID_WITH_FREE_PLANS}>Paid (with a free trial or plan)</Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </div>
+
+                                    <Divider />
+
+                                    <div>
+                                        <Title level={3}>
+                                            Write your first comment
+                                        </Title>
+
+                                        <div className='button-text-color mb-5'>
+                                            This comment will be posted when your product launches. Adding a first comment is essential to get the discussion started.
+                                        </div>
+
+                                        <TextArea
+                                            value={'Hello, I am using this product. I hope you enjoy it!'}
+                                            placeholder='Explain how you discovered this product.. Invite people to join the conversation!'
+                                        />
+                                    </div>
+
+                                    <Button
+                                        className='mt-5'
                                         onClick={() => setSelectedMenu(DetailMenu.REVIEW_AND_LAUNCH)}
                                     >
                                         Next step: Review and launch
@@ -666,7 +839,7 @@ export function CreateDetailPostPage() {
                                 selectedMenu === DetailMenu.REVIEW_AND_LAUNCH &&
                                 <div>
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Required info
                                         </Title>
 
@@ -674,35 +847,122 @@ export function CreateDetailPostPage() {
                                             Check that you’ve completed all of the required information.
                                         </div>
 
+                                        <Row className='mt-5'>
+                                            <Col span={12}>
+                                                <div
+                                                    className='my-2 cursor-pointer'
+                                                    onClick={() => setSelectedMenu(DetailMenu.MAIN_INFO)}
+                                                >
+                                                    <Checkbox checked={!!data.title}/> Product name
+                                                </div>
+
+                                                <div
+                                                    className='my-2 cursor-pointer'
+                                                    onClick={() => setSelectedMenu(DetailMenu.MAIN_INFO)}
+                                                >
+                                                    <Checkbox checked={!!data.summary}/> Product summary
+                                                </div>
+
+                                                <div
+                                                    className='my-2 cursor-pointer'
+                                                    onClick={() => setSelectedMenu(DetailMenu.MAIN_INFO)}
+                                                >
+                                                    <Checkbox checked={!!data.description}/> Description
+                                                </div>
+                                                
+                                            </Col>
+
+                                            <Col span={12}>
+                                                <div 
+                                                    className='my-2 cursor-pointer'
+                                                    onClick={() => setSelectedMenu(DetailMenu.MEDIA)}
+                                                >
+                                                    <Checkbox checked={!!data.thumbnail}/> Thumbnail
+                                                </div>
+
+                                                <div
+                                                    className='my-2 cursor-pointer' 
+                                                    onClick={() => setSelectedMenu(DetailMenu.MEDIA)}
+                                                >
+                                                    <Checkbox checked={!!data.galleryImages?.length}/> Add images to gallery
+                                                </div>
+                                            </Col>
+                                        </Row>
+
                                         
                                     </div>
 
                                     <Divider />
 
                                     <div>
-                                        <Title level={4}>
+                                        <Title level={3}>
                                             Suggested
                                         </Title>
 
                                         <div className='button-text-color'>
                                             Go the extra mile and add suggested information. Successful launches usually do.
                                         </div>
+
+                                        <div className='mt-5'>
+                                            <div
+                                                className='my-2 cursor-pointer'
+                                                onClick={() => setSelectedMenu(DetailMenu.MAIN_INFO)}
+                                            >
+                                                <Checkbox checked={!!data.videoLink && !!data.facebookLink}/> Links
+                                            </div>
+
+                                            <div
+                                                className='my-2 cursor-pointer'
+                                                onClick={() => setSelectedMenu(DetailMenu.SIP_ERS)}
+                                            >
+                                                <Checkbox checked={!!data.isAuthorAlsoMaker}/> Did you work on this product?
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Divider />
+
+                                    <div>
+                                        <Title level={3}>
+                                            Running plan
+                                        </Title>
+
+                                        <div className='button-text-color mb-5'>
+                                            {
+                                                productRunningPlans[runningStatus].detail
+                                            }
+                                        </div>
+                                        <Steps current={runningStatus}>
+                                            {
+                                                productRunningPlans.map(plan => {
+                                                    return (
+                                                        <Steps.Step
+                                                            key={plan.key}
+                                                            title={plan.title}
+                                                            description={plan.description}
+                                                        />
+                                                    );
+                                                })
+                                            }
+                                        </Steps>
                                     </div>
 
                                     <Divider />
 
                                     <Button
                                         className='mt-5'
-                                        onClick={() => alert('Submitting product')}
+                                        onClick={() => showPublishConfirmation()}
+                                        disabled={!data.title || !data.summary || !data.description || !data.thumbnail || !data.socialPreviewImage || data.galleryImages.length === 0}
                                     >
                                         Launch now
                                     </Button>
 
                                     <Button
                                         className='mt-5'
-                                        onClick={() => alert('Post this idea')}
+                                        onClick={() => showScheduleModal()}
+                                        disabled={!data.title || !data.summary || !data.description || !data.thumbnail || !data.socialPreviewImage || data.galleryImages.length === 0}
                                     >
-                                        Post this idea
+                                        Schedule launch later
                                     </Button>
                                 </div>
                             }

@@ -7,7 +7,6 @@ import { Post } from './post.entity';
 @EntityRepository(Post)
 export class PostRepository extends Repository<Post> {
   public findLatestPosts(searchQuery: SearchCriteria) {
-    console.log('Getting latest');
     const queryBuilder = this.createQueryBuilder('posts')
       .addSelect(`post_ordered_by_votes.total_votes as "posts_total_votes"`)
       .innerJoin(

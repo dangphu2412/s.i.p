@@ -1,3 +1,4 @@
+import { ProductRunningStatus, PricingType, PostStatus } from './../constants/post-status.enum';
 import { Topic } from '../../topic/api/topic.api';
 import { Author } from '../../user/api/user.api';
 
@@ -59,10 +60,11 @@ export interface PatchPostDetail {
     socialPreviewImage: string;
     galleryImages: string[];
     isAuthorAlsoMaker: boolean;
-    status: string;
-    runningStatus: string;
-    pricingType: string;
+    status: PostStatus;
+    runningStatus: ProductRunningStatus;
+    pricingType: PricingType;
     launchSchedule: Date;
+    firstComment: string;
 }
 
 export interface UpdatePostDto extends PatchPostDetail {

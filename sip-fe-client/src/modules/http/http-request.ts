@@ -59,6 +59,7 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
 
     function* getDataSafe() {
         if (errorMsg) {
+            console.log(errorMsg);
             yield put(fireError({ message: errorMsg }));
         }
         return data;
@@ -70,9 +71,6 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
 
     function _getErrorMessage(error: AxiosError): string {
         if (error.response) {
-            ErrorCodeToMsgMap.forEach(val => {
-                console.log(val);
-            });
             if (ErrorCodeToMsgMap.has(`${error.response.status}`)) {
                 return ErrorCodeToMsgMap.get(`${error.response.status}`) as string;
             }

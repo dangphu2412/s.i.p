@@ -1,7 +1,6 @@
 import './post-detail.scss';
 import { Button, Col, Divider, Image, Row, Comment, Avatar, Tooltip, List } from 'antd';
 import Title from 'antd/lib/typography/Title';
-import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';

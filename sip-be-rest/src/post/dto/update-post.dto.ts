@@ -1,4 +1,5 @@
 import { SocialMediaDto } from '@media/dto/gallery.dto';
+import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   PricingType,
@@ -54,10 +55,10 @@ export class UpdatePostDto {
   @IsArray()
   public makerIds: string[];
 
-  @ApiProperty()
-  @IsOptional()
-  @IsBoolean()
-  public isLookingForMakers: boolean;
+  // @ApiProperty()
+  // @Optional()
+  // @IsString()
+  // public firstComment: string;
 
   @ApiProperty()
   @IsOptional()

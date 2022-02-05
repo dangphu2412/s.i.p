@@ -111,15 +111,6 @@ export class PostService {
     return posts;
   }
 
-  /**
-   * Need to get:
-   * - Basic information: title, slug, summary,
-   * - voteStatus
-   * - projectMember
-   * - topics related
-   * - thumbnails
-   * - mainThumbnail
-   */
   async findOne(slug: string, optionalAuthor: UserCredential | undefined) {
     const post = await this.postRepository.findOne({
       where: {
@@ -170,10 +161,8 @@ export class PostService {
     switch (status) {
       case PostStatus.DRAFT:
         return this.saveAsDraft(id, updatePostDto);
-        break;
       case PostStatus.PUBLISH:
         return this.publish(id, updatePostDto);
-        break;
       default:
         throw new BadRequestException(
           `Cannot do update post with this action: ${status}`,
@@ -266,8 +255,25 @@ export class PostService {
 
     post.pricingType = updatePostDto.pricingType;
 
-    if (updatePostDto.isLookingForMakers) {
+    if (
+      !updatePostDto.links.productLink &&
+      post.runningStatus !== ProductRunningStatus.STILL_IDEA
+    ) {
+      post.runningStatus = ProductRunningStatus.STILL_IDEA;
+    }
+
+    if (
+      updatePostDto.runningStatus === ProductRunningStatus.STILL_IDEA &&
+      !!updatePostDto.links.productLink
+    ) {
       post.runningStatus = ProductRunningStatus.LOOKING_FOR_MEMBERS;
+    }
+
+    if (!!updatePostDto.launchSchedule) {
+      if (ArrayUtils.isEmpty(updatePostDto.makerIds)) {
+        throw new UnprocessableEntityException('Makers are required to launch');
+      }
+      post.runningStatus = ProductRunningStatus.UP_COMING;
     }
 
     return this.postRepository.save(post);
@@ -346,6 +352,14 @@ export class PostService {
           'Missing product link that we cannot find your product',
         );
       }
+    }
+
+    if (
+      updatePostDto.links.productLink &&
+      ArrayUtils.isPresent(updatePostDto.makerIds) &&
+      !updatePostDto.launchSchedule
+    ) {
+      post.runningStatus = ProductRunningStatus.RELEASED;
     }
 
     if (post.title !== updatePostDto.title) {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { REACT_APP_API_URL } from 'src/config/constant.config';
 import { createRequest } from '../http/http-request';
 import { Query } from '../query/interface';
 import { parseToSearchParams } from '../query/search-parser';
@@ -31,4 +32,8 @@ export function updatePostData(data: UpdatePostDto) {
             }
         }
     ));
+}
+
+export function getUploadUrl() {
+    return `${REACT_APP_API_URL}/v1/media/upload`;
 }

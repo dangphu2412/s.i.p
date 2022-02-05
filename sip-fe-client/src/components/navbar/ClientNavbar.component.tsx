@@ -1,9 +1,10 @@
-import React from 'react';
-import './index.scss';
 import { GoogleOutlined } from '@ant-design/icons';
-import { Button, Col, Dropdown, Input, Menu, message, Row, Avatar, Image  } from 'antd';
+import { Avatar, Button, Dropdown, Image, Input, Menu, message } from 'antd';
+import axios from 'axios';
 import { MenuInfo } from 'rc-menu/lib/interface';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { loggedInAction, loggingAction, logoutAction } from '../../modules/auth/auth.action';
 import { AuthType } from '../../modules/auth/auth.reducer';
 import { selectAuthState, selectProfile } from '../../modules/auth/auth.selector';
@@ -11,8 +12,7 @@ import { getLoginUrl } from '../../modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.config';
 import { fireError } from '../../modules/error/error.action';
 import { setLoading } from '../../modules/loading/loading.action';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import './index.scss';
 
 export function ClientNavbar(): JSX.Element {
     const dispatch = useDispatch();
@@ -52,35 +52,38 @@ export function ClientNavbar(): JSX.Element {
 
     return (
         <div className='shadow-sm cover-bg'>
-            <Row className='header-wrapper'>
-                <Col className='p-left-container' span={2}>
+            <div className='header-wrapper flex justify-between flex-row'>
+                <div className='p-left-container flex flex-row items-center'>
                     <Button className='btn-bg btn-bg-hover' shape="circle" size='large'>
                         <a href='/'>S.I.P</a>
                     </Button>
-                </Col>
-                <Col className='f-center my-3' span={3}>
-                    <Input style={{backgroundColor: '#F0F9FF'}} className='bg-sky-light' placeholder="Search Products ..." />
-                </Col>
-                <Col span={13}>
-                    <Menu mode="horizontal" className='override-line-height-menu cover-bg'>
-                        <Menu.Item className='cover-bg' key="1">
-                            <Link to="/"> 
+
+                    <div className='my-3 ml-8'>
+                        <Input style={{backgroundColor: '#F0F9FF'}} className='bg-sky-light' placeholder="Search Products ..." />
+                    </div>
+
+                    <div>
+                        <Menu mode="horizontal" className='override-line-height-menu cover-bg'>
+                            <Menu.Item className='cover-bg' key="1">
+                                <Link to="/"> 
                                 Products
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item className='cover-bg' key="2">
-                            <Link to="/topics"> 
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item className='cover-bg' key="2">
+                                <Link to="/topics"> 
                                 Topics
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item className='cover-bg' key="3">
-                            <Link to="/recommend"> 
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item className='cover-bg' key="3">
+                                <Link to="/recommend"> 
                                 Recommend
-                            </Link>
-                        </Menu.Item>
-                    </Menu>
-                </Col>
-                <Col className='adjust-avatar-to-the-end p-right-container f-center' span={6}>
+                                </Link>
+                            </Menu.Item>
+                        </Menu>
+                    </div>
+                </div>     
+                
+                <div className='p-right-container f-center' >
                     <Dropdown overlay={
                         <Menu mode={'horizontal'}>
                             <Menu.Item key="1">
@@ -130,8 +133,8 @@ export function ClientNavbar(): JSX.Element {
                                 <GoogleOutlined/>
                             </Button>
                     }
-                </Col>
-            </Row>
+                </div>
+            </div>
         </div>
     );
 }
