@@ -76,7 +76,7 @@ export class DiscussionService {
       where: {
         post,
       },
-      relations: ['author', 'replies'],
+      relations: ['author', 'replies', 'replies.author'],
       skip: searchCriteria.offset,
       take: searchCriteria.limit,
     });

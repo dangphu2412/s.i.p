@@ -1,4 +1,4 @@
-import { Avatar, Comment, CommentProps } from 'antd';
+import { Avatar, Collapse, Comment, CommentProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
@@ -8,19 +8,21 @@ import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { Reply } from '../api/discussion.api';
 import { DiscussionActions } from '../discussion.action';
 import { DiscussionEditor } from './Editor.component';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface CommentHandlerProps extends CommentProps {
     slug: string;
     key: string;
     commentId: string;
     profile: Profile | undefined;
+    replies: Reply[];
 }
 
 export function CommentHandler(props: CommentHandlerProps) {
     const dispatch = useDispatch();
     const [replyDisplayed, setReplyDisplayed] = useState(false);
     const [currentReply, setCurrentReply] = useState('');
-    const [replies, setReplies] = useState<Reply[]>([]);
+    const [replies, setReplies] = useState<Reply[]>(props.replies || []);
     const replyCreatedResponse = useSelector(selectDataHolderByView(VIEW_SELECTOR.CREATE_REPLY));
 
     useEffect(() => {
@@ -46,6 +48,7 @@ export function CommentHandler(props: CommentHandlerProps) {
                 content: currentReply,
                 slug: props.slug
             }));
+            setReplyDisplayed(false);
             setCurrentReply('');
         }
     }
@@ -77,17 +80,27 @@ export function CommentHandler(props: CommentHandlerProps) {
             }
             {
                 replies.length > 0 &&
-                replies.map(reply => {
-                    return (
-                        <Comment
-                            key={reply.id}
-                            author={reply.author.fullName}
-                            avatar={<Avatar src={reply.author.avatar} />}
-                            content={reply.content}
-                            datetime={reply.updatedAt}
-                        ></Comment>
-                    );
-                })
+                <Collapse
+                    expandIcon={() => (<FontAwesomeIcon icon={'arrow-right'}/>)} 
+                    ghost
+                    style={{fontSize: '12px'}}
+                >
+                    <Collapse.Panel key={props.key} header="Replies" >
+                        {
+                            replies.map(reply => {
+                                return (
+                                    <Comment
+                                        key={reply.id}
+                                        author={reply.author.fullName}
+                                        avatar={<Avatar src={reply.author.avatar} />}
+                                        content={reply.content}
+                                        datetime={reply.updatedAt}
+                                    ></Comment>
+                                );
+                            })
+                        }
+                    </Collapse.Panel>
+                </Collapse>
             }
         </Comment>
     );

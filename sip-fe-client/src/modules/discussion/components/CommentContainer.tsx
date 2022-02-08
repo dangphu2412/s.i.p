@@ -97,6 +97,7 @@ export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
                             avatar={<Avatar src={props.author.avatar} />}
                             content={props.content}
                             datetime={props.updatedAt}
+                            replies={props.replies}
                         />;
                     }}
                 />
