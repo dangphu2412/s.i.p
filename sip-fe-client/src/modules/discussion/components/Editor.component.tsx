@@ -1,13 +1,14 @@
+import { Avatar, Comment, Form, Input } from 'antd';
 import React from 'react';
-import {Form, Input, Button, Comment, Avatar} from 'antd';
 
 export interface DiscussionEditorProps { 
+    onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement>;
     onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
     value: string;
-    authorAvatar: string;
+    authorAvatar: React.ReactNode;
 }
 
-export const DiscussionEditor = ({ onChange, value, authorAvatar }: DiscussionEditorProps) => (
+export const DiscussionEditor = ({ onKeyDown, onChange, value, authorAvatar }: DiscussionEditorProps) => (
     <Comment
         avatar={
             <>
@@ -17,7 +18,11 @@ export const DiscussionEditor = ({ onChange, value, authorAvatar }: DiscussionEd
         content={
             <div>
                 <Form.Item>
-                    <Input.TextArea onChange={onChange} value={value} />
+                    <Input.TextArea 
+                        value={value}
+                        onKeyDown={onKeyDown}
+                        onChange={onChange}
+                    />
                 </Form.Item>
             </div>
         }

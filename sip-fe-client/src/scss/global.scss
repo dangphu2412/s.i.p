@@ -12,17 +12,17 @@
     background-color: $paragraph !important;
 }
 
-.btn-bg {
-    background-color: $button !important;
-}
+// .btn-bg {
+//     background-color: $button !important;
+// }
 
-.btn-bg-hover {
-    &:hover {
-        background-color: $content !important;
-        color: $button !important;
-        border: $button  1px solid !important;
-    }
-}
+// .btn-bg-hover {
+//     &:hover {
+//         background-color: $content !important;
+//         color: $button !important;
+//         border: $button  1px solid !important;
+//     }
+// }
 
 .btn {
     background-color: $content !important;
@@ -42,9 +42,9 @@
     color: $headline !important;
 }
 
-.button-text-color {
-    color: $button-text !important;
-}
+// .button-text-color {
+//     color: $button-text !important;
+// }
 
 .p-color {
     color: $paragraph !important;
@@ -65,17 +65,3 @@
 }
 
 // Antd global override
-.ant-btn  {
-    &:hover {
-        color: $button;
-        border-color: $button;
-    }
-    &:focus {
-        color: $button;
-        border-color: $button;
-    }
-}
-
-.ant-menu-horizontal > .ant-menu-item a:hover {
-    color: $button;
-}

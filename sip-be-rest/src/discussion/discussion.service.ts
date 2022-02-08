@@ -1,16 +1,15 @@
-import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { AccessRights } from '@constants/access-rights.enum';
+import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { RuleManager } from '@external/racl/core/rule.manager';
-import { Post } from 'src/post/post.entity';
-import { UserService } from 'src/user/user.service';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Post } from '@post/post.entity';
+import { User } from '@user/user.entity';
+import { TreeRepository } from 'typeorm';
 import { Discussion } from './discussion.entity';
 import { CreateDiscussionDto } from './dto/create-discussion.dto';
 import { UpdateDiscussionDto } from './dto/update-discussion.dto';
@@ -19,45 +18,71 @@ import { UpdateDiscussionDto } from './dto/update-discussion.dto';
 export class DiscussionService {
   constructor(
     @InjectRepository(Discussion)
-    private discussionRepository: Repository<Discussion>,
-    private userService: UserService,
+    private readonly discussionRepository: TreeRepository<Discussion>,
   ) {}
 
-  async create(createDiscussionDto: CreateDiscussionDto) {
+  public async createComment(
+    post: Post,
+    createDiscussionDto: CreateDiscussionDto,
+    author: User,
+  ) {
     createDiscussionDto.content = createDiscussionDto.content.trim();
 
     if (!createDiscussionDto.content) {
       throw new BadRequestException('Content of comment can not be empty');
-    }
-    const author = await this.userService.findById(
-      createDiscussionDto.authorId,
-    );
-
-    if (!author) {
-      throw new UnprocessableEntityException(
-        'Author is not persisting, maybe they have been banned',
-      );
     }
 
     const discussion = new Discussion();
 
     discussion.content = createDiscussionDto.content;
     discussion.author = author;
+    discussion.post = post;
+    discussion.parent = null;
 
-    return this.discussionRepository.save(discussion);
+    await this.discussionRepository.save(discussion);
+
+    return discussion;
   }
 
-  findRelatedDiscussions(post: Post, searchCriteria: SearchCriteria) {
+  public async createReply(
+    commentId: string,
+    createReplyDto: CreateDiscussionDto,
+    author: User,
+    post: Post,
+  ) {
+    createReplyDto.content = createReplyDto.content.trim();
+
+    if (!createReplyDto.content) {
+      throw new BadRequestException('Content of comment can not be empty');
+    }
+
+    const discussion = await this.discussionRepository.findOne(commentId);
+
+    if (!discussion) {
+      throw new NotFoundException('No parent comment found');
+    }
+
+    const reply = new Discussion();
+
+    reply.content = createReplyDto.content;
+    reply.author = author;
+    reply.parent = discussion;
+    reply.post = post;
+    return this.discussionRepository.save(reply);
+  }
+
+  public findDiscussionsOfPost(post: Post, searchCriteria: SearchCriteria) {
     return this.discussionRepository.find({
       where: {
         post,
       },
+      relations: ['author', 'replies'],
       skip: searchCriteria.offset,
       take: searchCriteria.limit,
     });
   }
 
-  async update(
+  public async update(
     id: number,
     updateDiscussionDto: UpdateDiscussionDto,
     ruleManager: RuleManager,

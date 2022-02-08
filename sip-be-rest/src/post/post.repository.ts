@@ -79,4 +79,12 @@ export class PostRepository extends Repository<Post> {
       })) !== 0
     );
   }
+
+  public findBySlug(slug: string): Promise<Post> {
+    return this.findOne({
+      where: {
+        slug,
+      },
+    });
+  }
 }

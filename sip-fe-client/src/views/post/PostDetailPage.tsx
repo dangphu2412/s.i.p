@@ -1,5 +1,5 @@
-import './post-detail.scss';
-import { Button, Col, Divider, Image, Row, Comment, Avatar, Tooltip, List } from 'antd';
+import { CaretUpOutlined, CaretDownFilled, FacebookFilled, InstagramFilled } from '@ant-design/icons';
+import { Avatar, Button, Col, Divider, Image, List, Row, Tooltip } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,17 +7,23 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
-import { ClientLayout } from 'src/layouts/client/ClientLayout';
-import { selectDataHolderByView } from 'src/modules/data/data.selector';
-import { TopFeatureBadge } from 'src/modules/post/components/badge/TopFeatureBadge';
-import { PostDetail, ProjectMembers } from '../../modules/post/api/post.api';
-import { ArrayUtils } from 'src/utils/array.utils';
-import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { DiscussionEditor } from 'src/modules/discussion/components/Editor.component';
-import { FacebookFilled, InstagramFilled } from '@ant-design/icons';
-import { SimpleCard } from '../../components/card/SimpleCard';
-import { CommentContainer } from 'src/modules/discussion/components/CommentContainer';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
+import { ClientLayout } from 'src/layouts/client/ClientLayout';
+import { openAuthPopupAction } from 'src/modules/auth/auth.action';
+import { AuthType } from 'src/modules/auth/auth.reducer';
+import { selectAuthState } from 'src/modules/auth/auth.selector';
+import { selectDataHolderByView } from 'src/modules/data/data.selector';
+import { CommentContainer } from 'src/modules/discussion/components/CommentContainer';
+import { TopFeatureBadge } from 'src/modules/post/components/badge/TopFeatureBadge';
+import { VoteState } from 'src/modules/post/components/card/CardItemOverview';
+import { PricingType } from 'src/modules/post/constants/post-status.enum';
+import { PostActions } from 'src/modules/post/post.action';
+import { voteForPost } from 'src/modules/vote/vote.action';
+import { ArrayUtils } from 'src/utils/array.utils';
+import { SimpleCard } from '../../components/card/SimpleCard';
+import { PostDetail } from '../../modules/post/api/post.api';
+import './post-detail.scss';
+
 const contentStyle: React.CSSProperties = {
     color: '#fff',
     textAlign: 'center',
@@ -28,24 +34,6 @@ interface GalleryItem {
     type: 'image' | 'video',
     src: string;
 }
-
-const data: PostDetail = {
-    id: '2',
-    author: {avatar: '', fullName: 'Fus dep trai', id: '1'},
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam corrupti adipisci distinctio esse pariatur amet vitae suscipit in nihil enim. Laudantium rerum quos dolorum repellat maiores et fugiat, veniam ex.',
-    isVoted: true,
-    galleryImages: ['https://joeschmoe.io/api/v1/random', 'https://joeschmoe.io/api/v1/random'],
-    previewGalleryImg: 'https://joeschmoe.io/api/v1/randomv',
-    productLink: '',
-    slug: '',
-    summary: 'Your personal AI Assistant for creating SEO-friendly content',
-    thumbnail: 'https://joeschmoe.io/api/v1/random',
-    title: 'This is the hottest one',
-    topics: [{id: '1', name: 'Tech', slug: 'Tech', avatar: '', summary: '' }],
-    totalVotes: 10,
-    videoDemo: 'https://www.youtube.com/embed/0ENKBcckukM',
-    ranking: '1',
-};
 
 const followers = [
     {
@@ -61,11 +49,6 @@ const followers = [
     {
         id: '3',
         avatar: 'https://joeschmoe.io/api/v1/random'
-    },
-    {
-        id: '4',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
     },
     {
         id: '4',
@@ -102,58 +85,69 @@ const followers = [
         avatar: 'https://joeschmoe.io/api/v1/random',
         fullName: 'Fus dep trai'
     },
+    {
+        id: '11',
+        avatar: 'https://joeschmoe.io/api/v1/random',
+        fullName: 'Fus dep trai'
+    },
 ];
-
-const makers = [
-    {
-        id: '1',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        name: 'Fus dep trai',
-        position: 'Marketer'
-    },
-    {
-        id: '2',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        name: 'Fus suck trai',
-        position: 'DevOps'
-    },
-    {
-        id: '3',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        name: 'Fus suck trai',
-        position: 'Super backend'
-    }
-];
-
-const projectMembers: ProjectMembers = {
-    hunter: {
-        id: '1',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        name: 'Fus dep trai',
-        position: 'Marketer'
-    },
-    makers
-};
 
 export function PostDetailPage(): JSX.Element {
     const dispatch = useDispatch();
-    const { postId } = useParams();
-    const [postDetail, setPostDetail] = useState<PostDetail | undefined>(data);
-    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_DETAIL));
+    const { slug } = useParams();
+    const [postDetail, setPostDetail] = useState<PostDetail>(
+        {
+            id: 'UNKNOWN',
+            title: '',
+            slug: '',
+            description: '',
+            author: {
+                id: 'UNKNOWN',
+                fullName: '',
+                avatar: '',
+                headline: ''
+            },
+            facebookLink: '',
+            galleryImages: [],
+            isVoted: false,
+            makers: [],
+            pricingType: PricingType.FREE,
+            productLink: '',
+            ranking: '1',
+            socialPreviewImage: '',
+            summary: '',
+            thumbnail: '',
+            topics: [],
+            totalVotes: 0,
+            videoLink: '',
+        }
+    );
+    const [vote, setVote] = useState<VoteState>({
+        isVoted: postDetail.isVoted,
+        voteTotal: +postDetail.totalVotes
+    });
 
-    if (!postId) {
-        throw new Error('Please recheck your routing. Post detail view is missing postId with key: postId');
+    const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_DETAIL));
+    const commentsDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_COMMENTS));
+    const authType = useSelector(selectAuthState);
+
+    if (!slug) {
+        throw new Error('Please recheck your routing. Post detail view is missing slug with key: slug');
     }
     
-    // useEffect(() => {
-    //     if (!dataHolder) {
-    //         dispatch(fetchPostDetail({ postId }));
-    //     }
-    // }, [dataHolder]);
+    useEffect(() => {
+        dispatch(PostActions.getDetailData({ slug }));
+    }, []);
 
-    // if (dataHolder?.data) {
-    //     setPostDetail(postDetail);
-    // }
+    useEffect(() => {
+        if (postDetailDataHolder?.data) {
+            setPostDetail(postDetailDataHolder.data);
+            setVote({
+                isVoted: postDetailDataHolder.data.isVoted,
+                voteTotal: postDetailDataHolder.data.totalVotes
+            });
+        }
+    }, [postDetailDataHolder]);
 
     function toGallery(imgs: string[] | undefined, videoLink: string | undefined): GalleryItem[] {
         const gallery: GalleryItem[] = [];
@@ -176,6 +170,21 @@ export function PostDetailPage(): JSX.Element {
         return gallery;
     }
 
+    function handleVote(e: React.MouseEvent<HTMLElement, MouseEvent>): void {
+        e.preventDefault();
+        if (authType !== AuthType.LOGGED_IN) {
+            dispatch(openAuthPopupAction());
+            return;
+        }
+        dispatch(voteForPost({
+            postId: postDetail.id
+        }));
+        setVote({
+            isVoted: !vote.isVoted,
+            voteTotal: vote.isVoted ? vote.voteTotal - 1 : vote.voteTotal + 1
+        });
+    }
+
     return (
         <ClientLayout>
             <div className='py-10'>
@@ -185,7 +194,7 @@ export function PostDetailPage(): JSX.Element {
                         {/* Thumbnail of product */}
                         <Col span={3}>
                             <Image
-                                src="https://joeschmoe.io/api/v1/random"
+                                src={postDetail.thumbnail}
                                 style={{ width: 100, height: 100 }}
                                 preview={false}
                             />
@@ -193,10 +202,10 @@ export function PostDetailPage(): JSX.Element {
                         {/* Product introduction */}
                         <Col span={13}>
                             <Title level={3} style={{fontWeight: 500}}>
-                                {postDetail?.title}
+                                {postDetail.title}
                             </Title>
 
-                            <div className='p-color'>{postDetail?.summary}</div>
+                            <div className='p-color'>{postDetail.summary}</div>
                             
                             <div className='mt-2'>
                                 {postDetail?.topics.map(topic => {
@@ -210,7 +219,7 @@ export function PostDetailPage(): JSX.Element {
                         {/* Ranking */}
                         <Col span={8}>
                             {
-                                postDetail?.ranking === '1' &&
+                                postDetail.ranking === '1' &&
                             <TopFeatureBadge
                                 rankTitle='#1 Product of the day'
                                 dateRank={Date.now()}
@@ -224,6 +233,7 @@ export function PostDetailPage(): JSX.Element {
                         {/* Gallery & detail and discussion */}
                         <Col span={16} className='pr-5'>
                             {/* Gallery */}
+                            {/* TODO: Change way of rendering data */}
                             <div className='content-bg rounded shadow p-5 hover:shadow-md transition delay-100'>
                                 <Carousel 
                                     showThumbs={true}
@@ -231,19 +241,21 @@ export function PostDetailPage(): JSX.Element {
                                     showStatus={false}
                                     showIndicators={false}
                                     renderThumbs={children => {
+                                        let j = 0;
                                         return children.map(i => {
-                                            return (<img key={i.toString()} src="https://joeschmoe.io/api/v1/random"/>);
+                                            j++;
+                                            return (<img key={j} src="https://joeschmoe.io/api/v1/random"/>);
                                         });
                                     }}
                                 >
                                     {
-                                        toGallery(postDetail?.galleryImages, postDetail?.videoDemo)
+                                        toGallery(postDetail.galleryImages, postDetail.videoLink)
                                             .map((item, index) => {
                                                 if (item.type === 'image') {
                                                     return (
                                                         <Image
                                                             key={index}
-                                                            src="https://ph-files.imgix.net/02eab590-4b2e-46a0-8eb8-2ec59cc51d2f.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=640&h=380&fit=max&bg=0fff"
+                                                            src={item.src}
                                                             style={contentStyle}
                                                             preview={false}
                                                             alt='alt'
@@ -267,7 +279,7 @@ export function PostDetailPage(): JSX.Element {
                                 </Carousel>
                                 <Divider />
                                 <div className='my-5'>
-                                    {postDetail?.summary}
+                                    {postDetail.summary}
                                 </div>
                                 <div className='my-5'>Have a question about this product? Ask the Makers</div>
                                 <div>
@@ -284,7 +296,7 @@ export function PostDetailPage(): JSX.Element {
                             <div 
                                 className='content-bg rounded shadow mr-3 p-5'
                             >
-                                <CommentContainer/>
+                                <CommentContainer slug={postDetail.slug}/>
 
                                 {/* <Comment
                                     actions={[<span key="comment-nested-reply-to">Reply to</span>]}
@@ -303,19 +315,26 @@ export function PostDetailPage(): JSX.Element {
 
                         {/* Vote & connected information */}
                         <Col span={8}  className='pl-5'>
-                            <Row className='rounded shadow'>
-                                <Col span={12}>
-                                    <Button className='w-full'>
+                            <Row className='rounded'>
+                                <Col span={12} className='pr-2'>
+                                    <Button danger className=' w-full'>
                                         <a href='#'>
                                         Go to product
                                         </a>
                                     </Button>
                                 </Col>
                             
-                                <Col span={12}>
-                                    <Button className='w-full f-center'>
-                                        <CaretUpOutlined/>
-                                        Vote
+                                <Col span={12} className='pl-2'>
+                                    <Button
+                                        className={'w-full center ' + (vote.isVoted ? ' btn ' : '')}
+                                        onClick={handleVote}
+                                    >
+                                        {
+                                            vote.isVoted
+                                                ? <CaretUpOutlined/>
+                                                : <CaretDownFilled/>
+                                        }
+                                        Vote {vote.voteTotal}
                                     </Button>
                                 </Col>
                             </Row>
@@ -357,9 +376,9 @@ export function PostDetailPage(): JSX.Element {
                                     Hunter
                                 </p>
                                 <SimpleCard 
-                                    title={projectMembers.hunter.name}
-                                    description={projectMembers.hunter.position}
-                                    image={projectMembers.hunter.avatar}
+                                    title={postDetail.author.fullName}
+                                    description={postDetail.author.headline}
+                                    image={postDetail.author.avatar}
                                 />
                                 <div>
                                     4 Sip-ers
@@ -367,13 +386,13 @@ export function PostDetailPage(): JSX.Element {
 
                                 <div className='mt-5 maker-container'>
                                     <List
-                                        dataSource={projectMembers.makers}
+                                        dataSource={postDetail.makers}
                                         itemLayout="horizontal"
                                         renderItem={maker => (
                                             <List.Item.Meta
                                                 avatar={<Avatar src={maker.avatar} />}
-                                                title={<a href="https://ant.design">{maker.name}</a>}
-                                                description={maker.position}
+                                                title={<a href="https://ant.design">{maker.fullName}</a>}
+                                                description={maker.headline}
                                             />
                                         )}
                                     />

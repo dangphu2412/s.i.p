@@ -4,6 +4,7 @@ import { createRequest } from '../http/http-request';
 import { Query } from '../query/interface';
 import { parseToSearchParams } from '../query/search-parser';
 import { PostDetail, PostOverview, UpdatePostDto } from './api/post.api';
+import { FetchDetailType } from './constants/get-type';
 import { InitPost, PostDetailRequest } from './post.action';
 
 export function getPostsOverview(query: Query) {
@@ -13,11 +14,33 @@ export function getPostsOverview(query: Query) {
 }
 
 export function getPostDetail(slug: string) {
-    return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`));
+    return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`, {
+        params: parseToSearchParams({
+            filters: [
+                {
+                    column: 'type',
+                    comparator: 'eq',
+                    value: FetchDetailType.DETAIL
+                }
+            ],
+            sorts: [],
+        })
+    }));
 }
 
 export function getPatchPostData(slug: string) {
-    return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`));
+    return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`, {
+        params: parseToSearchParams({
+            filters: [
+                {
+                    column: 'type',
+                    comparator: 'eq',
+                    value: FetchDetailType.EDIT
+                }
+            ],
+            sorts: [],
+        })
+    }));
 }
 
 export function createInitialPost(data: InitPost) {

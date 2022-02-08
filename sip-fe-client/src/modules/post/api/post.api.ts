@@ -19,31 +19,25 @@ export interface PostDetail {
   id: string;
   title: string;
   slug: string;
-  content: string;
   summary: string;
-  thumbnail: string;
-  previewGalleryImg: string;
-  galleryImages: string[];
-  videoDemo: string;
+  description: string;
+
   productLink: string;
+  facebookLink: string;
+  videoLink: string;
+  thumbnail: string;
+  socialPreviewImage: string;
+  galleryImages: string[];
+  pricingType: PricingType;
+
   isVoted: boolean;
   totalVotes: number;
+
+  makers: Author[];
   topics: Topic[];
   author: Author;
 
   ranking: string;
-}
-
-export interface ProjectMember {
-  id: string,
-  avatar: string,
-  name: string,
-  position: string
-}
-
-export interface ProjectMembers {
-  hunter: ProjectMember,
-  makers: ProjectMember[]
 }
 
 export interface PatchPostDetail {

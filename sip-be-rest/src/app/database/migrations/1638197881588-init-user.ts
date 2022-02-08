@@ -21,6 +21,7 @@ export class initUser1638197881588 implements MigrationInterface {
     user.password = await new BcryptService().hash('Sgroup123@@');
     user.permissions = [adminPermission];
     user.avatar = ConfigService.get('DEFAULT_AVATAR');
+    user.headline = 'Im admin';
     queryRunner.manager.save(user);
   }
 

@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 
 export function TopicDetailPage(): JSX.Element {
-    const { topicId } = useParams();
+    const { slug } = useParams();
 
-    if (!topicId) {
+    if (!slug) {
         throw new Error('Missing topic id when render topic detail. Please check routing');
     }
 

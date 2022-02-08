@@ -1,9 +1,8 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    Avatar, Button, Col, Divider, Dropdown, Form, Image,
-    Input, List, Menu, Radio, Row, Space, Upload, Checkbox, Modal,
-    Steps
+    Avatar, Button, Checkbox, Col, Divider, Dropdown, Form, Image,
+    Input, List, Menu, Modal, Radio, Row, Space, Steps, Upload
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Title from 'antd/lib/typography/Title';
@@ -21,14 +20,13 @@ import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { PatchPostDetail } from 'src/modules/post/api/post.api';
 import { PostStatus, PricingType, ProductRunningStatus } from 'src/modules/post/constants/post-status.enum';
 import { PostActions } from 'src/modules/post/post.action';
+import { getUploadUrl } from 'src/modules/post/post.service';
 import { Topic } from 'src/modules/topic/api/topic.api';
 import { TopicActions } from 'src/modules/topic/topic.action';
 import { Author } from 'src/modules/user/api/user.api';
 import { UserActions } from 'src/modules/user/user.action';
 import { ArrayUtils } from 'src/utils/array.utils';
 import './create-post-detail.scss';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { getUploadUrl } from 'src/modules/post/post.service';
 
 interface MenuProps {
     key: DetailMenu;

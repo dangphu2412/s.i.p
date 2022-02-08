@@ -13,3 +13,6 @@ export const restoreAction = createAction<void>('AUTH/RESTORE');
 export const restoreSuccessAction = createAction<void>('AUTH/RESTORE_SUCCESS');
 export const restoreFailedAction = createAction<void>('AUTH/RESTORE_FAILED');
 export const restoreFinishAction = createAction<void>('AUTH/RESTORE_FINISH');
+
+export const openAuthPopupAction = createAction<void>('AUTH/OPEN_AUTH_POPUP');
+export const closeAuthPopupAction = createAction<void>('AUTH/CLOSE_AUTH_POPUP');

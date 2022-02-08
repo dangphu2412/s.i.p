@@ -1,5 +1,5 @@
 import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import React from 'react';
 
@@ -20,16 +20,16 @@ export function FilterDropdown(props: FilterDropdownProps): JSX.Element {
                 <Menu onClick={handleFilterChosen}>
                     {
                         props.options.map(option => {
-                            return <Menu.Item key={option}>
+                            return <Menu.Item danger key={option}>
                                 {option}
                             </Menu.Item>;
                         })
                     }
                 </Menu>
             }>
-                <a className="btn-color text-lg" onClick={e => e.preventDefault()}>
+                <Button danger>
                     {props.selectedValue} <DownOutlined />
-                </a>
+                </Button>
             </Dropdown>
         </div>
     );

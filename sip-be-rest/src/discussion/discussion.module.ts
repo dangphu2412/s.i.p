@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { DiscussionService } from './discussion.service';
-import { DiscussionController } from './discussion.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DiscussionController } from './discussion.controller';
 import { Discussion } from './discussion.entity';
-import { UserModule } from '@user/user.module';
+import { DiscussionService } from './discussion.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Discussion]), UserModule],
+  imports: [TypeOrmModule.forFeature([Discussion])],
   controllers: [DiscussionController],
   providers: [DiscussionService],
   exports: [DiscussionService],

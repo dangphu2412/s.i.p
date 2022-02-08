@@ -123,8 +123,6 @@ export function CreatePostPage(): JSX.Element {
                         </div>
                     }
 
-
-
                     <Form
                         labelCol={{span: 4}}
                         labelAlign='left'

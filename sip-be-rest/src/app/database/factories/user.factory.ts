@@ -18,6 +18,7 @@ define(
     user.hashTag = fullName;
     user.permissions = permissions;
     user.password = password;
+    user.headline = faker.lorem.words(5);
 
     return user;
   },

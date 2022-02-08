@@ -7,3 +7,5 @@ export const selectProfile = (state: AppState): Profile  | undefined => state.au
 
 export const selectIsLoggingIn = (state: AppState): boolean => state.auth.authState === AuthType.LOGGED_IN;
 export const selectRestoreStatus = (state: AppState): boolean | undefined => state.auth.restoreStatus;
+
+export const selectModalOpenState = (state: AppState): boolean | undefined => state.auth.modalOpened;

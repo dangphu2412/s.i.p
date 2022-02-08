@@ -1,7 +1,10 @@
+import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
+import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { toPage } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -19,11 +22,13 @@ import {
   Protected,
 } from 'src/auth/decorator/protected.decorator';
 import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { InitPostDto } from './dto/init-post.dto';
-import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
-import { PostService } from './post.service';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { FetchDetailType } from './enums/fetch-post-type.enum';
 import { PostStatus } from './enums/post-status.enum';
+import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
+import { FetchPostsDetailValidator } from './pipes/post-detail.validator';
+import { PostService } from './post.service';
 
 @ApiTags('posts')
 @Controller('v1/posts')
@@ -73,20 +78,59 @@ export class PostController {
   findOne(
     @Param('slug') slug: string,
     @AuthContext() author: UserCredential | undefined,
+    @SearchQuery(FetchPostsDetailValidator) searchCriteria: SearchCriteria,
   ) {
-    return this.postService.findOne(slug, author);
+    const getType = FilterUtils.get(searchCriteria.filters, 'type');
+    switch (getType) {
+      case FetchDetailType.DETAIL:
+        return this.postService.findOneForDetail(slug, author);
+      case FetchDetailType.EDIT:
+        return this.postService.findOneForEdit(slug);
+      default:
+        throw new BadRequestException('Invalid type to fetch detail post data');
+    }
   }
 
-  @Get(':id/discussions')
+  @Get(':slug/comments')
   async findRelatedDiscussions(
-    @Param('id') id: string,
+    @Param('slug') slug: string,
     @SearchQuery() searchCriteria: SearchCriteria,
   ) {
     const discussions = await this.postService.findRelatedDiscussions(
-      +id,
+      slug,
       searchCriteria,
     );
     return toPage(discussions, searchCriteria);
+  }
+
+  @Protected
+  @Post(':slug/comments')
+  async createComment(
+    @Param('slug') slug: string,
+    @Body() createDiscussionDto: CreateDiscussionDto,
+    @AuthContext() author: UserCredential,
+  ) {
+    return this.postService.createCommentOfPost(
+      slug,
+      createDiscussionDto,
+      author,
+    );
+  }
+
+  @Protected
+  @Post(':slug/comments/:commentId/replies')
+  async createReply(
+    @Param('slug') slug: string,
+    @Param('commentId') commentId: string,
+    @Body() createDiscussionDto: CreateDiscussionDto,
+    @AuthContext() author: UserCredential,
+  ) {
+    return this.postService.createReplyOfPost(
+      slug,
+      commentId,
+      createDiscussionDto,
+      author,
+    );
   }
 
   @Delete(':id')

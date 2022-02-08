@@ -40,6 +40,9 @@ export class User extends TimeEntityGenerator() {
   @Column({ name: 'avatar' })
   public avatar: string;
 
+  @Column({ name: 'headline' })
+  public headline: string;
+
   @ManyToMany(() => Permission, (per) => per.users, { cascade: ['remove'] })
   @JoinTable({
     name: 'users_permissions',

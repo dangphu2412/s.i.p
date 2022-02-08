@@ -24,7 +24,7 @@ export function Footer(): JSX.Element {
             {
                 infoLinks.map(info => {
                     return <a
-                        className='mr-3'
+                        className='mr-3 btn-color'
                         key={info.body}
                         href={info.link}
                         target='_blank' rel="noreferrer"

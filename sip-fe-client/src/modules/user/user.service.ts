@@ -10,3 +10,7 @@ export function searchMakers(query: Query) {
         headers: {}
     }));
 }
+
+export function findSiper(hashTag: string) {
+    return createRequest<Author[], Record<string, unknown>>(axios.get(`/v1/users/sipers/${hashTag}`));
+}

@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
+import { selectAuthState } from 'src/modules/auth/auth.selector';
 import { Page } from 'src/modules/query/interface';
 import { selectDataHolderByView } from '../../../data/data.selector';
 import { PostOverview } from '../../api/post.api';
@@ -26,6 +27,7 @@ export function CardContainer(): JSX.Element {
     });
 
     const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_OVERVIEW));
+    const authState = useSelector(selectAuthState);
     
     useEffect(() => {
         setPosts([]);
@@ -86,6 +88,7 @@ export function CardContainer(): JSX.Element {
                             <CardItemOverview
                                 key={post.id}
                                 data={post}
+                                authType={authState}
                             />
                         </a>;
                     })

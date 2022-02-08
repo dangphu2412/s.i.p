@@ -5,10 +5,4 @@ export class CreateDiscussionDto {
   @ApiProperty()
   @IsString()
   public content: string;
-
-  @ApiProperty()
-  @IsNumber()
-  public postId: number;
-
-  public authorId: number;
 }

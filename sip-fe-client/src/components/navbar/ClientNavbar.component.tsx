@@ -54,7 +54,7 @@ export function ClientNavbar(): JSX.Element {
         <div className='shadow-sm cover-bg'>
             <div className='header-wrapper flex justify-between flex-row'>
                 <div className='p-left-container flex flex-row items-center'>
-                    <Button className='btn-bg btn-bg-hover' shape="circle" size='large'>
+                    <Button danger className='btn-bg btn-bg-hover' shape="circle" size='large'>
                         <a href='/'>S.I.P</a>
                     </Button>
 
@@ -103,7 +103,7 @@ export function ClientNavbar(): JSX.Element {
                             ? <Dropdown overlay={
                                 <Menu mode={'horizontal'}>
                                     <Menu.Item key="1">
-                                        <Link to={`/siper/${profile?.username}`}>
+                                        <Link to={`/sipers/${profile?.username}`}>
                                             Profile
                                         </Link>
                                     </Menu.Item>
@@ -128,6 +128,7 @@ export function ClientNavbar(): JSX.Element {
                                 className="ant-dropdown-link btn-bg btn-bg-hover"
                                 shape="circle"
                                 size='large' 
+                                danger
                                 onClick={() => loginGoogle()}
                             >
                                 <GoogleOutlined/>

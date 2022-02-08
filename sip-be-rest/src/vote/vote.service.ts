@@ -40,4 +40,12 @@ export class VoteService {
   public async didUserVoteForPost(author: User, post: Post) {
     return (await this.findByAuthorAndPosts(author, [post])).length > 0;
   }
+
+  public countTotalVotesForPost(post: Post): Promise<number> {
+    return this.voteRepository.count({
+      where: {
+        post,
+      },
+    });
+  }
 }

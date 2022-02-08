@@ -1,3 +1,5 @@
+import { DiscussionService } from 'src/discussion/discussion.service';
+import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayMapper } from '@external/mappers/array.mapper';
 import {
@@ -8,6 +10,7 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Topic } from '@topic/topic.entity';
 import { TopicService } from '@topic/topic.service';
 import { User } from '@user/user.entity';
@@ -16,8 +19,8 @@ import { Vote } from '@vote/vote.entity';
 import { VoteService } from '@vote/vote.service';
 import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
-import { DiscussionService } from 'src/discussion/discussion.service';
 import { UserService } from 'src/user/user.service';
+import { Repository } from 'typeorm';
 import { ArrayUtils } from '../external/utils/array/array.utils';
 import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
 import { PostOverview } from './client/post-overview.api';
@@ -31,6 +34,7 @@ import {
 } from './enums/post-status.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
+import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
 
 @Injectable()
 export class PostService {
@@ -38,11 +42,11 @@ export class PostService {
     private readonly postRepository: PostRepository,
     private readonly voteService: VoteService,
     private readonly userService: UserService,
-    private readonly discussionService: DiscussionService,
     private readonly topicService: TopicService,
+    private readonly discussionService: DiscussionService,
   ) {}
 
-  async init(initPostDto: InitPostDto, authContext: UserCredential) {
+  public async init(initPostDto: InitPostDto, authContext: UserCredential) {
     const isTitleConflict = await this.postRepository.isTitleConflict(
       initPostDto.title,
     );
@@ -85,6 +89,56 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
+  public async createCommentOfPost(
+    slug: string,
+    createDiscussionDto: CreateDiscussionDto,
+    authContext: UserCredential,
+  ) {
+    const post = await this.postRepository.findBySlug(slug);
+
+    if (!post) {
+      throw new NotFoundException('Not found post with slug ' + slug);
+    }
+
+    const author = await this.userService.findById(+authContext.userId);
+
+    if (!author) {
+      throw new UnprocessableEntityException('User is not available');
+    }
+
+    return this.discussionService.createComment(
+      post,
+      createDiscussionDto,
+      author,
+    );
+  }
+
+  public async createReplyOfPost(
+    slug: string,
+    commentId: string,
+    createDiscussionDto: CreateDiscussionDto,
+    authContext: UserCredential,
+  ) {
+    const post = await this.postRepository.findBySlug(slug);
+
+    if (!post) {
+      throw new NotFoundException('Not found post with slug ' + slug);
+    }
+
+    const author = await this.userService.findById(+authContext.userId);
+
+    if (!author) {
+      throw new UnprocessableEntityException('User is not available');
+    }
+
+    return this.discussionService.createReply(
+      commentId,
+      createDiscussionDto,
+      author,
+      post,
+    );
+  }
+
   public async findMany(
     searchQuery: SearchCriteria,
     author: UserCredential | undefined,
@@ -111,12 +165,15 @@ export class PostService {
     return posts;
   }
 
-  async findOne(slug: string, optionalAuthor: UserCredential | undefined) {
+  public async findOneForDetail(
+    slug: string,
+    optionalAuthor: UserCredential | undefined,
+  ) {
     const post = await this.postRepository.findOne({
       where: {
         slug,
       },
-      relations: ['topics', 'makers'],
+      relations: ['author', 'topics', 'makers'],
     });
 
     if (!post) {
@@ -129,28 +186,38 @@ export class PostService {
       const author: User = await this.userService.findById(
         +optionalAuthor.userId,
       );
-      const isVoted: boolean = await this.voteService.didUserVoteForPost(
-        author,
-        post,
-      );
-      if (isVoted) {
-        post.isVoted = true;
-      }
+      post.isVoted = await this.voteService.didUserVoteForPost(author, post);
     }
 
-    return post;
+    const totalVotes = await this.voteService.countTotalVotesForPost(post);
+
+    return {
+      ...post,
+      totalVotes,
+    };
   }
 
-  async findRelatedDiscussions(postId: number, searchCriteria: SearchCriteria) {
-    const post = await this.postRepository.findOne(postId);
+  public findOneForEdit(slug: string) {
+    return this.postRepository.findOne({
+      where: {
+        slug,
+      },
+      relations: ['author', 'topics', 'makers'],
+    });
+  }
+
+  public async findRelatedDiscussions(
+    slug: string,
+    searchCriteria: SearchCriteria,
+  ) {
+    const post = await this.postRepository.findBySlug(slug);
 
     if (!post) {
       throw new UnprocessableEntityException(
-        `Post with id: ${postId} does not exist that cannot find discussions`,
+        `Post with id: ${slug} does not exist that cannot find discussions`,
       );
     }
-
-    return this.discussionService.findRelatedDiscussions(post, searchCriteria);
+    return this.discussionService.findDiscussionsOfPost(post, searchCriteria);
   }
 
   public remove(id: number) {
@@ -170,7 +237,7 @@ export class PostService {
     }
   }
 
-  async upsertVoteOfPost(postId: number, author: UserCredential) {
+  public async upsertVoteOfPost(postId: number, author: UserCredential) {
     const post = await this.postRepository.findOne(postId);
 
     // Need to specify case where post is disable or this id is not valid
@@ -196,7 +263,7 @@ export class PostService {
     return this.voteService.upsertOne(voteDto);
   }
 
-  async saveAsDraft(id: number, updatePostDto: UpdatePostDto) {
+  private async saveAsDraft(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.postRepository.findOne(id, {
       relations: ['topics', 'makers'],
     });
@@ -279,7 +346,7 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  async publish(id: number, updatePostDto: UpdatePostDto) {
+  private async publish(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.postRepository.findOne(id, {
       relations: ['topics', 'makers'],
     });

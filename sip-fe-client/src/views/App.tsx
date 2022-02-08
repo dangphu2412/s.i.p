@@ -15,6 +15,8 @@ import { TopicDetailPage } from './topic/TopicDetailPage';
 import { TopicOverviewPage } from './topic/TopicOverviewPage';
 import { CreateDetailPostPage } from './post/CreateDetailPostPage';
 import { registerErrors } from 'src/modules/http/http-request';
+import { Profile } from './user/Profile';
+import { Products } from './user/Products';
 
 configApp();
 
@@ -27,14 +29,16 @@ function App(): JSX.Element {
                     {
                         AuthRouteMapper.toRoutes([
                             { path: '/success', element: LoginSuccessPage },
-                            { path: '/posts/:postId', element: PostDetailPage },
+                            { path: '/posts/:slug', element: PostDetailPage },
                             { path: '/posts/new/:slug', element: CreateDetailPostPage, protected: true },
                             { path: '/posts/new', element: CreatePostPage, protected: true },
                             { path: '/topics', element: TopicOverviewPage,
                                 children: [
-                                    { path: '/topics/:topicId', element: TopicDetailPage }
+                                    { path: '/topics/:slug', element: TopicDetailPage }
                                 ] 
                             },
+                            { path: '/sipers/:slug', element: Profile, protected: true },
+                            { path: '/me/products', element: Products, protected: true },
                             { path: '/', element: HomePage }
                         ], {
                             noPublicGuard: true

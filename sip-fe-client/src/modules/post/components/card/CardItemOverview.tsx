@@ -4,31 +4,38 @@ import { Button, Card, Col, Image, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { openAuthPopupAction } from 'src/modules/auth/auth.action';
+import { AuthType } from 'src/modules/auth/auth.reducer';
 import { voteForPost } from 'src/modules/vote/vote.action';
 import { PostSummary } from '../../api/post.api';
 import './index.scss';
 
-interface VoteState {
+export interface VoteState {
     isVoted: boolean;
     voteTotal: number;
 }
 
 interface CardItemOverviewProps {
-    data: PostSummary
+    data: PostSummary;
+    authType: AuthType;
 }
 
-export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
+export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX.Element {
     const dispatch = useDispatch();
     const [vote, setVote] = useState<VoteState>({
-        isVoted: props.data.isAuthor,
-        voteTotal: +props.data.totalVotes
+        isVoted: data.isAuthor,
+        voteTotal: +data.totalVotes
     });
 
     function handleVote(e: React.MouseEvent<HTMLElement, MouseEvent>): void {
-        dispatch(voteForPost({
-            postId: props.data.id
-        }));
         e.preventDefault();
+        if (authType !== AuthType.LOGGED_IN) {
+            dispatch(openAuthPopupAction());
+            return;
+        }
+        dispatch(voteForPost({
+            postId: data.id
+        }));
         setVote({
             isVoted: !vote.isVoted,
             voteTotal: vote.isVoted ? vote.voteTotal - 1 : vote.voteTotal + 1
@@ -54,11 +61,11 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                     </Col>
                     <Col span={18}>
                         <Title level={4}>
-                            {props.data.title}
+                            {data.title}
                         </Title>
 
                         <div>
-                            {props.data.summary}
+                            {data.summary}
                         </div>
                         <div className='mt-3'>
                             <span className='mr-3'>
@@ -66,14 +73,14 @@ export function CardItemOverview(props: CardItemOverviewProps): JSX.Element {
                                 80
                             </span>
                             {
-                                props.data.topics.map((topic, index) => {
+                                data.topics.map((topic, index) => {
                                     return <span className='mr-2' key={index}>{topic.name}</span>;
                                 })
                             }
                         </div>
                     </Col>
                     <Col span={4}>
-                        <Button className={'upvote-style ' + (vote.isVoted ? 'btn' : '')} onClick={handleVote}>
+                        <Button className={vote.isVoted ? 'upvote-style btn': 'upvote-style'} onClick={handleVote}>
                             { 
                                 vote.isVoted ?
                                     <CaretUpOutlined/> 

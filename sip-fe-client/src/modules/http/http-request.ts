@@ -59,7 +59,6 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
 
     function* getDataSafe() {
         if (errorMsg) {
-            console.log(errorMsg);
             yield put(fireError({ message: errorMsg }));
         }
         return data;

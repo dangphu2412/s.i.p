@@ -26,9 +26,10 @@ import { ArrayMapper } from '@external/mappers/array.mapper';
 export class UserService {
   private logger: Logger;
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
-    private permissionService: PermissionService,
-    private bcryptService: BcryptService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly permissionService: PermissionService,
+    private readonly bcryptService: BcryptService,
   ) {
     this.logger = new Logger(UserService.name);
   }
@@ -51,6 +52,7 @@ export class UserService {
     newUser.hashTag = createUserDto.username;
     newUser.password = await this.bcryptService.hash(newUser.password);
     newUser.avatar = newUser.avatar || ConfigService.getCache('DEFAULT_AVATAR');
+    newUser.headline = '';
 
     return this.createUser(newUser);
   }
@@ -64,6 +66,7 @@ export class UserService {
       fullName,
       avatar: payload.picture,
       password: '',
+      headline: '',
     });
     return this.createUser(newUser);
   }
