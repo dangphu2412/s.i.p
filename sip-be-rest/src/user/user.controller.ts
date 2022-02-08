@@ -13,12 +13,14 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { FetchUsersOverviewValidator } from './pipes/overview-search.validator';
 import { UserService } from './user.service';
 
@@ -47,6 +49,15 @@ export class UserController {
   @Post()
   public createOne(@Body() createUserDto: CreateUserDto) {
     return this.userService.createOne(createUserDto);
+  }
+
+  @Protected
+  @Patch('/profile')
+  public updateProfile(
+    @Body() profile: UpdateProfileDto,
+    @AuthContext() authContext: UserCredential,
+  ) {
+    return this.userService.updateProfile(+authContext.userId, profile);
   }
 
   @Post('/:userId/permissions')

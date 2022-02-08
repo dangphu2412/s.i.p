@@ -6,6 +6,7 @@ export interface Profile {
   username: string;
   avatar: string;
   fullName: string;
+  headline: string;
 }
 
 export function getLoginUrl(): string {

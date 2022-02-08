@@ -17,6 +17,7 @@ import { CreateDetailPostPage } from './post/CreateDetailPostPage';
 import { registerErrors } from 'src/modules/http/http-request';
 import { Profile } from './user/Profile';
 import { Products } from './user/Products';
+import { Settings } from './user/Settings';
 
 configApp();
 
@@ -39,6 +40,7 @@ function App(): JSX.Element {
                             },
                             { path: '/sipers/:slug', element: Profile, protected: true },
                             { path: '/me/products', element: Products, protected: true },
+                            { path: '/settings', element: Settings, protected: true },
                             { path: '/', element: HomePage }
                         ], {
                             noPublicGuard: true

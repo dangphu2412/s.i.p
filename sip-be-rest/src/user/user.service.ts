@@ -1,3 +1,4 @@
+import { UserCredential } from './../auth/client/user-cred';
 import { ConfigService } from '@external/config/config.service';
 import { toOrders } from '@external/crud/common/pipes/order.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
@@ -21,6 +22,7 @@ import { GrantPermissionDto } from './dto/grant-permission.dto';
 import { User } from './user.entity';
 import { PermissionService } from '@permission/permission.service';
 import { ArrayMapper } from '@external/mappers/array.mapper';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class UserService {
@@ -123,6 +125,19 @@ export class UserService {
         id: In(ids),
       },
     });
+  }
+
+  public async updateProfile(userId: number, profile: UpdateProfileDto) {
+    const user = await this.userRepository.findOne(userId);
+
+    if (!user) {
+      throw new UnprocessableEntityException('User is no longer available');
+    }
+
+    user.avatar = profile.avatar;
+    user.headline = profile.headline;
+    user.fullName = profile.fullName;
+    return this.userRepository.save(user);
   }
 
   public extractProfile(user: User): Profile {

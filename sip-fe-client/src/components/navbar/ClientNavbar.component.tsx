@@ -84,8 +84,8 @@ export function ClientNavbar(): JSX.Element {
                 </div>     
                 
                 <div className='p-right-container f-center' >
-                    <Dropdown overlay={
-                        <Menu mode={'horizontal'}>
+                    <Dropdown placement='bottomRight' overlay={
+                        <Menu>
                             <Menu.Item key="1">
                                 <Link to='/posts/new'>
                                     Create new product
@@ -102,6 +102,11 @@ export function ClientNavbar(): JSX.Element {
                         authState === AuthType.LOGGED_IN
                             ? <Dropdown overlay={
                                 <Menu mode={'horizontal'}>
+                                    <Menu.Item key="2">
+                                        <Link to='/settings'>
+                                            My settings
+                                        </Link>
+                                    </Menu.Item>
                                     <Menu.Item key="1">
                                         <Link to={`/sipers/${profile?.username}`}>
                                             Profile
