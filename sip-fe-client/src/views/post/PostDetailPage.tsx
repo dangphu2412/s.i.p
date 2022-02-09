@@ -1,4 +1,4 @@
-import { CaretUpOutlined, CaretDownFilled, FacebookFilled, InstagramFilled } from '@ant-design/icons';
+import { CaretDownFilled, CaretUpOutlined, FacebookFilled, InstagramFilled } from '@ant-design/icons';
 import { Avatar, Button, Col, Divider, Image, List, Row, Tooltip } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
@@ -127,8 +127,7 @@ export function PostDetailPage(): JSX.Element {
         voteTotal: +postDetail.totalVotes
     });
 
-    const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_DETAIL));
-    const commentsDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_COMMENTS));
+    const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_DETAIL));
     const authType = useSelector(selectAuthState);
 
     if (!slug) {

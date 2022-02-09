@@ -13,6 +13,12 @@ export function getPostsOverview(query: Query) {
     }));
 }
 
+export function getSelfIdeas(query: Query) {
+    return createRequest<PostOverview, Query>(axios.get('/v1/posts/me', {
+        params: parseToSearchParams(query)
+    }));
+}
+
 export function getPostDetail(slug: string) {
     return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`, {
         params: parseToSearchParams({

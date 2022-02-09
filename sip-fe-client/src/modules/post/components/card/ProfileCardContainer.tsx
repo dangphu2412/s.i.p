@@ -1,38 +1,38 @@
-import { Button, Skeleton, Spin } from 'antd';
+import { Skeleton, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
+import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { Page } from 'src/modules/query/interface';
-import { selectDataHolderByView } from '../../../data/data.selector';
 import { PostOverview } from '../../api/post.api';
-import { PostFilter } from '../../constants/post-filter.enum';
 import { PostActions } from '../../post.action';
-import { FilterDropdown } from '../dropdown/FilterDropdown';
 import { CardItemOverview } from './CardItemOverview';
 
-// UI to load posts
-export function CardContainer(): JSX.Element {
+export function ProfileCardContainer() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const [posts, setPosts] = useState<PostOverview>([]);
     const [isLoading, setLoading] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState<PostFilter>(PostFilter.HOTTEST);
     const [page, setPage] = useState<Page>({
         page: 0,
         size: 20
     });
 
-    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_OVERVIEW));
+    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_SELF_IDEAS));
     const authState = useSelector(selectAuthState);
     
     useEffect(() => {
-        setPosts([]);
-        loadMorePosts();
-    }, [selectedFilter]);
+        dispatch(PostActions.getSelfIdeas({
+            page,
+            filters: []
+        }));
+        setPage({
+            ...page,
+            page: page.page + 1,
+        });
+    }, []);
 
     useEffect(() => {
         if (dataHolder?.data) {
@@ -45,15 +45,9 @@ export function CardContainer(): JSX.Element {
     function loadMorePosts() {
         setLoading(true);
 
-        dispatch(PostActions.getOverviewData({
+        dispatch(PostActions.getSelfIdeas({
             page,
-            filters: [
-                {
-                    column: 'type',
-                    comparator: 'eq',
-                    value: selectedFilter
-                }
-            ]
+            filters: []
         }));
 
         setPage({
@@ -66,12 +60,6 @@ export function CardContainer(): JSX.Element {
     
     return (
         <div>
-            <FilterDropdown
-                selectedValue={selectedFilter}
-                setSelected={setSelectedFilter}
-                options={Object.values(PostFilter)}
-            />
-
             <InfiniteScroll
                 dataLength={posts.length}
                 next={loadMorePosts}

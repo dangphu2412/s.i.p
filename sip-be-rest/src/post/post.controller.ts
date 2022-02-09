@@ -74,6 +74,21 @@ export class PostController {
   }
 
   @OptionalProtected
+  @Get('/users/:hashTag')
+  async findPostsOfAuthor(
+    @Param('hashTag') hashTag: string,
+    @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
+    @AuthContext() author: UserCredential | undefined,
+  ) {
+    const posts = await this.postService.findPostsOfAuthor(
+      searchQuery,
+      hashTag,
+      author,
+    );
+    return toPage(posts, searchQuery);
+  }
+
+  @OptionalProtected
   @Get(':slug')
   findOne(
     @Param('slug') slug: string,

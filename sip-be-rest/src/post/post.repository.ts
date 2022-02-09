@@ -1,5 +1,6 @@
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
+import { User } from '@user/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { PostOverview } from './client/post-overview.api';
 import { Post } from './post.entity';
@@ -68,6 +69,10 @@ export class PostRepository extends Repository<Post> {
       queryBuilder.where(`topics.name = :topicName`, { topicName });
     }
     return <Promise<PostOverview>>queryBuilder.getMany();
+  }
+
+  public findPostsOfAuthor(searchQuery: SearchCriteria, author: User) {
+    return;
   }
 
   public async isTitleConflict(title: string): Promise<boolean> {

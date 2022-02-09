@@ -165,6 +165,21 @@ export class PostService {
     return posts;
   }
 
+  public async findPostsOfAuthor(
+    searchQuery: SearchCriteria,
+    hashTag: string,
+    authContext: UserCredential | undefined,
+  ) {
+    const user = await this.userService.findByHashTag(hashTag);
+    const posts: PostOverview = await this.postRepository.findPostsOfAuthor(
+      searchQuery,
+      user,
+    );
+
+    await this.markAuthorForPosts(posts, authContext);
+    return posts;
+  }
+
   public async findOneForDetail(
     slug: string,
     optionalAuthor: UserCredential | undefined,

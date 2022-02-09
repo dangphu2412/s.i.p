@@ -113,7 +113,7 @@ export function CreateDetailPostPage() {
     const [loading, setLoading] = useState<boolean>(false);
 
     const profile: Profile | undefined = useSelector(selectProfile);
-    const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.POST_PATCH_DETAIL));
+    const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_PATCH_DETAIL));
     const [data, setData] = useState<PatchPostDetail>({
         id: 'UNKNOWN',
         title: '',

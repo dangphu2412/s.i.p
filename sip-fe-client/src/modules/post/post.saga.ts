@@ -7,7 +7,7 @@ import { Query } from '../query/interface';
 import { fireError } from './../error/error.action';
 import { PatchPostDetail, UpdatePostDto } from './api/post.api';
 import { PostActions, PostDetailRequest } from './post.action';
-import { getPatchPostData, getPostDetail, getPostsOverview, updatePostData } from './post.service';
+import { getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
 
 export function* PostSagaTree() {
     yield takeLatest(
@@ -18,6 +18,11 @@ export function* PostSagaTree() {
     yield takeLatest(
         PostActions.getDetailData.type,
         handleFetchPostDetail
+    );
+
+    yield takeLatest(
+        PostActions.getSelfIdeas.type,
+        handleFetchSelfIdeas
     );
 
     yield takeLatest(
@@ -41,7 +46,21 @@ function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
     yield put(saveData({
         data: data.data,
         query: {},
-        view: VIEW_SELECTOR.POST_OVERVIEW
+        view: VIEW_SELECTOR.FIND_POST_OVERVIEW
+    }));
+}
+
+function* handleFetchSelfIdeas(action: PayloadAction<Query>): SagaIterator {
+    const request = getSelfIdeas({
+        page: action.payload.page,
+        filters: action.payload.filters,
+        sorts: []
+    });
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data: data.data,
+        query: {},
+        view: VIEW_SELECTOR.FIND_POST_SELF_IDEAS
     }));
 }
 
@@ -50,7 +69,7 @@ function* handleFetchPostDetail(action: PayloadAction<PostDetailRequest>): SagaI
     const data = yield call(request.handle);
     yield put(saveData({
         data,
-        view: VIEW_SELECTOR.POST_DETAIL
+        view: VIEW_SELECTOR.FIND_POST_DETAIL
     }));
 }
 
@@ -59,7 +78,7 @@ function* handleFetchPatchPostData(action: PayloadAction<PostDetailRequest>): Sa
     const data = yield call(request.handle);
     yield put(saveData({
         data,
-        view: VIEW_SELECTOR.POST_PATCH_DETAIL
+        view: VIEW_SELECTOR.FIND_POST_PATCH_DETAIL
     }));
 }
 

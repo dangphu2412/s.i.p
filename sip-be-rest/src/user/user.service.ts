@@ -115,6 +115,14 @@ export class UserService {
     });
   }
 
+  public findByHashTag(hashTag: string) {
+    return this.userRepository.findOne({
+      where: {
+        hashTag,
+      },
+    });
+  }
+
   public findById(id: number) {
     return this.userRepository.findOne(id);
   }
