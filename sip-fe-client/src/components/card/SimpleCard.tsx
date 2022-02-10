@@ -1,5 +1,5 @@
+import { Col, Row, Avatar } from 'antd';
 import React from 'react';
-import {Row, Col, Image} from 'antd';
 
 export interface SimpleCardProps {
     image: string;
@@ -11,10 +11,8 @@ export function SimpleCard(props: SimpleCardProps): JSX.Element {
     return (
         <Row>
             <Col span={4}>
-                <Image
+                <Avatar
                     src={props.image}
-                    style={{ width: 30, height: 30 }}
-                    preview={false}
                 />
             </Col>
 

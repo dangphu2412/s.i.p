@@ -380,7 +380,7 @@ export function PostDetailPage(): JSX.Element {
                                     image={postDetail.author.avatar}
                                 />
                                 <div>
-                                    4 Sip-ers
+                                    {postDetail.makers.length} Sip-ers
                                 </div>
 
                                 <div className='mt-5 maker-container'>

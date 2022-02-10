@@ -7,6 +7,7 @@ export interface Profile {
   avatar: string;
   fullName: string;
   headline: string;
+  hashTag: string;
 }
 
 export function getLoginUrl(): string {

@@ -72,7 +72,35 @@ export class PostRepository extends Repository<Post> {
   }
 
   public findPostsOfAuthor(searchQuery: SearchCriteria, author: User) {
-    return;
+    const queryBuilder = this.createQueryBuilder('posts')
+      .addSelect(`post_ordered_by_votes.total_votes as "posts_total_votes"`)
+      .innerJoin(
+        (qb) => {
+          qb.select('posts.id as id, COUNT(votes.id) as total_votes')
+            .from(Post, 'posts')
+            .leftJoin(
+              'votes',
+              'votes',
+              'votes.post_id = posts.id AND votes.is_voted = true',
+            )
+            .leftJoin(
+              'users',
+              'author',
+              `author.id = posts.authorId AND posts.authorId = ${author.id}`,
+            )
+            .groupBy('posts.id')
+            .limit(searchQuery.limit)
+            .offset(searchQuery.offset)
+            .orderBy('total_votes', 'DESC');
+          return qb;
+        },
+        'post_ordered_by_votes',
+        'post_ordered_by_votes.id = posts.id',
+      )
+      .leftJoinAndSelect('posts.topics', 'topics')
+      .leftJoinAndSelect('posts.author', 'author')
+      .orderBy('posts_total_votes', 'DESC');
+    return <Promise<PostOverview>>queryBuilder.getMany();
   }
 
   public async isTitleConflict(title: string): Promise<boolean> {

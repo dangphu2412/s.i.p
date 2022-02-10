@@ -1,5 +1,4 @@
 import { DiscussionService } from 'src/discussion/discussion.service';
-import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayMapper } from '@external/mappers/array.mapper';
 import {
@@ -7,10 +6,8 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Topic } from '@topic/topic.entity';
 import { TopicService } from '@topic/topic.service';
 import { User } from '@user/user.entity';
@@ -20,9 +17,8 @@ import { VoteService } from '@vote/vote.service';
 import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { UserService } from 'src/user/user.service';
-import { Repository } from 'typeorm';
-import { ArrayUtils } from '../external/utils/array/array.utils';
-import { UpsertVoteDto } from './../vote/dto/upsert-vote.dto';
+import { ArrayUtils } from '@external/utils/array/array.utils';
+import { UpsertVoteDto } from '@vote/dto/upsert-vote.dto';
 import { PostOverview } from './client/post-overview.api';
 import { InitPostDto } from './dto/init-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -141,7 +137,7 @@ export class PostService {
 
   public async findMany(
     searchQuery: SearchCriteria,
-    author: UserCredential | undefined,
+    authContext: UserCredential | undefined,
   ): Promise<PostOverview> {
     if (ArrayUtils.isEmpty(searchQuery.filters)) {
       throw new BadRequestException('Required filter type to get posts');
@@ -160,23 +156,41 @@ export class PostService {
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
     }
-    await this.markAuthorForPosts(posts, author);
+    const user: User | null = authContext
+      ? await this.userService.findById(+authContext.userId)
+      : null;
+    await this.markAuthorForPosts(posts, user);
 
     return posts;
   }
 
   public async findPostsOfAuthor(
     searchQuery: SearchCriteria,
-    hashTag: string,
+    targetAuthorHashTag: string,
     authContext: UserCredential | undefined,
   ) {
-    const user = await this.userService.findByHashTag(hashTag);
-    const posts: PostOverview = await this.postRepository.findPostsOfAuthor(
-      searchQuery,
-      user,
+    const hashTags = [targetAuthorHashTag];
+    if (authContext) {
+      hashTags.push(authContext.hashTag);
+    }
+    const users = await this.userService.findByHashTag(hashTags);
+    const [author, [targetAuthor]] = this.splitAuthorAndUsers(
+      authContext?.userId,
+      users,
     );
 
-    await this.markAuthorForPosts(posts, authContext);
+    if (!targetAuthor) {
+      throw new NotFoundException(
+        `Not found author with hashTag: ${targetAuthorHashTag}`,
+      );
+    }
+
+    const posts: PostOverview = await this.postRepository.findPostsOfAuthor(
+      searchQuery,
+      targetAuthor,
+    );
+
+    await this.markAuthorForPosts(posts, author);
     return posts;
   }
 
@@ -473,28 +487,18 @@ export class PostService {
 
   private async markAuthorForPosts(
     posts: PostOverview,
-    optionalAuthor: UserCredential | undefined,
+    optionalAuthor: User | undefined,
   ): Promise<void> {
     if (optionalAuthor) {
-      const author = await this.userService.findById(+optionalAuthor.userId);
-
-      if (!author) {
-        throw new UnauthorizedException('Your user is not available now');
-      }
-
       const votes: Vote[] = await this.voteService.findByAuthorAndPosts(
-        author,
+        optionalAuthor,
         <Post[]>posts,
       );
 
       const postMap = keyBy(votes, 'post');
 
       posts.forEach((post) => {
-        if (postMap[`${post.id}`]) {
-          post.isAuthor = true;
-        } else {
-          post.isAuthor = false;
-        }
+        post.isAuthor = !!postMap[`${post.id}`];
       });
 
       return;
@@ -503,5 +507,25 @@ export class PostService {
     posts.forEach((post) => {
       post.isAuthor = false;
     });
+  }
+
+  private splitAuthorAndUsers(
+    authorId: string,
+    users: User[],
+  ): [User | null, User[]] {
+    if (!authorId) {
+      return [null, users];
+    }
+    return users.reduce(
+      (result, user) => {
+        if (user.id === authorId) {
+          result[0] = user;
+        } else {
+          result[1].push(user);
+        }
+        return result;
+      },
+      [null, []],
+    );
   }
 }

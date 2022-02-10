@@ -4,7 +4,7 @@ import { configAxios } from './axios.config';
 export function configApp(): void {
     AuthConfig.config({
         authKey: 'auth',
-        redirectRoute: '/login',
+        redirectRoute: '/forbidden',
         defaultRoute: '/'
     });
 

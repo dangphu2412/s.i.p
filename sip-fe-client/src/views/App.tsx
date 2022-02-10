@@ -9,6 +9,7 @@ import { AuthRestoreGuard } from '../modules/auth/guards/restore-guard';
 import { LoginSuccessPage } from '../modules/auth/pages/LoginSuccessPage';
 import { HomePage } from './post/HomePage';
 import { NotFoundPage } from './not-found/NotFoundPage';
+import { UnAuthenticatePage } from './auth/UnAuthenticatePage';
 import { PostDetailPage } from './post/PostDetailPage';
 import { CreatePostPage } from './post/CreatePostPage';
 import { TopicDetailPage } from './topic/TopicDetailPage';
@@ -38,9 +39,10 @@ function App(): JSX.Element {
                                     { path: '/topics/:slug', element: TopicDetailPage }
                                 ] 
                             },
-                            { path: '/sipers/:slug', element: Profile, protected: true },
+                            { path: '/sipers/:hashTag', element: Profile, protected: true },
                             { path: '/me/products', element: Products, protected: true },
                             { path: '/settings', element: Settings, protected: true },
+                            { path: '/forbidden', element: UnAuthenticatePage },
                             { path: '/', element: HomePage }
                         ], {
                             noPublicGuard: true

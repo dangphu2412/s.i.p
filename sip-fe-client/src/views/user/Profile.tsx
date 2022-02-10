@@ -1,9 +1,12 @@
-import { Button, Col, List, Row, Tabs } from 'antd';
+import { Button, Col, Row, Tabs } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
+import { ProfileCardContainer } from 'src/modules/post/components/card/ProfileCardContainer';
 
 enum ProfileTab {
     Idea = 'idea',
@@ -26,8 +29,9 @@ export function Profile(): JSX.Element {
             key: ProfileTab.Discussion,
         }
     ];
-
-    const [activeKey, setActiveKey] = useState(ProfileTab.Idea);
+    const { hashTag } = useParams();
+    const [activeKey, setActiveKey] = useState<ProfileTab>(ProfileTab.Idea);
+    
 
     return <ClientLayout>
         <Container>
@@ -82,7 +86,9 @@ export function Profile(): JSX.Element {
 
             <Row>
                 <Col span={16}>
-                        Hello
+                    {
+                        activeKey === ProfileTab.Idea && <ProfileCardContainer hashTag={hashTag || ''}/>
+                    }
                 </Col>
 
                 <Col span={8}>

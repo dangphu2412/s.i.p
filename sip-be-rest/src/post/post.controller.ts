@@ -77,7 +77,7 @@ export class PostController {
   @Get('/users/:hashTag')
   async findPostsOfAuthor(
     @Param('hashTag') hashTag: string,
-    @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
+    @SearchQuery() searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
   ) {
     const posts = await this.postService.findPostsOfAuthor(

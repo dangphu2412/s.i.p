@@ -51,9 +51,12 @@ export class AuthService {
 
   public generateTestToken() {
     return {
-      accessToken: this.jwtService.sign(
-        JwtPayloadDto.create('9', 'fus', { ADMIN: 1 }),
-      ),
+      accessToken: this.jwtService.sign({
+        sub: '9',
+        fullName: 'Fus',
+        permissions: { ADMIN: 1 },
+        hashTag: 'Fusdeptrai',
+      } as JwtPayloadDto),
       profile: {},
     };
   }
@@ -64,9 +67,12 @@ export class AuthService {
     );
 
     return {
-      accessToken: this.jwtService.sign(
-        JwtPayloadDto.create(user.id, user.fullName, permissions),
-      ),
+      accessToken: this.jwtService.sign({
+          sub: user.id,
+          fullName: user.fullName,
+          permissions,
+          hashTag: user.hashTag,
+      } as JwtPayloadDto),
       profile: this.userService.extractProfile(user),
     };
   }

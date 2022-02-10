@@ -115,10 +115,10 @@ export class UserService {
     });
   }
 
-  public findByHashTag(hashTag: string) {
-    return this.userRepository.findOne({
+  public findByHashTag(hashTags: string[]) {
+    return this.userRepository.find({
       where: {
-        hashTag,
+        hashTag: In(hashTags),
       },
     });
   }

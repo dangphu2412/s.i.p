@@ -10,7 +10,11 @@ import { PostOverview } from '../../api/post.api';
 import { PostActions } from '../../post.action';
 import { CardItemOverview } from './CardItemOverview';
 
-export function ProfileCardContainer() {
+export interface ProfileCardContainerProps {
+    hashTag: string;
+}
+
+export function ProfileCardContainer(props: ProfileCardContainerProps) {
     const dispatch = useDispatch();
 
     const [posts, setPosts] = useState<PostOverview>([]);
@@ -26,7 +30,8 @@ export function ProfileCardContainer() {
     useEffect(() => {
         dispatch(PostActions.getSelfIdeas({
             page,
-            filters: []
+            filters: [],
+            hashTag: props.hashTag
         }));
         setPage({
             ...page,
@@ -47,7 +52,8 @@ export function ProfileCardContainer() {
 
         dispatch(PostActions.getSelfIdeas({
             page,
-            filters: []
+            filters: [],
+            hashTag: props.hashTag
         }));
 
         setPage({

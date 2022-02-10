@@ -19,6 +19,7 @@ export function Settings(): JSX.Element {
         id: 'UNKNOWN',
         username: '',
         headline: '',
+        hashTag: ''
     });
 
     useEffect(() => {

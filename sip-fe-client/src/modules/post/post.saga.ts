@@ -50,8 +50,8 @@ function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
     }));
 }
 
-function* handleFetchSelfIdeas(action: PayloadAction<Query>): SagaIterator {
-    const request = getSelfIdeas({
+function* handleFetchSelfIdeas(action: PayloadAction<Query & { hashTag: string }>): SagaIterator {
+    const request = getSelfIdeas(action.payload.hashTag, {
         page: action.payload.page,
         filters: action.payload.filters,
         sorts: []

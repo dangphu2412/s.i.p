@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import { Action } from 'redux';
 import { AuthenticatorGuard } from './guards/authenticator.guard';
 import { PublicGuard } from './guards/public.guard';
 
@@ -10,8 +11,12 @@ interface RouteMapper {
     children?: RouteMapper[]
 }
 
+interface RouteProtectOptions {
+    noPublicGuard: boolean;
+}
+
 export class AuthRouteMapper {
-    static toRoutes(mappers: RouteMapper[], options = { noPublicGuard: false }): JSX.Element[] {
+    static toRoutes(mappers: RouteMapper[], options: RouteProtectOptions = { noPublicGuard: false }): JSX.Element[] {
         return mappers.map(mapper => {
             if (mapper.protected) {
                 return <Route key={Math.random()} path={mapper.path} element={

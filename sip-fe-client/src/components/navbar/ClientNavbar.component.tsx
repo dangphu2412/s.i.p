@@ -108,7 +108,7 @@ export function ClientNavbar(): JSX.Element {
                                         </Link>
                                     </Menu.Item>
                                     <Menu.Item key="1">
-                                        <Link to={`/sipers/${profile?.username}`}>
+                                        <Link to={`/sipers/${profile?.hashTag}`}>
                                             Profile
                                         </Link>
                                     </Menu.Item>
@@ -123,7 +123,7 @@ export function ClientNavbar(): JSX.Element {
                             >
                                 <Avatar src={
                                     <Image
-                                        src="https://joeschmoe.io/api/v1/random"
+                                        src={profile?.avatar}
                                         style={{ width: 36 }}
                                         preview={false}
                                     />}
