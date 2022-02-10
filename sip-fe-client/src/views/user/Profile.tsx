@@ -1,12 +1,15 @@
-import { Button, Col, Row, Tabs } from 'antd';
+import { FacebookFilled } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Divider, Row, Tabs } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { ProfileCardContainer } from 'src/modules/post/components/card/ProfileCardContainer';
+import { Topic } from 'src/modules/topic/api/topic.api';
+
 
 enum ProfileTab {
     Idea = 'idea',
@@ -29,7 +32,26 @@ export function Profile(): JSX.Element {
             key: ProfileTab.Discussion,
         }
     ];
+
+    const topics: Topic[] = [
+        {
+            id: '1',
+            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            name: 'Topic 1',
+            slug: 'topic-1',
+            summary: 'Topic 1 summary',
+        },
+        {
+            id: '2',
+            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            name: 'Topic 2',
+            slug: 'topic-2',
+            summary: 'Topic 2 summary',
+        }
+    ];
+
     const { hashTag } = useParams();
+    const navigate = useNavigate();
     const [activeKey, setActiveKey] = useState<ProfileTab>(ProfileTab.Idea);
     
 
@@ -56,7 +78,7 @@ export function Profile(): JSX.Element {
                         <div className='my-3'>
                             @dangphu2412
                         </div>
-                        <Button ghost>
+                        <Button ghost onClick={() => navigate('/settings')}>
                             Edit profile
                         </Button>
                     </div>
@@ -92,8 +114,43 @@ export function Profile(): JSX.Element {
                 </Col>
 
                 <Col span={8}>
-                Hello
+                    <div className='shadow rounded-md content-bg p-5 hover:shadow-md transition delay-100'>
+                        <div className='my-5'>
+                            <FontAwesomeIcon
+                                icon={'birthday-cake'}
+                            />
+                            <span className='ml-3 my-10'>
+                                Joined on July 27th, 2020
+                            </span>
+                        </div>
 
+                        <div className='my-5'>
+                            <FontAwesomeIcon
+                                icon={'star'}
+                            />
+                            <span className='ml-3 my-10'>
+                                Followed Topics
+                            </span>
+                        </div>
+
+                        <div className='flex space-x-2'>
+                            {
+                                topics.map(topic => {
+                                    return <span key={topic.id}>
+                                        <Link to={`/topics/${topic.slug}`}>
+                                            {topic.name}
+                                        </Link>
+                                    </span>;
+                                })
+                            }
+                        </div>
+
+                        <Divider/>
+
+                        <Button>
+                            <FacebookFilled/> Share
+                        </Button>
+                    </div>
                 </Col>
             </Row>
         </Container>

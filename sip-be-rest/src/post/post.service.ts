@@ -174,6 +174,7 @@ export class PostService {
       hashTags.push(authContext.hashTag);
     }
     const users = await this.userService.findByHashTag(hashTags);
+
     const [author, [targetAuthor]] = this.splitAuthorAndUsers(
       authContext?.userId,
       users,
@@ -516,6 +517,11 @@ export class PostService {
     if (!authorId) {
       return [null, users];
     }
+
+    if (users.length === 1 && users[0].id === authorId) {
+      return [users[0], users];
+    }
+
     return users.reduce(
       (result, user) => {
         if (user.id === authorId) {

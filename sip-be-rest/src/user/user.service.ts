@@ -1,11 +1,8 @@
-import { UserCredential } from './../auth/client/user-cred';
 import { ConfigService } from '@external/config/config.service';
 import { toOrders } from '@external/crud/common/pipes/order.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
+import { ArrayMapper } from '@external/mappers/array.mapper';
 import { ArrayUtils } from '@external/utils/array/array.utils';
-import { Profile } from 'src/auth/client/login-success';
-import { BcryptService } from 'src/auth/services/bcrypt.service';
-import { GoogleUserExtractedDto } from 'src/auth/internal/google-user-extracted';
 import {
   Injectable,
   InternalServerErrorException,
@@ -14,15 +11,17 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PermissionService } from '@permission/permission.service';
 import { SlugUtils } from '@utils/slug';
 import { isEqual, pick } from 'lodash';
-import { In, Repository, ILike } from 'typeorm';
+import { Profile } from 'src/auth/client/login-success';
+import { GoogleUserExtractedDto } from 'src/auth/internal/google-user-extracted';
+import { BcryptService } from 'src/auth/services/bcrypt.service';
+import { ILike, In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GrantPermissionDto } from './dto/grant-permission.dto';
-import { User } from './user.entity';
-import { PermissionService } from '@permission/permission.service';
-import { ArrayMapper } from '@external/mappers/array.mapper';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {

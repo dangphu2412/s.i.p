@@ -68,10 +68,10 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign({
-          sub: user.id,
-          fullName: user.fullName,
-          permissions,
-          hashTag: user.hashTag,
+        sub: user.id,
+        fullName: user.fullName,
+        permissions,
+        hashTag: user.hashTag,
       } as JwtPayloadDto),
       profile: this.userService.extractProfile(user),
     };
