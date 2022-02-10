@@ -52,8 +52,8 @@ export function ClientNavbar(): JSX.Element {
 
     return (
         <div className='shadow-sm cover-bg'>
-            <div className='header-wrapper flex justify-between flex-row'>
-                <div className='p-left-container flex flex-row items-center'>
+            <div className='header-wrapper flex justify-between'>
+                <div className='p-left-container flex items-center'>
                     <Button danger className='btn-bg btn-bg-hover' shape="circle" size='large'>
                         <a href='/'>S.I.P</a>
                     </Button>
@@ -62,7 +62,7 @@ export function ClientNavbar(): JSX.Element {
                         <Input style={{backgroundColor: '#F0F9FF'}} className='bg-sky-light' placeholder="Search Products ..." />
                     </div>
 
-                    <div>
+                    <div className='max-w-2xl w-full'>
                         <Menu mode="horizontal" className='override-line-height-menu cover-bg'>
                             <Menu.Item className='cover-bg' key="1">
                                 <Link to="/"> 
@@ -75,8 +75,8 @@ export function ClientNavbar(): JSX.Element {
                                 </Link>
                             </Menu.Item>
                             <Menu.Item className='cover-bg' key="3">
-                                <Link to="/recommend"> 
-                                Recommend
+                                <Link to="/discussions"> 
+                                Discussions
                                 </Link>
                             </Menu.Item>
                         </Menu>
@@ -91,6 +91,13 @@ export function ClientNavbar(): JSX.Element {
                                     Create new product
                                 </Link>
                             </Menu.Item>
+
+                            <Menu.Item key="1">
+                                <Link to='/discussions/new'>
+                                    New discussion
+                                </Link>
+                            </Menu.Item>
+                            
                         </Menu>
                     }
                     >

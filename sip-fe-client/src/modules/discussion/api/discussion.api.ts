@@ -15,3 +15,8 @@ export interface Discussion extends Comment {
 export interface Reply extends Comment {
     parent: Discussion;
 }
+
+export interface CreateDiscussionDto {
+    content: string;
+    title: string;
+}

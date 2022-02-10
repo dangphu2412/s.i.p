@@ -19,6 +19,8 @@ import { registerErrors } from 'src/modules/http/http-request';
 import { Profile } from './user/Profile';
 import { Products } from './user/Products';
 import { Settings } from './user/Settings';
+import { CreateDiscussionPage } from './dicussion/CreateDicussionPage';
+import { DiscussionOverviewPage } from './dicussion/DicussionOverviewPage';
 
 configApp();
 
@@ -39,6 +41,8 @@ function App(): JSX.Element {
                                     { path: '/topics/:slug', element: TopicDetailPage }
                                 ] 
                             },
+                            { path: '/discussions/new', element: CreateDiscussionPage, protected: true },
+                            { path: '/discussions', element: DiscussionOverviewPage, protected: true },
                             { path: '/sipers/:hashTag', element: Profile, protected: true },
                             { path: '/me/products', element: Products, protected: true },
                             { path: '/settings', element: Settings, protected: true },
