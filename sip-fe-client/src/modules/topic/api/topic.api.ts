@@ -5,3 +5,7 @@ export interface Topic {
   summary: string;
   avatar: string;
 }
+
+export interface TopicWithFollowStatus extends Topic {
+  followed: boolean;
+}

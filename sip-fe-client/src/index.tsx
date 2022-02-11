@@ -8,14 +8,15 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faComment, faPlusCircle, faCheckCircle,
     faInfoCircle, faPhotoVideo, faUser, faRocket,
-    faMinusCircle, faFire, faArrowRight, faBirthdayCake, faStar
+    faMinusCircle, faFire, faArrowRight, faBirthdayCake, faStar,
+    faSearch
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
     faComment, faPlusCircle, faCheckCircle,
     faInfoCircle, faPhotoVideo, faUser, faRocket,
     faMinusCircle, faFire, faArrowRight, faBirthdayCake,
-    faStar
+    faStar, faSearch
 );
 
 render(

@@ -126,6 +126,12 @@ export class UserService {
     return this.userRepository.findOne(id);
   }
 
+  public findByIdWithFollowedTopics(id: number) {
+    return this.userRepository.findOne(id, {
+      relations: ['followedTopics'],
+    });
+  }
+
   public findByIds(ids: string[]) {
     return this.userRepository.find({
       where: {
@@ -144,6 +150,10 @@ export class UserService {
     user.avatar = profile.avatar;
     user.headline = profile.headline;
     user.fullName = profile.fullName;
+    return this.userRepository.save(user);
+  }
+
+  public save(user: User) {
     return this.userRepository.save(user);
   }
 

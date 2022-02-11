@@ -41,8 +41,8 @@ function App(): JSX.Element {
                                     { path: '/topics/:slug', element: TopicDetailPage }
                                 ] 
                             },
+                            { path: '/discussions', element: DiscussionOverviewPage },
                             { path: '/discussions/new', element: CreateDiscussionPage, protected: true },
-                            { path: '/discussions', element: DiscussionOverviewPage, protected: true },
                             { path: '/sipers/:hashTag', element: Profile, protected: true },
                             { path: '/me/products', element: Products, protected: true },
                             { path: '/settings', element: Settings, protected: true },
