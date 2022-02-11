@@ -22,7 +22,7 @@ export function CardContainer(): JSX.Element {
     const [isLoading, setLoading] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState<PostFilter>(PostFilter.HOTTEST);
     const [page, setPage] = useState<Page>({
-        page: 0,
+        page: 1,
         size: 20
     });
 
@@ -45,8 +45,13 @@ export function CardContainer(): JSX.Element {
     function loadMorePosts() {
         setLoading(true);
 
+        const newPage = {
+            ...page,
+            page: page.page + 1,
+        };
+
         dispatch(PostActions.getOverviewData({
-            page,
+            page: newPage,
             filters: [
                 {
                     column: 'type',
@@ -56,10 +61,7 @@ export function CardContainer(): JSX.Element {
             ]
         }));
 
-        setPage({
-            ...page,
-            page: page.page + 1,
-        });
+        setPage(newPage);
 
         setLoading(false);
     }

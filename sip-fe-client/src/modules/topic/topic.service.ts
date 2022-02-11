@@ -10,3 +10,7 @@ export function searchTopics(query: Query) {
         headers: {}
     }));
 }
+
+export function followTopic(topicId: string) {
+    return createRequest<string, Record<string, unknown>>(axios.post(`/v1/topics/${topicId}/follow`));
+}

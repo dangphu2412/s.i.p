@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { AuthType } from 'src/modules/auth/auth.reducer';
 import { TopicWithFollowStatus } from '../api/topic.api';
+import { TopicActions } from '../topic.action';
 
 export interface TopicCardProps {
     data: TopicWithFollowStatus;
@@ -22,6 +23,7 @@ export function TopicCard(props: TopicCardProps) {
             dispatch(openAuthPopupAction());
             return;
         }
+        dispatch(TopicActions.followTopic(data.id));
         setFollowed(!followed);
     }
 

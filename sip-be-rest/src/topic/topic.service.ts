@@ -1,12 +1,18 @@
-import { SearchCriteria } from "@external/crud/search/core/search-criteria";
-import { Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
-import { UserCredential } from "src/auth/client/user-cred";
-import { FindManyOptions, ILike, In } from "typeorm";
-import { TopicOverview, TopicSummary } from "./client/topic-overview.api";
-import { TopicIncludeOptionalAuthor } from "./internal/topic-include-optional-author";
-import { Topic } from "./topic.entity";
-import { TopicRepository } from "./topic.repository";
-import { UserService } from "@user/user.service";
+import { ArrayUtils } from './../external/utils/array/array.utils';
+import { SearchCriteria } from '@external/crud/search/core/search-criteria';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { User } from '@user/user.entity';
+import { UserService } from '@user/user.service';
+import { keyBy } from 'lodash';
+import { UserCredential } from 'src/auth/client/user-cred';
+import { In } from 'typeorm';
+import { TopicOverview } from './client/topic-overview.api';
+import { Topic } from './topic.entity';
+import { TopicRepository } from './topic.repository';
 
 @Injectable()
 export class TopicService {
@@ -17,26 +23,21 @@ export class TopicService {
 
   public async findMany(
     searchQuery: SearchCriteria,
-    author: UserCredential | undefined,
+    authContext: UserCredential | undefined,
   ): Promise<TopicOverview> {
-    if (author) {
-      const topics = await this.topicRepository.findTopicsIncludeOptionalAuthor(
-        searchQuery,
-        author,
+    const topics = await this.topicRepository.searchWithPagination(searchQuery);
+    if (authContext) {
+      const author = await this.userService.findByIdWithFollowedTopics(
+        +authContext.userId,
       );
-      return topics.map(this.toTopicOverview);
+      if (!author) {
+        throw new UnprocessableEntityException(
+          `User with id: ${authContext.userId} is not available at the moment`,
+        );
+      }
+      return this.markFollowedTopicsByAuthor(topics, author);
     }
-    const findManyOptions: FindManyOptions<Topic> = {
-      skip: searchQuery.offset,
-      take: searchQuery.limit,
-    };
-    if (searchQuery.search) {
-      findManyOptions.where = {
-        name: ILike(`%${searchQuery.search}%`),
-      };
-    }
-    const topics = await this.topicRepository.find(findManyOptions);
-    return topics.map(this.toTopicOverview);
+    return this.markFollowedTopicsByAuthor(topics, undefined);
   }
 
   public async followTopicByAuthor(topicId: number, authorId: number) {
@@ -55,16 +56,18 @@ export class TopicService {
       throw new NotFoundException('Topic is not found');
     }
 
-    const indexOfTopic = user.followedTopics.findIndex(
-      (flTopic) => flTopic.id === topic.id,
-    );
-
-    if (indexOfTopic !== -1) {
-      user.followedTopics.push(topic);
+    if (ArrayUtils.isEmpty(user.followedTopics)) {
+      user.followedTopics = [topic];
     } else {
-      user.followedTopics = user.followedTopics.filter(
-        (_, i) => i !== indexOfTopic,
+      const newTopics = user.followedTopics.filter(
+        (followedTopic) => followedTopic.id !== topic.id,
       );
+
+      if (user.followedTopics.length !== newTopics.length) {
+        user.followedTopics.push(topic);
+      } else {
+        user.followedTopics = newTopics;
+      }
     }
 
     await this.userService.save(user);
@@ -78,16 +81,26 @@ export class TopicService {
     });
   }
 
-  private toTopicOverview(topic: TopicIncludeOptionalAuthor): TopicSummary {
-    let isAuthor = false;
-    if (topic.users_id && topic.topics_id) {
-      isAuthor = true;
+  private markFollowedTopicsByAuthor(
+    topics: Topic[],
+    author: User | undefined,
+  ): TopicOverview {
+    if (!author) {
+      return topics.map((topic) => {
+        return {
+          ...topic,
+          followed: false,
+        };
+      });
     }
-    delete topic.users_id;
-    delete topic.topics_id;
-    return {
-      ...topic,
-      isAuthor,
-    };
+
+    const topicsKeyById = keyBy(author.followedTopics, 'id');
+
+    return topics.map((topic) => {
+      return {
+        ...topic,
+        followed: !!topicsKeyById[topic.id],
+      };
+    });
   }
 }
