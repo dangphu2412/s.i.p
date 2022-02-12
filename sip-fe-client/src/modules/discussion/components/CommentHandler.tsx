@@ -23,6 +23,7 @@ export function CommentHandler(props: CommentHandlerProps) {
     const [replyDisplayed, setReplyDisplayed] = useState(false);
     const [currentReply, setCurrentReply] = useState('');
     const [replies, setReplies] = useState<Reply[]>(props.replies || []);
+    const [toggleReply, setToggleReply] = useState(false);
     const replyCreatedResponse = useSelector(selectDataHolderByView(VIEW_SELECTOR.CREATE_REPLY));
 
     useEffect(() => {
@@ -81,11 +82,15 @@ export function CommentHandler(props: CommentHandlerProps) {
             {
                 replies.length > 0 &&
                 <Collapse
-                    expandIcon={() => (<FontAwesomeIcon icon={'arrow-right'}/>)} 
+                    expandIcon={() => (<FontAwesomeIcon icon={!toggleReply ? 'arrow-right' : 'arrow-down'}/>)}
+                    onChange={() => {setToggleReply(!toggleReply);}}
                     ghost
                     style={{fontSize: '12px'}}
                 >
-                    <Collapse.Panel key={props.key} header="Replies" >
+                    <Collapse.Panel 
+                        forceRender={toggleReply}
+                        key={props.key} header="Replies"
+                    >
                         {
                             replies.map(reply => {
                                 return (

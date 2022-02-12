@@ -12,5 +12,5 @@ export function searchTopics(query: Query) {
 }
 
 export function followTopic(topicId: string) {
-    return createRequest<string, Record<string, unknown>>(axios.post(`/v1/topics/${topicId}/follow`));
+    return createRequest<string, Record<string, unknown>>(axios.patch(`/v1/topics/${topicId}/follow`));
 }

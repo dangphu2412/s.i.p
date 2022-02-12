@@ -1,6 +1,6 @@
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserCredential } from 'src/auth/client/user-cred';
 import {
@@ -26,7 +26,7 @@ export class TopicController {
   }
 
   @Protected
-  @Post('/:id/follow')
+  @Patch('/:id/follow')
   followTopic(
     @Param('id') id: string,
     @AuthContext() authContext: UserCredential,

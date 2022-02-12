@@ -2,7 +2,7 @@ import { Button, Skeleton, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
 import { Page } from 'src/modules/query/interface';
@@ -30,8 +30,24 @@ export function CardContainer(): JSX.Element {
     const authState = useSelector(selectAuthState);
     
     useEffect(() => {
+        setLoading(true);
         setPosts([]);
-        loadMorePosts();
+        const newPage = {
+            page: 1,
+            size: 20
+        };
+        setPage(newPage);
+        dispatch(PostActions.getOverviewData({
+            page: newPage,
+            filters: [
+                {
+                    column: 'type',
+                    comparator: 'eq',
+                    value: selectedFilter
+                }
+            ]
+        }));
+        setLoading(false);
     }, [selectedFilter]);
 
     useEffect(() => {
@@ -82,17 +98,17 @@ export function CardContainer(): JSX.Element {
             >
                 {
                     posts.map(post => {
-                        return <a
-                            href={'/posts/' + post.slug}
+                        return <Link
+                            to={'/posts/' + post.slug}
                             key={post.id}
-                            className='cursor-pointer hover:shadow my-2 transition delay-50'
+                            className='cursor-pointer my-2 transition delay-50'
                         >
                             <CardItemOverview
                                 key={post.id}
                                 data={post}
                                 authType={authState}
                             />
-                        </a>;
+                        </Link>;
                     })
                 }
                 <Skeleton loading={isLoading} />

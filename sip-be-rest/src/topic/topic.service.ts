@@ -56,18 +56,14 @@ export class TopicService {
       throw new NotFoundException('Topic is not found');
     }
 
-    if (ArrayUtils.isEmpty(user.followedTopics)) {
-      user.followedTopics = [topic];
-    } else {
-      const newTopics = user.followedTopics.filter(
-        (followedTopic) => followedTopic.id !== topic.id,
-      );
+    const newFollowedTopics = user.followedTopics.filter(
+      (followedTopic) => followedTopic.id !== topic.id,
+    );
 
-      if (user.followedTopics.length !== newTopics.length) {
-        user.followedTopics.push(topic);
-      } else {
-        user.followedTopics = newTopics;
-      }
+    if (newFollowedTopics.length === user.followedTopics.length) {
+      user.followedTopics.push(topic);
+    } else {
+      user.followedTopics = newFollowedTopics;
     }
 
     await this.userService.save(user);

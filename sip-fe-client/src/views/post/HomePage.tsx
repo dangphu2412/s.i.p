@@ -28,12 +28,13 @@ export function HomePage(): JSX.Element {
                             </Col>
 
                             <Col span={7}>
-                                
                                 <div>
+                                    <div>
                                     UPCOMING PRODUCTS
-                                </div>
+                                    </div>
 
-                                <FollowProductCardContainer/>
+                                    <FollowProductCardContainer/>
+                                </div>
 
                                 <Divider/>
 

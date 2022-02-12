@@ -429,9 +429,7 @@ export class PostService {
         updatePostDto.isAuthorAlsoMaker &&
         updatePostDto.makerIds.length > 1
       ) {
-        throw new UnprocessableEntityException(
-          'Product is looking for members. Cannot contains makers. Only author be maker because of you picked isAuthorAlsoMaker option',
-        );
+        updatePostDto.runningStatus = ProductRunningStatus.RELEASED;
       }
     }
 

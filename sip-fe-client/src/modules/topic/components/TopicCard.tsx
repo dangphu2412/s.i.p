@@ -38,6 +38,7 @@ export function TopicCard(props: TopicCardProps) {
                 danger={followed}
                 onClick={handleFollow}
                 style={{width: '126px'}}
+                className='ml-5'
             >
                 {
                     followed ? 'Following' : 'Follow'

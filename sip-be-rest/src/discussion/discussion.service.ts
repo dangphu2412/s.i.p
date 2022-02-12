@@ -75,6 +75,7 @@ export class DiscussionService {
     return this.discussionRepository.find({
       where: {
         post,
+        parent: null,
       },
       relations: ['author', 'replies', 'replies.author'],
       skip: searchCriteria.offset,

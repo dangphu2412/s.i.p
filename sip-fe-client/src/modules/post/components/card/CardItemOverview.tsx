@@ -1,6 +1,6 @@
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Image, Row } from 'antd';
+import { Avatar, Button, Card, Col, Image, List, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -48,38 +48,27 @@ export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX
                 bordered={false}
                 bodyStyle={{padding: '0'}}
             >
-                <Row>
-                    <Col
-                        span={2}
-                        style={{display: 'flex', alignItems: 'center'}}
-                    >
-                        <Image
-                            src="https://joeschmoe.io/api/v1/random"
-                            style={{ width: 80 }}
-                            preview={false}
-                        />
-                    </Col>
-                    <Col span={18}>
-                        <Title level={4}>
+                <div className='flex justify-between items-center'>
+                    <List.Item.Meta
+                        avatar={<Avatar shape='square' size={86} src={'https://joeschmoe.io/api/v1/random'} />}
+                        title={<Title level={4}>
                             {data.title}
-                        </Title>
-
-                        <div>
-                            {data.summary}
-                        </div>
-                        <div className='mt-3'>
-                            <span className='mr-3'>
-                                <FontAwesomeIcon icon="comment" className='mr-3'/>
+                        </Title>}
+                        description={
+                            <div className='mt-3'>
+                                <span className='mr-3'>
+                                    <FontAwesomeIcon icon="comment" className='mr-3'/>
                                 80
-                            </span>
-                            {
-                                data.topics.map((topic, index) => {
-                                    return <span className='mr-2' key={index}>{topic.name}</span>;
-                                })
-                            }
-                        </div>
-                    </Col>
-                    <Col span={4}>
+                                </span>
+                                {
+                                    data.topics.map((topic, index) => {
+                                        return <span className='mr-2' key={index}>{topic.name}</span>;
+                                    })
+                                }
+                            </div>
+                        }
+                    />
+                    <div className='pr-10'>
                         <Button className={vote.isVoted ? 'upvote-style btn': 'upvote-style'} onClick={handleVote}>
                             { 
                                 vote.isVoted ?
@@ -91,8 +80,8 @@ export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX
                             </div>
                             
                         </Button>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
                 
             </Card>
         </div>

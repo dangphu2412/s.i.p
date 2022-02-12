@@ -9,6 +9,7 @@ export interface PostSummary {
   summary: string;
   isAuthor: boolean;
   totalVotes: string;
+  thumbnail: string;
   topics: Topic[];
   author: Author;
 }

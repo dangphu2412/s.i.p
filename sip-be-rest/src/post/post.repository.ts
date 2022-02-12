@@ -32,7 +32,7 @@ export class PostRepository extends Repository<Post> {
 
     if (FilterUtils.has(searchQuery.filters, 'topicName')) {
       const topicName = FilterUtils.get(searchQuery.filters, 'topicName');
-      queryBuilder.where(`topics.name = :topicName`, { topicName });
+      queryBuilder.where(`topics.slug = :topicName`, { topicName });
     }
     return <Promise<PostOverview>>queryBuilder.getMany();
   }
@@ -66,7 +66,7 @@ export class PostRepository extends Repository<Post> {
 
     if (FilterUtils.has(searchQuery.filters, 'topicName')) {
       const topicName = FilterUtils.get(searchQuery.filters, 'topicName');
-      queryBuilder.where(`topics.name = :topicName`, { topicName });
+      queryBuilder.where(`topics.slug = :topicName`, { topicName });
     }
     return <Promise<PostOverview>>queryBuilder.getMany();
   }

@@ -288,6 +288,7 @@ export function CreateDetailPostPage() {
                     ...data,
                     status: PostStatus.PUBLISH
                 }));
+                navigate('/posts');
             }
         });
     }

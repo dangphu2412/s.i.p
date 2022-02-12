@@ -4,6 +4,7 @@ import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
@@ -145,11 +146,15 @@ export function TopicOverviewPage(): JSX.Element {
                                 <List
                                     dataSource={topics}
                                     itemLayout="horizontal"
-                                    renderItem={item => <TopicCard
-                                        className='my-5'
-                                        data={item}
-                                        authState={authState}
-                                    />}
+                                    renderItem={item => <Link
+                                        to={`/topics/${item.slug}`}
+                                    >
+                                        <TopicCard
+                                            className='my-5'
+                                            data={item}
+                                            authState={authState}
+                                        />
+                                    </Link>}
                                 />
                                 <Skeleton loading={isLoading.isLoading} />
                             </InfiniteScroll>

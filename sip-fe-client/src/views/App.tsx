@@ -36,11 +36,8 @@ function App(): JSX.Element {
                             { path: '/posts/:slug', element: PostDetailPage },
                             { path: '/posts/new/:slug', element: CreateDetailPostPage, protected: true },
                             { path: '/posts/new', element: CreatePostPage, protected: true },
-                            { path: '/topics', element: TopicOverviewPage,
-                                children: [
-                                    { path: '/topics/:slug', element: TopicDetailPage }
-                                ] 
-                            },
+                            { path: '/topics/:slug', element: TopicDetailPage },
+                            { path: '/topics', element: TopicOverviewPage },
                             { path: '/discussions', element: DiscussionOverviewPage },
                             { path: '/discussions/new', element: CreateDiscussionPage, protected: true },
                             { path: '/sipers/:hashTag', element: Profile, protected: true },
