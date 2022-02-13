@@ -16,6 +16,11 @@ export function getTypeOrmModule(): DynamicModule {
     password: ConfigService.get('DB_PASSWORD'),
     database: ConfigService.get('DB_DATABASE'),
     entities: pathLookupEntities,
+    ssl: ConfigService.getBoolean('DB_SSL')
+      ? {
+          rejectUnauthorized: false,
+        }
+      : false,
     synchronize: isBooleanString(ConfigService.getOptional('DB_SYNC'))
       ? ConfigService.getBoolean('DB_SYNC')
       : isNotProd,
