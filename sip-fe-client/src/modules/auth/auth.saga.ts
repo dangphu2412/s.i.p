@@ -1,11 +1,11 @@
 import { SagaIterator } from 'redux-saga';
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, ForkEffect } from 'redux-saga/effects';
 import { loggedOutAction, loggingOutAction, logoutAction, restoreAction, loggedInAction, restoreSuccessAction, restoreFailedAction, restoreFinishAction } from './auth.action';
 import { getMe } from './auth.service';
 import { AuthConfig, AuthConfigKeys } from './config/auth.config';
 import { AuthProps } from './pages/LoginSuccessPage';
 
-export function* AuthSagaTree() {
+export function* AuthSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
         logoutAction.type,
         handleLogout

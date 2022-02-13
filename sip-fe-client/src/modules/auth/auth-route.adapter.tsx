@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { Action } from 'redux';
 import { AuthenticatorGuard } from './guards/authenticator.guard';
 import { PublicGuard } from './guards/public.guard';
 
@@ -23,7 +22,7 @@ export class AuthRouteMapper {
                     <AuthenticatorGuard element={<mapper.element/>} />
                 }>
                     {
-                        mapper.children ? 
+                        mapper.children ?
                             AuthRouteMapper.toRoutes(mapper.children, options)
                             : undefined
                     }
@@ -33,7 +32,7 @@ export class AuthRouteMapper {
                 options.noPublicGuard ? <mapper.element/>: <PublicGuard element={<mapper.element/>}/>
             }>
                 {
-                    mapper.children ? 
+                    mapper.children ?
                         AuthRouteMapper.toRoutes(mapper.children, options)
                         : undefined
                 }

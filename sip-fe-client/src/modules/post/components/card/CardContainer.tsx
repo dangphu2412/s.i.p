@@ -1,8 +1,8 @@
-import { Button, Skeleton, Spin } from 'antd';
+import { Skeleton, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
 import { Page } from 'src/modules/query/interface';
@@ -16,7 +16,6 @@ import { CardItemOverview } from './CardItemOverview';
 // UI to load posts
 export function CardContainer(): JSX.Element {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const [posts, setPosts] = useState<PostOverview>([]);
     const [isLoading, setLoading] = useState(false);
@@ -28,7 +27,7 @@ export function CardContainer(): JSX.Element {
 
     const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_OVERVIEW));
     const authState = useSelector(selectAuthState);
-    
+
     useEffect(() => {
         setLoading(true);
         setPosts([]);
@@ -81,7 +80,7 @@ export function CardContainer(): JSX.Element {
 
         setLoading(false);
     }
-    
+
     return (
         <div>
             <FilterDropdown

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { REACT_APP_API_URL } from '../../config/constant.config';
-import { createRequest } from '../http/http-request';
+import { createRequest, RequestProcessor } from '../http/http-request';
 export interface Profile {
   id: string;
   username: string;
@@ -14,6 +14,6 @@ export function getLoginUrl(): string {
     return `${REACT_APP_API_URL}/v1/auth/google`;
 }
 
-export function getMe() {
+export function getMe(): RequestProcessor<Profile> {
     return createRequest<Profile, Record<string, never>>(axios.get('/v1/users/me'));
 }

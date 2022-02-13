@@ -14,7 +14,7 @@ export interface ProfileCardContainerProps {
     hashTag: string;
 }
 
-export function ProfileCardContainer(props: ProfileCardContainerProps) {
+export function ProfileCardContainer(props: ProfileCardContainerProps): JSX.Element {
     const dispatch = useDispatch();
 
     const [posts, setPosts] = useState<PostOverview>([]);
@@ -26,7 +26,7 @@ export function ProfileCardContainer(props: ProfileCardContainerProps) {
 
     const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_SELF_IDEAS));
     const authState = useSelector(selectAuthState);
-    
+
     useEffect(() => {
         dispatch(PostActions.getSelfIdeas({
             page,
@@ -63,7 +63,7 @@ export function ProfileCardContainer(props: ProfileCardContainerProps) {
 
         setLoading(false);
     }
-    
+
     return (
         <div>
             <InfiniteScroll

@@ -49,7 +49,7 @@ enum DetailMenu {
     REVIEW_AND_LAUNCH = 'REVIEW_AND_LAUNCH'
 }
 
-export function CreateDetailPostPage() {
+export function CreateDetailPostPage(): JSX.Element {
     const menuData: MenuProps[] = [
         {
             key: DetailMenu.MAIN_INFO,
@@ -332,7 +332,7 @@ export function CreateDetailPostPage() {
                             Auto saved few minutes ago
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <Divider />
@@ -382,7 +382,7 @@ export function CreateDetailPostPage() {
                                         </div>
 
                                         <Form.Item label="Product name" required>
-                                            <Input 
+                                            <Input
                                                 placeholder="Place your cool name here"
                                                 value={data.title}
                                                 onChange={e => updateData('title', e.target.value)}
@@ -492,7 +492,7 @@ export function CreateDetailPostPage() {
 
                                         {/* List selected */}
                                         {
-                                            data.topics.length > 0 && 
+                                            data.topics.length > 0 &&
                                             <List
                                                 dataSource={data.topics}
                                                 renderItem={item => {
@@ -585,14 +585,14 @@ export function CreateDetailPostPage() {
 
                                         {
                                             data.socialPreviewImage
-                                            && 
+                                            &&
                                             <Image
                                                 src={data.socialPreviewImage}
                                                 alt='Preview image'
                                                 preview={false}
                                             />
                                         }
-                                            
+
                                         <Upload
                                             name="files"
                                             listType="picture-card"
@@ -626,7 +626,7 @@ export function CreateDetailPostPage() {
 
                                     <Form.Item label="Product video">
                                         <Input
-                                            placeholder="Video of product" 
+                                            placeholder="Video of product"
                                             value={data.videoLink}
                                             onChange={e => updateData('videoLink', e.target.value)}
                                         />
@@ -675,7 +675,7 @@ export function CreateDetailPostPage() {
                                                         makers:  [...data.makers.filter(maker => maker.id !== profile.id)]
                                                     });
                                                 }
-                                                
+
                                             }}
                                             value={data.isAuthorAlsoMaker}
                                         >
@@ -685,7 +685,7 @@ export function CreateDetailPostPage() {
                                             </Space>
                                         </Radio.Group>
 
-                                        
+
                                     </div>
 
                                     <Divider />
@@ -733,7 +733,7 @@ export function CreateDetailPostPage() {
                                             </Dropdown>
 
                                             {
-                                                data.makers.length > 0 && 
+                                                data.makers.length > 0 &&
                                                 <List
                                                     dataSource={data.makers}
                                                     renderItem={item => {
@@ -868,11 +868,11 @@ export function CreateDetailPostPage() {
                                                 >
                                                     <Checkbox checked={!!data.description}/> Description
                                                 </div>
-                                                
+
                                             </Col>
 
                                             <Col span={12}>
-                                                <div 
+                                                <div
                                                     className='my-2 cursor-pointer'
                                                     onClick={() => setSelectedMenu(DetailMenu.MEDIA)}
                                                 >
@@ -880,7 +880,7 @@ export function CreateDetailPostPage() {
                                                 </div>
 
                                                 <div
-                                                    className='my-2 cursor-pointer' 
+                                                    className='my-2 cursor-pointer'
                                                     onClick={() => setSelectedMenu(DetailMenu.MEDIA)}
                                                 >
                                                     <Checkbox checked={!!data.galleryImages?.length}/> Add images to gallery
@@ -888,7 +888,7 @@ export function CreateDetailPostPage() {
                                             </Col>
                                         </Row>
 
-                                        
+
                                     </div>
 
                                     <Divider />

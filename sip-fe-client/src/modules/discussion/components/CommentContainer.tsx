@@ -1,4 +1,4 @@
-import { CommentProps, Divider, List, Comment } from 'antd';
+import { Divider, List } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
@@ -7,7 +7,6 @@ import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { selectProfile } from 'src/modules/auth/auth.selector';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
-import { Author } from 'src/modules/user/api/user.api';
 import { Discussion } from '../api/discussion.api';
 import { DiscussionActions } from '../discussion.action';
 import { CommentHandler } from './CommentHandler';
@@ -60,7 +59,7 @@ export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
                 slug
             }));
         }
-        
+
     }
 
     function onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -72,7 +71,7 @@ export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
             <Title level={5}>
                 Tell us what do you think about our product?
             </Title>
- 
+
             <DiscussionEditor
                 authorAvatar={author?.avatar || ''}
                 value={comment}
@@ -82,7 +81,7 @@ export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
 
             <Divider style={{margin: 0}}/>
 
-            {comments.length > 0 && 
+            {comments.length > 0 &&
                 <List
                     dataSource={comments}
                     header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}

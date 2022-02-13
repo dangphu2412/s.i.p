@@ -1,6 +1,6 @@
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button, Card, Col, Image, List, Row } from 'antd';
+import { Avatar, Button, Card, List } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -70,19 +70,19 @@ export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX
                     />
                     <div className='pr-10'>
                         <Button className={vote.isVoted ? 'upvote-style btn': 'upvote-style'} onClick={handleVote}>
-                            { 
+                            {
                                 vote.isVoted ?
-                                    <CaretUpOutlined/> 
+                                    <CaretUpOutlined/>
                                     : <CaretDownOutlined/>
                             }
                             <div>
                                 { vote.voteTotal }
                             </div>
-                            
+
                         </Button>
                     </div>
                 </div>
-                
+
             </Card>
         </div>
     );

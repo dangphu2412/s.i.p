@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { AnyAction } from 'redux';
+import { AnyAction, Reducer } from 'redux';
 
 const DEFAULT_LOCALE = 'vi';
 
@@ -10,8 +10,8 @@ export interface LangState {
 export const initialState = {
     locale: DEFAULT_LOCALE,
 };
-  
-export const languageProviderReducer = (state = initialState, action: AnyAction) =>
+
+export const languageProviderReducer = (): Reducer<LangState> => (state = initialState, action: AnyAction) =>
     produce(state, draft => {
         switch (action.type) {
         case 'CHANGE_LOCALE':

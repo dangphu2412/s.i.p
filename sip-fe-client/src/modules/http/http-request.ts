@@ -1,6 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { merge } from 'lodash';
-import { call, put } from 'redux-saga/effects';
+import { call, CallEffect, put, PutEffect } from 'redux-saga/effects';
+import { AppError, AppLoading } from '../app.types';
 import { fireError } from '../error/error.action';
 import { setLoading } from './../loading/loading.action';
 import { HttpError } from './http-error';
@@ -8,6 +9,7 @@ import { HttpError } from './http-error';
 interface RegisterErrorOptions {
     allowMerge: boolean;
 }
+
 
 const ErrorCodeToMsgMap = new Map<string, string>();
 
@@ -36,12 +38,12 @@ export function registerErrors(errorCodeToMsgMap: Record<string, string>, option
         });
 }
 
-export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosResponse<DataResponse, DataRequest>>) {
-    let data: DataResponse;
+export function createRequest<Response, Request>(request: Promise<AxiosResponse<Response, Request>>): RequestProcessor<Response> {
+    let data: Response;
     let errorMsg: string;
 
     async function doRequest() {
-        let response: AxiosResponse<DataResponse, DataRequest>;
+        let response: AxiosResponse<Response, Request>;
         try {
             response = await request;
             data = response.data;
@@ -90,7 +92,7 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
         yield call(start);
         yield call(doRequest);
         yield call(finish);
-        return <DataResponse> (yield call(getDataSafe));
+        return <Response> (yield call(getDataSafe));
     }
 
     return {
@@ -102,4 +104,23 @@ export function createRequest<DataResponse, DataRequest>(request: Promise<AxiosR
         getDataSafe,
         getErrorMessage
     };
+}
+
+export interface RequestProcessor<Response> {
+    start(): Generator<PutEffect<{
+        payload: AppLoading;
+        type: string;
+    }>, void, unknown>;
+    finish(): Generator<PutEffect<{
+        payload: AppLoading;
+        type: string;
+    }>, void, unknown>;
+    doRequest(): Promise<void>;
+    handle(): Generator<CallEffect<Response> | CallEffect<void>, Response, Response>;
+    getData(): Response;
+    getDataSafe(): Generator<PutEffect<{
+        payload: Pick<AppError, 'message'>;
+        type: string;
+    }>, Response, unknown>;
+    getErrorMessage(): string;
 }

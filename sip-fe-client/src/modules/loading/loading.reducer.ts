@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { AnyAction } from 'redux';
+import { AnyAction, Reducer } from 'redux';
 import { AppLoading } from '../app.types';
 import { setLoading } from './loading.action';
 
@@ -8,8 +8,8 @@ const initialState: AppLoading = {
     content: 'Loading ...'
 };
 
-export function loadingReducer(state = initialState, action: AnyAction) {
-    return produce(state, draft => {
+export function loadingReducer(): Reducer<AppLoading> {
+    return (state = initialState, action: AnyAction) => produce(state, draft => {
         switch(action.type) {
         case setLoading.type:
             draft = {

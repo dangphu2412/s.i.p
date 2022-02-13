@@ -3,17 +3,17 @@ import { Button, Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import React from 'react';
 
-interface FilterDropdownProps {
+interface FilterDropdownProps<T> {
     selectedValue: string;
-    setSelected: React.Dispatch<React.SetStateAction<any>>;
+    setSelected: React.Dispatch<React.SetStateAction<T>>;
     options: string[];
 }
 
-export function FilterDropdown(props: FilterDropdownProps): JSX.Element {
+export function FilterDropdown<T>(props: FilterDropdownProps<T>): JSX.Element {
     function handleFilterChosen(e: MenuInfo) {
-        props.setSelected(e.key);
+        props.setSelected((e.key as unknown) as T);
     }
-    
+
     return (
         <div>
             <Dropdown overlay={

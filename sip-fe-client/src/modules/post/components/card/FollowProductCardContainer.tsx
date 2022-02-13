@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FollowProductCard, FollowProductProps } from './FollowProductCard';
 
-export function FollowProductCardContainer() {
+export function FollowProductCardContainer(): JSX.Element {
     const [products, setProducts] = useState<FollowProductProps[]>([]);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export function FollowProductCardContainer() {
             }
         ]);
     }
-    
+
     return <>
         {
             products.map(product => {

@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { AnyAction } from 'redux';
+import { AnyAction, Reducer } from 'redux';
 import { closeAuthPopupAction, loggedInAction, loggedOutAction, openAuthPopupAction, restoreFinishAction } from './auth.action';
 import { AuthProps } from './pages/LoginSuccessPage';
 
@@ -22,8 +22,8 @@ const initialState: AuthState = {
     modalOpened: false,
 };
 
-export function authReducer(state = initialState, action: AnyAction) {
-    return produce(state, draft => {
+export function createAuthReducer(): Reducer<AuthState> {
+    return (state = initialState, action: AnyAction) => produce(state, draft => {
         switch(action.type) {
         case loggedInAction.type:
             draft = {
@@ -44,7 +44,7 @@ export function authReducer(state = initialState, action: AnyAction) {
         case closeAuthPopupAction.type:
             draft = { ...state, modalOpened: false };
         }
-        
+
         return draft;
     });
 }

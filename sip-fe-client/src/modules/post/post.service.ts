@@ -1,3 +1,4 @@
+import { RequestProcessor } from './../http/http-request';
 import axios from 'axios';
 import { REACT_APP_API_URL } from 'src/config/constant.config';
 import { createRequest } from '../http/http-request';
@@ -7,19 +8,19 @@ import { PostDetail, PostOverview, UpdatePostDto } from './api/post.api';
 import { FetchDetailType } from './constants/get-type';
 import { InitPost, PostDetailRequest } from './post.action';
 
-export function getPostsOverview(query: Query) {
+export function getPostsOverview(query: Query): RequestProcessor<PostOverview> {
     return createRequest<PostOverview, Query>(axios.get('/v1/posts', {
         params: parseToSearchParams(query)
     }));
 }
 
-export function getSelfIdeas(hashTag:  string, query: Query) {
+export function getSelfIdeas(hashTag:  string, query: Query): RequestProcessor<PostOverview> {
     return createRequest<PostOverview, Query>(axios.get(`/v1/posts/users/${hashTag}`, {
         params: parseToSearchParams(query)
     }));
 }
 
-export function getPostDetail(slug: string) {
+export function getPostDetail(slug: string): RequestProcessor<PostDetail> {
     return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`, {
         params: parseToSearchParams({
             filters: [
@@ -34,7 +35,7 @@ export function getPostDetail(slug: string) {
     }));
 }
 
-export function getPatchPostData(slug: string) {
+export function getPatchPostData(slug: string): RequestProcessor<PostDetail> {
     return createRequest<PostDetail, PostDetailRequest>(axios.get(`/v1/posts/${slug}`, {
         params: parseToSearchParams({
             filters: [
@@ -49,11 +50,11 @@ export function getPatchPostData(slug: string) {
     }));
 }
 
-export function createInitialPost(data: InitPost) {
+export function createInitialPost(data: InitPost): RequestProcessor<Record<string, unknown>> {
     return createRequest<Record<string, unknown>, InitPost>(axios.post('/v1/posts', data));
 }
 
-export function updatePostData(data: UpdatePostDto) {
+export function updatePostData(data: UpdatePostDto): RequestProcessor<Record<string, unknown>> {
     return createRequest<Record<string, unknown>, UpdatePostDto>(axios.patch(`/v1/posts/${data.id}`, data,
         {
             params: {
@@ -63,6 +64,6 @@ export function updatePostData(data: UpdatePostDto) {
     ));
 }
 
-export function getUploadUrl() {
+export function getUploadUrl(): string {
     return `${REACT_APP_API_URL}/v1/media/upload`;
 }

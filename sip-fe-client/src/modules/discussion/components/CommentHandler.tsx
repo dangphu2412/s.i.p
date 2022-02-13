@@ -18,7 +18,7 @@ export interface CommentHandlerProps extends CommentProps {
     replies: Reply[];
 }
 
-export function CommentHandler(props: CommentHandlerProps) {
+export function CommentHandler(props: CommentHandlerProps): JSX.Element {
     const dispatch = useDispatch();
     const [replyDisplayed, setReplyDisplayed] = useState(false);
     const [currentReply, setCurrentReply] = useState('');
@@ -57,7 +57,7 @@ export function CommentHandler(props: CommentHandlerProps) {
     function onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         setCurrentReply(e.target.value);
     }
-    
+
     return (
         <Comment
             {...props}
@@ -87,7 +87,7 @@ export function CommentHandler(props: CommentHandlerProps) {
                     ghost
                     style={{fontSize: '12px'}}
                 >
-                    <Collapse.Panel 
+                    <Collapse.Panel
                         forceRender={toggleReply}
                         key={props.key} header="Replies"
                     >

@@ -3,7 +3,7 @@ import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
@@ -24,7 +24,6 @@ export function TopicDetailPage(): JSX.Element {
     }
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const [posts, setPosts] = useState<PostOverview>([]);
     const [isLoading, setLoading] = useState(false);
@@ -121,7 +120,7 @@ export function TopicDetailPage(): JSX.Element {
                     </div>
 
                     <Divider/>
-                    
+
                     <Row>
                         <Col span={16}>
                             <div className='flex justify-between'>
@@ -135,7 +134,7 @@ export function TopicDetailPage(): JSX.Element {
                                     options={Object.values(PostFilter)}
                                 />
                             </div>
-                            
+
 
                             <InfiniteScroll
                                 dataLength={posts.length}

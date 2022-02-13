@@ -1,18 +1,18 @@
-import { Button, Modal } from 'antd';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectModalOpenState } from 'src/modules/auth/auth.selector';
 import { GoogleOutlined } from '@ant-design/icons';
+import { Modal } from 'antd';
+import Avatar from 'antd/lib/avatar/avatar';
+import Title from 'antd/lib/typography/Title';
 import axios from 'axios';
-import { loggingAction, loggedInAction, closeAuthPopupAction } from 'src/modules/auth/auth.action';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeAuthPopupAction, loggedInAction, loggingAction } from 'src/modules/auth/auth.action';
+import { selectModalOpenState } from 'src/modules/auth/auth.selector';
 import { getLoginUrl } from 'src/modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from 'src/modules/auth/config/auth.config';
 import { fireError } from 'src/modules/error/error.action';
 import { setLoading } from 'src/modules/loading/loading.action';
-import Avatar from 'antd/lib/avatar/avatar';
-import Title from 'antd/lib/typography/Title';
 
-export function AuthModal() {
+export function AuthModal(): JSX.Element {
     const dispatch = useDispatch();
     const isOpening: boolean | undefined = useSelector(selectModalOpenState);
 
@@ -38,10 +38,10 @@ export function AuthModal() {
                 axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY)) || '';
                 dispatch(setLoading({ isLoading: false }));
                 dispatch(closeAuthPopupAction());
-            } 
+            }
         }, 5000);
     }
-    
+
     return <Modal
         title="Login"
         visible={isOpening}

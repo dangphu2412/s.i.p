@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, ForkEffect, put, takeLatest } from 'redux-saga/effects';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { saveData } from '../data/data.action';
 import { Query } from '../query/interface';
@@ -9,7 +9,7 @@ import { PatchPostDetail, UpdatePostDto } from './api/post.api';
 import { PostActions, PostDetailRequest } from './post.action';
 import { getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
 
-export function* PostSagaTree() {
+export function* PostSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
         PostActions.getOverviewData.type,
         handleFetchPosts

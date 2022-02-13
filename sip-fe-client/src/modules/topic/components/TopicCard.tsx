@@ -12,11 +12,11 @@ export interface TopicCardProps {
     className?: string;
 }
 
-export function TopicCard(props: TopicCardProps) {
+export function TopicCard(props: TopicCardProps): JSX.Element {
     const dispatch = useDispatch();
     const { data, authState } = props;
     const [followed, setFollowed] = useState(props.data.followed);
-    
+
     function handleFollow(e: React.MouseEvent<HTMLElement, MouseEvent>) {
         e.preventDefault();
         if (authState !== AuthType.LOGGED_IN) {

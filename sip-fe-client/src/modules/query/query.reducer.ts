@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import { WritableDraft } from 'immer/dist/types/types-external';
-import { AnyAction } from 'redux';
+import { AnyAction, Reducer } from 'redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { Query } from './interface';
 import { queryChanged, queryClear } from './query.action';
@@ -12,8 +12,8 @@ const initialState: Query = {
     sorts: []
 };
 
-export function queryReducer(state = initialState, action: AnyAction) {
-    return produce(state, draft => {
+export function queryReducer(): Reducer<Query> {
+    return (state = initialState, action: AnyAction) => produce(state, draft => {
         switch(action.type) {
         case queryChanged.type:
             updateQuery(action as PayloadAction<Query>, draft);
@@ -37,7 +37,7 @@ function updateQuery(action: PayloadAction<Query>, draft: WritableDraft<Query>):
         draft.filters = filters;
     }
 
-    
+
     if (Array.isArray(sorts)) {
         draft.sorts = sorts;
     }

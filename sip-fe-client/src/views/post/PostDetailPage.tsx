@@ -133,7 +133,7 @@ export function PostDetailPage(): JSX.Element {
     if (!slug) {
         throw new Error('Please recheck your routing. Post detail view is missing slug with key: slug');
     }
-    
+
     useEffect(() => {
         dispatch(PostActions.getDetailData({ slug }));
     }, []);
@@ -205,7 +205,7 @@ export function PostDetailPage(): JSX.Element {
                             </Title>
 
                             <div className='p-color'>{postDetail.summary}</div>
-                            
+
                             <div className='mt-2'>
                                 {postDetail?.topics.map(topic => {
                                     return (<span key={topic.id}>
@@ -234,14 +234,14 @@ export function PostDetailPage(): JSX.Element {
                             {/* Gallery */}
                             {/* TODO: Change way of rendering data */}
                             <div className='content-bg rounded shadow p-5 hover:shadow-md transition delay-100'>
-                                <Carousel 
+                                <Carousel
                                     showThumbs={true}
                                     showArrows={false}
                                     showStatus={false}
                                     showIndicators={false}
                                     renderThumbs={children => {
                                         let j = 0;
-                                        return children.map(i => {
+                                        return children.map(() => {
                                             j++;
                                             return (<img key={j} src="https://joeschmoe.io/api/v1/random"/>);
                                         });
@@ -268,7 +268,7 @@ export function PostDetailPage(): JSX.Element {
                                                         width="560"
                                                         height="400"
                                                         frameBorder="0"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                         allowFullScreen={true}
                                                         src={item.src}>
                                                     </iframe>
@@ -292,7 +292,7 @@ export function PostDetailPage(): JSX.Element {
                                 Discussion
                             </div>
 
-                            <div 
+                            <div
                                 className='content-bg rounded shadow mr-3 p-5'
                             >
                                 <CommentContainer slug={postDetail.slug}/>
@@ -322,7 +322,7 @@ export function PostDetailPage(): JSX.Element {
                                         </a>
                                     </Button>
                                 </Col>
-                            
+
                                 <Col span={12} className='pl-2'>
                                     <Button
                                         className={'w-full center ' + (vote.isVoted ? ' btn ' : '')}
@@ -374,7 +374,7 @@ export function PostDetailPage(): JSX.Element {
                                 <p className='button-text-color'>
                                     Hunter
                                 </p>
-                                <SimpleCard 
+                                <SimpleCard
                                     title={postDetail.author.fullName}
                                     description={postDetail.author.headline}
                                     image={postDetail.author.avatar}

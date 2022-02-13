@@ -1,13 +1,13 @@
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, ForkEffect, put, takeLatest } from 'redux-saga/effects';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { saveData } from '../data/data.action';
 import { Query } from '../query/interface';
 import { TopicActions } from './topic.action';
 import { followTopic, searchTopics } from './topic.service';
 
-export function* TopicSagaTree() {
+export function* TopicSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
         TopicActions.findMany,
         handleSearchTopics

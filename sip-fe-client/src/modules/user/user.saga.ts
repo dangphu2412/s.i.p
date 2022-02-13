@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, ForkEffect, put, takeLatest } from 'redux-saga/effects';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { Profile } from '../auth/auth.service';
 import { saveData } from '../data/data.action';
@@ -8,7 +8,7 @@ import { Query } from '../query/interface';
 import { FindSiperRequest, UserActions } from './user.action';
 import { findSiper, searchMakers, updateProfile } from './user.service';
 
-export function* UserSagaTree() {
+export function* UserSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
         UserActions.findMakers,
         handleSearchMakers

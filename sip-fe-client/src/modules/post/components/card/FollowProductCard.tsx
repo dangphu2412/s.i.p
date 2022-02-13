@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Row, Col, Image } from 'antd';
+import { Col, Image, Row } from 'antd';
 import React, { useState } from 'react';
 export interface FollowProductProps {
     id: string;
@@ -12,7 +12,7 @@ interface FollowState {
     followed: boolean;
 }
 
-export function FollowProductCard(props: FollowProductProps) {
+export function FollowProductCard(props: FollowProductProps): JSX.Element {
     const [follow, setFollow] = useState<FollowState>(props.followed ? {
         followed: props.followed
     } : {
@@ -37,7 +37,7 @@ export function FollowProductCard(props: FollowProductProps) {
 
             <div className='cursor-pointer' onClick={handleFollowUpComingProduct}>
                 {
-                    follow.followed ? 
+                    follow.followed ?
                         <div>
                             <FontAwesomeIcon icon='check-circle' className='mr-3'/>
                             Following
@@ -47,7 +47,7 @@ export function FollowProductCard(props: FollowProductProps) {
                             Follow
                         </div>
                 }
-                
+
             </div>
         </Col>
 
