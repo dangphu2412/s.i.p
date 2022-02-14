@@ -1,0 +1,5 @@
+
+ptypescript:S37764"TRefactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed.(“ÿÝƒ
+Ttypescript:S1117´"7'runningStatus' is already declared in the upper scope.(ç¬Äð
+Ctypescript:S1110Î"!Remove these useless parentheses.(êæ‚ãÿÿÿÿÿ
+ftypescript:S3358·"DExtract this nested ternary operation into an independent statement.(ãé©Öøÿÿÿÿ

@@ -26,6 +26,7 @@ import { InitPostDto } from './dto/init-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchDetailType } from './enums/fetch-post-type.enum';
 import { PostStatus } from './enums/post-status.enum';
+import { FetchAuthorPostsValidator } from './pipes/author-posts-search.validator';
 import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
 import { FetchPostsDetailValidator } from './pipes/post-detail.validator';
 import { PostService } from './post.service';
@@ -77,7 +78,7 @@ export class PostController {
   @Get('/users/:hashTag')
   async findPostsOfAuthor(
     @Param('hashTag') hashTag: string,
-    @SearchQuery() searchQuery: SearchCriteria,
+    @SearchQuery(FetchAuthorPostsValidator) searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
   ) {
     const posts = await this.postService.findPostsOfAuthor(
@@ -85,7 +86,7 @@ export class PostController {
       hashTag,
       author,
     );
-    return toPage(posts, searchQuery);
+    return toPage(posts as [], searchQuery);
   }
 
   @OptionalProtected

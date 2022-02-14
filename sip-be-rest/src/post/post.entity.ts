@@ -75,11 +75,7 @@ export class Post extends TimeEntityGenerator() {
   @Column({ name: 'pricing_type', type: 'enum', enum: PricingType })
   public pricingType: PricingType;
 
-  /**
-   * START VIRTUAL FIELDS
-   * FIXME: This is a work around to add virtual field mapping into entity
-   */
-  public isAuthor?: boolean;
+  public isVoted?: boolean;
 
   @Column({
     select: false,

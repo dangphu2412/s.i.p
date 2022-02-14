@@ -23,7 +23,7 @@ interface CardItemOverviewProps {
 export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX.Element {
     const dispatch = useDispatch();
     const [vote, setVote] = useState<VoteState>({
-        isVoted: data.isAuthor,
+        isVoted: data.isVoted,
         voteTotal: +data.totalVotes
     });
 

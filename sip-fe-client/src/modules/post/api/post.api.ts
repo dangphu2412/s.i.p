@@ -7,7 +7,7 @@ export interface PostSummary {
   title: string;
   slug: string;
   summary: string;
-  isAuthor: boolean;
+  isVoted: boolean;
   totalVotes: string;
   thumbnail: string;
   topics: Topic[];
@@ -75,4 +75,16 @@ export interface UpdatePostDto extends PatchPostDetail {
   links: {
     productLink: string;
   }
+}
+
+export interface EditPostViewDto {
+    id: string;
+    title: string;
+    slug: string;
+    status: PostStatus;
+    thumbnail: string;
+    updatedAt: string;
+    canDelete: boolean;
+    canUpdate: boolean;
+    readonly: boolean;
 }

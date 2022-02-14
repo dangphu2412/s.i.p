@@ -31,6 +31,8 @@ import {
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
 import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
+import { EditablePostView } from './client/post-editable';
+import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 
 @Injectable()
 export class PostService {
@@ -192,6 +194,11 @@ export class PostService {
     );
 
     await this.markAuthorForPosts(posts, author);
+
+    if (FilterUtils.has(searchQuery.filters, 'scope')) {
+      return this.mapScopeForPosts(posts);
+    }
+
     return posts;
   }
 
@@ -497,14 +504,14 @@ export class PostService {
       const postMap = keyBy(votes, 'post');
 
       posts.forEach((post) => {
-        post.isAuthor = !!postMap[`${post.id}`];
+        post.isVoted = !!postMap[`${post.id}`];
       });
 
       return;
     }
 
     posts.forEach((post) => {
-      post.isAuthor = false;
+      post.isVoted = false;
     });
   }
 
@@ -531,5 +538,22 @@ export class PostService {
       },
       [null, []],
     );
+  }
+
+  private mapScopeForPosts(posts: PostOverview): EditablePostView {
+    return posts.map((post) => {
+      const canModify = post.status === PostStatus.DRAFT;
+      return {
+        id: post.id,
+        slug: post.slug,
+        status: post.status,
+        thumbnail: post.thumbnail,
+        title: post.title,
+        updatedAt: post.updatedAt,
+        canDelete: canModify,
+        canUpdate: canModify,
+        readonly: !canModify,
+      };
+    });
   }
 }

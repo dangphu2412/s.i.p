@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { Action, Reducer } from 'redux';
 import { DataHolders } from './api/activity';
-import { saveData } from './data.action';
+import { cleanData, saveData } from './data.action';
 
 export function dataHoldersReducer(): Reducer<DataHolders> {
     return (state = {}, action: Action) => produce(state, draft => {
@@ -11,6 +11,8 @@ export function dataHoldersReducer(): Reducer<DataHolders> {
                 data: action.payload.data,
                 query: action.payload.query
             };
+        } else if (cleanData.match(action)) {
+            delete draft[action.payload];
         }
 
         return draft;

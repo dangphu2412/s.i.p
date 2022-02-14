@@ -9,7 +9,7 @@ export function UnAuthenticatePage(): JSX.Element {
     useEffect(() => {
         dispatch(openAuthPopupAction());
     }, []);
-    
+
     return <ClientLayout>
         <div className='cover'>
             <div className="wrapper">

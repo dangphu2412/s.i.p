@@ -1,5 +1,5 @@
 import { Post } from '../post.entity';
 
-export interface PostDetail extends Post {
+export interface DetailPostView extends Post {
   voteCount: number;
 }

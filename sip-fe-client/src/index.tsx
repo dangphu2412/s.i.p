@@ -9,14 +9,14 @@ import {
     faComment, faPlusCircle, faCheckCircle,
     faInfoCircle, faPhotoVideo, faUser, faRocket,
     faMinusCircle, faFire, faArrowRight, faBirthdayCake, faStar,
-    faSearch, faArrowDown
+    faSearch, faArrowDown, faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
     faComment, faPlusCircle, faCheckCircle,
     faInfoCircle, faPhotoVideo, faUser, faRocket,
     faMinusCircle, faFire, faArrowRight, faBirthdayCake,
-    faStar, faSearch, faArrowDown
+    faStar, faSearch, faArrowDown, faTrash
 );
 
 render(

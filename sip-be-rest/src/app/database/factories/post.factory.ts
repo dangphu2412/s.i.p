@@ -25,7 +25,6 @@ define(
     const runningStatusValues = Object.values(ProductRunningStatus);
     const author = faker.random.arrayElement(authors);
     return Post.create({
-      content: faker.lorem.paragraph(1),
       title,
       summary: faker.lorem.words(5),
       slug: SlugUtils.normalize(title),

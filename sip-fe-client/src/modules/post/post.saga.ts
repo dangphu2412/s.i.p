@@ -21,8 +21,8 @@ export function* PostSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     );
 
     yield takeLatest(
-        PostActions.getSelfIdeas.type,
-        handleFetchSelfIdeas
+        PostActions.getAuthorIdeas.type,
+        handleFetchAuthorIdeas
     );
 
     yield takeLatest(
@@ -50,7 +50,7 @@ function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
     }));
 }
 
-function* handleFetchSelfIdeas(action: PayloadAction<Query & { hashTag: string }>): SagaIterator {
+function* handleFetchAuthorIdeas(action: PayloadAction<Query & { hashTag: string }>): SagaIterator {
     const request = getSelfIdeas(action.payload.hashTag, {
         page: action.payload.page,
         filters: action.payload.filters,
@@ -60,7 +60,7 @@ function* handleFetchSelfIdeas(action: PayloadAction<Query & { hashTag: string }
     yield put(saveData({
         data: data.data,
         query: {},
-        view: VIEW_SELECTOR.FIND_POST_SELF_IDEAS
+        view: VIEW_SELECTOR.FIND_POST_AUTHOR_IDEAS
     }));
 }
 

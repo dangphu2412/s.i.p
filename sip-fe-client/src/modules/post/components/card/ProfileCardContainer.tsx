@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
+import { cleanData } from 'src/modules/data/data.action';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { Page } from 'src/modules/query/interface';
 import { PostOverview } from '../../api/post.api';
@@ -24,11 +25,11 @@ export function ProfileCardContainer(props: ProfileCardContainerProps): JSX.Elem
         size: 20
     });
 
-    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_SELF_IDEAS));
+    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_AUTHOR_IDEAS));
     const authState = useSelector(selectAuthState);
 
     useEffect(() => {
-        dispatch(PostActions.getSelfIdeas({
+        dispatch(PostActions.getAuthorIdeas({
             page,
             filters: [],
             hashTag: props.hashTag
@@ -45,12 +46,16 @@ export function ProfileCardContainer(props: ProfileCardContainerProps): JSX.Elem
                 dataHolder.data
             ));
         }
+
+        return () => {
+            dispatch(cleanData(VIEW_SELECTOR.FIND_POST_AUTHOR_IDEAS));
+        };
     }, [dataHolder]);
 
     function loadMorePosts() {
         setLoading(true);
 
-        dispatch(PostActions.getSelfIdeas({
+        dispatch(PostActions.getAuthorIdeas({
             page,
             filters: [],
             hashTag: props.hashTag

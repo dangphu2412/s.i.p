@@ -6,9 +6,10 @@
         "typescript",
         "typescriptreact"
     ],
+    "files.eol": "\n",
     "editor.lineHeight": 1.8,
     "javascript.preferences.quoteStyle": "single",
     "typescript.preferences.quoteStyle": "single",
     "javascript.updateImportsOnFileMove.enabled": "always",
-    "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always"
 }

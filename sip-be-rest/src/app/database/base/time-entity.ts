@@ -7,8 +7,13 @@ export enum TimeType {
   TimeTracker,
 }
 
+export interface TimeGenerator {
+  (): BaseTracker;
+  (type: TimeType): TrashTracker | TimeTracker;
+}
+
 // Still not figure way to fix type
-export const TimeEntityGenerator = (type?: TimeType): any => {
+export const TimeEntityGenerator = (type?: TimeType) => {
   if (!type) return BaseTracker;
 
   const typeToClass = {
