@@ -1,10 +1,13 @@
+import { fireMessage } from '../message/message.action';
 import { CreatCommentDto, CreatReplyDto as CreateReplyDto, DiscussionActions } from './discussion.action';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { createComment, createReply, getPostComments } from './discussion.service';
+import { createComment, createDiscussion, createReply, getPostComments } from './discussion.service';
 import { saveData } from '../data/data.action';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
+import { CreateDiscussionDto } from './api/discussion.api';
+import { MessageType } from '../app.types';
 
 export function* DiscussionSagaTree(): SagaIterator {
     yield takeLatest(
@@ -15,6 +18,11 @@ export function* DiscussionSagaTree(): SagaIterator {
     yield takeLatest(
         DiscussionActions.createReply.type,
         handleReplyCreation
+    );
+
+    yield takeLatest(
+        DiscussionActions.createDiscussion.type,
+        handleDiscussionCreation
     );
 
     yield takeLatest(
@@ -51,4 +59,15 @@ function* handleGetPostComments(action: PayloadAction<{ slug: string }>): SagaIt
         view: VIEW_SELECTOR.FIND_POST_COMMENTS
     }));
     return;
+}
+
+function* handleDiscussionCreation(action: PayloadAction<CreateDiscussionDto>): SagaIterator {
+    const request = createDiscussion(action.payload);
+    yield call(request.handle);
+    if (request.isSuccess()) {
+        yield put(fireMessage({
+            type: MessageType.SUCCESS,
+            message: 'Discussion created successfully'
+        }));
+    }
 }

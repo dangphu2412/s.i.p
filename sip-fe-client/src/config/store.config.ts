@@ -1,6 +1,7 @@
 import { applyMiddleware, compose, createStore, Store } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { fireError } from '../modules/error/error.action';
+import { MessageType } from 'src/modules/app.types';
+import { fireMessage } from '../modules/message/message.action';
 import createReducer from './root-reducer.config';
 import rootSaga from './root-saga.config';
 
@@ -16,7 +17,7 @@ export function createReduxStore(): Store {
     const sagaMiddleware = createSagaMiddleware({
         onError: (error: Error) => {
             if (error.name === 'HTTP') {
-                store.dispatch(fireError({message: error.message }));
+                store.dispatch(fireMessage({message: error.message, type: MessageType.ERROR }));
             }
         }
     });

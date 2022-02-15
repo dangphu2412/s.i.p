@@ -30,7 +30,7 @@ import {
 } from './enums/post-status.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
-import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
+import { CreateCommentDto } from '@discussion/dto/create-comment.dto';
 import { EditablePostView } from './client/post-editable';
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 
@@ -89,7 +89,7 @@ export class PostService {
 
   public async createCommentOfPost(
     slug: string,
-    createDiscussionDto: CreateDiscussionDto,
+    createDiscussionDto: CreateCommentDto,
     authContext: UserCredential,
   ) {
     const post = await this.postRepository.findBySlug(slug);
@@ -114,7 +114,7 @@ export class PostService {
   public async createReplyOfPost(
     slug: string,
     commentId: string,
-    createDiscussionDto: CreateDiscussionDto,
+    createDiscussionDto: CreateCommentDto,
     authContext: UserCredential,
   ) {
     const post = await this.postRepository.findBySlug(slug);

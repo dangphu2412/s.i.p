@@ -5,12 +5,13 @@ import { MenuInfo } from 'rc-menu/lib/interface';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { MessageType } from 'src/modules/app.types';
 import { loggedInAction, loggingAction, logoutAction } from '../../modules/auth/auth.action';
 import { AuthType } from '../../modules/auth/auth.reducer';
 import { selectAuthState, selectProfile } from '../../modules/auth/auth.selector';
 import { getLoginUrl } from '../../modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.config';
-import { fireError } from '../../modules/error/error.action';
+import { fireMessage } from '../../modules/message/message.action';
 import { setLoading } from '../../modules/loading/loading.action';
 import './index.scss';
 
@@ -31,7 +32,10 @@ export function ClientNavbar(): JSX.Element {
                 const profile = localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY));
 
                 if (!profile) {
-                    dispatch(fireError({message: 'Cannot login at the moment. Please try again later'}));
+                    dispatch(fireMessage({
+                        message: 'Cannot login at the moment. Please try again later',
+                        type: MessageType.ERROR
+                    }));
                     return;
                 }
 
@@ -40,7 +44,8 @@ export function ClientNavbar(): JSX.Element {
                 }));
                 axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY)) || '';
                 dispatch(setLoading({ isLoading: false }));
-            } 
+                location.href = '/';
+            }
         }, 5000);
     }
 
@@ -48,6 +53,7 @@ export function ClientNavbar(): JSX.Element {
         menuInfo.domEvent.preventDefault();
         message.info('Logging out');
         dispatch(logoutAction());
+        location.href = '/';
     }
 
     return (
@@ -65,24 +71,24 @@ export function ClientNavbar(): JSX.Element {
                     <div className='max-w-2xl w-full'>
                         <Menu mode="horizontal" className='override-line-height-menu cover-bg'>
                             <Menu.Item className='cover-bg' key="1">
-                                <Link to="/"> 
+                                <Link to="/">
                                 Products
                                 </Link>
                             </Menu.Item>
                             <Menu.Item className='cover-bg' key="2">
-                                <Link to="/topics"> 
+                                <Link to="/topics">
                                 Topics
                                 </Link>
                             </Menu.Item>
                             <Menu.Item className='cover-bg' key="3">
-                                <Link to="/discussions"> 
+                                <Link to="/discussions">
                                 Discussions
                                 </Link>
                             </Menu.Item>
                         </Menu>
                     </div>
-                </div>     
-                
+                </div>
+
                 <div className='p-right-container f-center' >
                     <Dropdown placement='bottomRight' overlay={
                         <Menu>
@@ -97,7 +103,7 @@ export function ClientNavbar(): JSX.Element {
                                     New discussion
                                 </Link>
                             </Menu.Item>
-                            
+
                         </Menu>
                     }
                     >
@@ -139,7 +145,7 @@ export function ClientNavbar(): JSX.Element {
                             : <Button
                                 className="ant-dropdown-link btn-bg btn-bg-hover"
                                 shape="circle"
-                                size='large' 
+                                size='large'
                                 danger
                                 onClick={() => loginGoogle()}
                             >

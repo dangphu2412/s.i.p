@@ -5,6 +5,7 @@ export const VIEW_SELECTOR = {
     FIND_SIPER: 'findSiper',
     FIND_POST_COMMENTS: 'findPostComments',
     FIND_POST_AUTHOR_IDEAS: 'findPostAuthorIdeas',
+    FIND_TOPIC_DETAIL: 'findTopicDetail',
     SEARCH_TOPIC: 'searchTopic',
     SEARCH_MAKERS: 'searchUsers',
     CREATE_COMMENT: 'createComment',

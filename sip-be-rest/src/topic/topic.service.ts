@@ -34,9 +34,9 @@ export class TopicService {
           `User with id: ${authContext.userId} is not available at the moment`,
         );
       }
-      return this.markFollowedTopicsByAuthor(topics, author);
+      return this.mapFollowedTopicsByAuthor(topics, author);
     }
-    return this.markFollowedTopicsByAuthor(topics, undefined);
+    return this.mapFollowedTopicsByAuthor(topics, undefined);
   }
 
   public async followTopicByAuthor(topicId: number, authorId: number) {
@@ -76,7 +76,25 @@ export class TopicService {
     });
   }
 
-  private markFollowedTopicsByAuthor(
+  public async findOneBySlug(
+    slug: string,
+    authContext: UserCredential | undefined,
+  ) {
+    let user: User | undefined;
+    const topic = await this.topicRepository.findOne({
+      where: {
+        slug,
+      },
+    });
+    if (authContext) {
+      user = await this.userService.findByIdWithFollowedTopics(
+        +authContext.userId,
+      );
+    }
+    return this.mapFollowedTopicsByAuthor([topic], user)[0];
+  }
+
+  private mapFollowedTopicsByAuthor(
     topics: Topic[],
     author: User | undefined,
   ): TopicOverview {

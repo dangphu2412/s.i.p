@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
-import { fireError } from 'src/modules/error/error.action';
+import { MessageType } from 'src/modules/app.types';
+import { fireMessage } from 'src/modules/message/message.action';
 import { CreatePostType } from 'src/modules/post/constants/create-type';
 import { InitPost } from 'src/modules/post/post.action';
 import { createInitialPost } from 'src/modules/post/post.service';
@@ -42,7 +43,7 @@ export function CreatePostPage(): JSX.Element {
 
         await request.doRequest();
         if (request.getErrorMessage()) {
-            dispatch(fireError({message: request.getErrorMessage() }));
+            dispatch(fireMessage({message: request.getErrorMessage(), type: MessageType.ERROR }));
             return;
         }
 

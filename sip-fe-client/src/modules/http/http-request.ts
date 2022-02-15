@@ -1,8 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { merge } from 'lodash';
 import { call, CallEffect, put, PutEffect } from 'redux-saga/effects';
-import { AppError, AppLoading } from '../app.types';
-import { fireError } from '../error/error.action';
+import { AppMessage, AppLoading, MessageType } from '../app.types';
+import { fireMessage } from '../message/message.action';
 import { setLoading } from './../loading/loading.action';
 import { HttpError } from './http-error';
 
@@ -61,7 +61,7 @@ export function createRequest<Response, Request>(request: Promise<AxiosResponse<
 
     function* getDataSafe() {
         if (errorMsg) {
-            yield put(fireError({ message: errorMsg }));
+            yield put(fireMessage({ message: errorMsg, type: MessageType.ERROR }));
         }
         return data;
     }
@@ -102,7 +102,9 @@ export function createRequest<Response, Request>(request: Promise<AxiosResponse<
         handle,
         getData,
         getDataSafe,
-        getErrorMessage
+        getErrorMessage,
+        hasError: () => !!errorMsg,
+        isSuccess: () => !errorMsg
     };
 }
 
@@ -119,8 +121,10 @@ export interface RequestProcessor<Response> {
     handle(): Generator<CallEffect<Response> | CallEffect<void>, Response, Response>;
     getData(): Response;
     getDataSafe(): Generator<PutEffect<{
-        payload: Pick<AppError, 'message'>;
+        payload: Pick<AppMessage, 'message'>;
         type: string;
     }>, Response, unknown>;
     getErrorMessage(): string;
+    hasError(): boolean;
+    isSuccess(): boolean;
 }

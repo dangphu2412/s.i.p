@@ -1,5 +1,6 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
-import { Discussion } from '@discussion/discussion.entity';
+import { Comment } from '@discussion/entities/comment.entity';
+import { Discussion } from '@discussion/entities/discussion.entity';
 import { Permission } from '@permission/permission.entity';
 import { Post } from '@post/post.entity';
 import { Topic } from '@topic/topic.entity';
@@ -56,6 +57,9 @@ export class User extends TimeEntityGenerator() {
     },
   })
   public permissions: Permission[];
+
+  @OneToMany(() => Comment, (comment) => comment.author)
+  public comments: Comment[];
 
   @OneToMany(() => Discussion, (discussion) => discussion.author)
   public discussions: Discussion[];

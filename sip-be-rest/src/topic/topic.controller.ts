@@ -20,9 +20,18 @@ export class TopicController {
   @OptionalProtected
   findMany(
     @SearchQuery(FetchTopicsOverviewValidator) searchQuery: SearchCriteria,
-    @AuthContext() author: UserCredential | undefined,
+    @AuthContext() authContext: UserCredential | undefined,
   ) {
-    return this.topicService.findMany(searchQuery, author);
+    return this.topicService.findMany(searchQuery, authContext);
+  }
+
+  @Get(':slug')
+  @OptionalProtected
+  findOne(
+    @Param('slug') slug: string,
+    @AuthContext() authContext: UserCredential | undefined,
+  ) {
+    return this.topicService.findOneBySlug(slug, authContext);
   }
 
   @Protected

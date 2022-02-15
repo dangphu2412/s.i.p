@@ -5,11 +5,12 @@ import Title from 'antd/lib/typography/Title';
 import axios from 'axios';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { MessageType } from 'src/modules/app.types';
 import { closeAuthPopupAction, loggedInAction, loggingAction } from 'src/modules/auth/auth.action';
 import { selectModalOpenState } from 'src/modules/auth/auth.selector';
 import { getLoginUrl } from 'src/modules/auth/auth.service';
 import { AuthConfig, AuthConfigKeys } from 'src/modules/auth/config/auth.config';
-import { fireError } from 'src/modules/error/error.action';
+import { fireMessage } from 'src/modules/message/message.action';
 import { setLoading } from 'src/modules/loading/loading.action';
 
 export function AuthModal(): JSX.Element {
@@ -28,7 +29,12 @@ export function AuthModal(): JSX.Element {
                 const profile = localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY));
 
                 if (!profile) {
-                    dispatch(fireError({message: 'Cannot login at the moment. Please try again later'}));
+                    dispatch(fireMessage(
+                        {
+                            message: 'Cannot login at the moment. Please try again later',
+                            type: MessageType.ERROR
+                        }
+                    ));
                     return;
                 }
 
@@ -38,6 +44,7 @@ export function AuthModal(): JSX.Element {
                 axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY)) || '';
                 dispatch(setLoading({ isLoading: false }));
                 dispatch(closeAuthPopupAction());
+                location.href = '/';
             }
         }, 5000);
     }

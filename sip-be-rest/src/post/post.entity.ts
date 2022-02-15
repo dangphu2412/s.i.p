@@ -1,6 +1,6 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
 import { Vote } from '@vote/vote.entity';
-import { Discussion } from 'src/discussion/discussion.entity';
+import { Comment } from '@discussion/entities/comment.entity';
 import { Topic } from 'src/topic/topic.entity';
 import { User } from 'src/user/user.entity';
 import {
@@ -18,6 +18,7 @@ import {
   PricingType,
   ProductRunningStatus,
 } from './enums/post-status.enum';
+import { Discussion } from '@discussion/entities/discussion.entity';
 
 @Entity('posts')
 @Index(['slug'])
@@ -106,8 +107,8 @@ export class Post extends TimeEntityGenerator() {
   @OneToMany(() => Vote, (vote) => vote.post)
   public votes: Vote[];
 
-  @OneToMany(() => Discussion, (discussion) => discussion.author)
-  public discussions: Discussion[];
+  @OneToMany(() => Comment, (comment) => comment.author)
+  public comments: Comment[];
 
   @ManyToOne(() => User, (author) => author.posts)
   public author: User;

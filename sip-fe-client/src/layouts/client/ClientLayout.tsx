@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthModal } from 'src/components/modal/AuthModal';
 import { ClientNavbar } from '../../components/navbar/ClientNavbar.component';
-import { ErrorBoundary } from '../../components/progress/ErrorBoundary';
+import { NotificationContainer } from '../../components/progress/NotificationContainer';
 import { LoadingOverlay } from '../../components/progress/LoadingOverlay';
 import './index.scss';
 
@@ -12,7 +12,7 @@ interface Props {
 export function ClientLayout(props: Props): JSX.Element {
     return (
         <div>
-            <ErrorBoundary/>
+            <NotificationContainer/>
             <AuthModal/>
             <LoadingOverlay>
                 <ClientNavbar/>

@@ -17,14 +17,14 @@ export class Discussion extends TimeEntityGenerator(TimeType.Time) {
   @PrimaryGeneratedColumn()
   public id: string;
 
+  @Column({ name: 'title', nullable: false })
+  public title: string;
+
   @Column({ name: 'content', type: 'text' })
   public content: string;
 
   @ManyToOne(() => User, (author) => author.discussions)
   public author: User;
-
-  @ManyToOne(() => Post, (post) => post.discussions)
-  public post: Post;
 
   @TreeChildren()
   replies: Discussion[];

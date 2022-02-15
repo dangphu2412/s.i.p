@@ -15,3 +15,7 @@ export function searchTopics(query: Query): RequestProcessor<Topic[]> {
 export function followTopic(topicId: string): RequestProcessor<string> {
     return createRequest<string, Record<string, unknown>>(axios.patch(`/v1/topics/${topicId}/follow`));
 }
+
+export function getTopicDetail(slug: string): RequestProcessor<Topic> {
+    return createRequest<Topic, void>(axios.get(`/v1/topics/${slug}`));
+}

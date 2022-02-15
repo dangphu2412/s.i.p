@@ -2,9 +2,10 @@ import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 import { SagaIterator } from 'redux-saga';
 import { call, ForkEffect, put, takeLatest } from 'redux-saga/effects';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
+import { MessageType } from '../app.types';
 import { saveData } from '../data/data.action';
 import { Query } from '../query/interface';
-import { fireError } from './../error/error.action';
+import { fireMessage } from '../message/message.action';
 import { PatchPostDetail, UpdatePostDto } from './api/post.api';
 import { PostActions, PostDetailRequest } from './post.action';
 import { getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
@@ -104,7 +105,10 @@ function* handleSavePostData(action: PayloadAction<PatchPostDetail>): SagaIterat
     const request = updatePostData(toUpdatePostDto(action.payload));
     yield call(request.doRequest);
     if (request.getErrorMessage()) {
-        yield put(fireError({ message: request.getErrorMessage() }));
+        yield put(fireMessage({
+            message: request.getErrorMessage(),
+            type: MessageType.ERROR
+        }));
     }
     return;
 }

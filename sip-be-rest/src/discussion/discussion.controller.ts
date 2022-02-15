@@ -3,15 +3,28 @@ import { Protected } from '@auth/decorator/protected.decorator';
 import { AuthContext } from '@auth/decorator/user-cred.decorator';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
-import { Body, Controller, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DiscussionService } from './discussion.service';
+import { CreateDiscussionDto } from './dto/create-discussion.dto';
 import { UpdateDiscussionDto } from './dto/update-discussion.dto';
 
 @ApiTags('discussions')
 @Controller('v1/discussions')
 export class DiscussionController {
   constructor(private readonly discussionService: DiscussionService) {}
+
+  @Protected
+  @Post()
+  createDiscussion(
+    @Body() createDiscussionDto: CreateDiscussionDto,
+    @AuthContext() authContext: UserCredential,
+  ) {
+    return this.discussionService.createDiscussion(
+      createDiscussionDto,
+      authContext,
+    );
+  }
 
   @Protected
   @Patch(':id')

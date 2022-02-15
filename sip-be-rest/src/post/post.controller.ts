@@ -1,4 +1,4 @@
-import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
+import { CreateCommentDto } from '@discussion/dto/create-comment.dto';
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { toPage } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
@@ -123,7 +123,7 @@ export class PostController {
   @Post(':slug/comments')
   async createComment(
     @Param('slug') slug: string,
-    @Body() createDiscussionDto: CreateDiscussionDto,
+    @Body() createDiscussionDto: CreateCommentDto,
     @AuthContext() author: UserCredential,
   ) {
     return this.postService.createCommentOfPost(
@@ -138,7 +138,7 @@ export class PostController {
   async createReply(
     @Param('slug') slug: string,
     @Param('commentId') commentId: string,
-    @Body() createDiscussionDto: CreateDiscussionDto,
+    @Body() createDiscussionDto: CreateCommentDto,
     @AuthContext() author: UserCredential,
   ) {
     return this.postService.createReplyOfPost(

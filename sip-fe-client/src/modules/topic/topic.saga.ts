@@ -4,8 +4,9 @@ import { call, ForkEffect, put, takeLatest } from 'redux-saga/effects';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { saveData } from '../data/data.action';
 import { Query } from '../query/interface';
+import { Topic } from './api/topic.api';
 import { TopicActions } from './topic.action';
-import { followTopic, searchTopics } from './topic.service';
+import { followTopic, getTopicDetail, searchTopics } from './topic.service';
 
 export function* TopicSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
@@ -16,6 +17,11 @@ export function* TopicSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
         TopicActions.followTopic,
         handleFollowTopic
+    );
+
+    yield takeLatest(
+        TopicActions.findDetail,
+        handleGetTopicDetail
     );
 }
 
@@ -31,4 +37,13 @@ function* handleSearchTopics(action: PayloadAction<Query>): SagaIterator {
 function* handleFollowTopic(action: PayloadAction<string>): SagaIterator {
     const request = followTopic(action.payload);
     yield call(request.handle);
+}
+
+function* handleGetTopicDetail(action: PayloadAction<string>) {
+    const request = getTopicDetail(action.payload);
+    const data: Topic = yield call(request.handle);
+    yield put(saveData({
+        data,
+        view: VIEW_SELECTOR.FIND_TOPIC_DETAIL
+    }));
 }

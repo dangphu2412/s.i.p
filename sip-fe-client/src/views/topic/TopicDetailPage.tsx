@@ -7,6 +7,8 @@ import { Link, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
+import { openAuthPopupAction } from 'src/modules/auth/auth.action';
+import { AuthType } from 'src/modules/auth/auth.reducer';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { PostOverview } from 'src/modules/post/api/post.api';
@@ -15,6 +17,8 @@ import { FilterDropdown } from 'src/modules/post/components/dropdown/FilterDropd
 import { PostFilter } from 'src/modules/post/constants/post-filter.enum';
 import { PostActions } from 'src/modules/post/post.action';
 import { Page } from 'src/modules/query/interface';
+import { Topic, TopicWithFollowStatus } from 'src/modules/topic/api/topic.api';
+import { TopicActions } from 'src/modules/topic/topic.action';
 
 export function TopicDetailPage(): JSX.Element {
     const { slug } = useParams();
@@ -25,6 +29,14 @@ export function TopicDetailPage(): JSX.Element {
 
     const dispatch = useDispatch();
 
+    const [detail, setDetail] = useState<TopicWithFollowStatus>({
+        id: 'UNKNOWN',
+        avatar: '',
+        name: '',
+        slug: '',
+        summary: '',
+        followed: false
+    });
     const [posts, setPosts] = useState<PostOverview>([]);
     const [isLoading, setLoading] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState<PostFilter>(PostFilter.HOTTEST);
@@ -32,9 +44,45 @@ export function TopicDetailPage(): JSX.Element {
         page: 1,
         size: 20
     });
+    const [follow, setFollow] = useState(false);
 
-    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_OVERVIEW));
+    const topicDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_TOPIC_DETAIL));
+    const postOverviewDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_OVERVIEW));
     const authState = useSelector(selectAuthState);
+
+    useEffect(() => {
+        dispatch(TopicActions.findDetail(slug));
+    }, []);
+
+    useEffect(() => {
+        if (topicDetailDataHolder?.data) {
+            setDetail(topicDetailDataHolder.data as TopicWithFollowStatus);
+            setLoading(true);
+            setPosts([]);
+            const page = {
+                page: 1,
+                size: 20
+            };
+            setPage(page);
+            dispatch(PostActions.getOverviewData({
+                page: page,
+                filters: [
+                    {
+                        column: 'type',
+                        comparator: 'eq',
+                        value: selectedFilter
+                    },
+                    {
+                        column: 'topicName',
+                        comparator: 'eq',
+                        value: (topicDetailDataHolder.data as Topic).name
+                    }
+                ]
+            }));
+            setFollow((topicDetailDataHolder.data as TopicWithFollowStatus).followed);
+            setLoading(false);
+        }
+    }, [topicDetailDataHolder]);
 
     useEffect(() => {
         setLoading(true);
@@ -55,22 +103,23 @@ export function TopicDetailPage(): JSX.Element {
                 {
                     column: 'topicName',
                     comparator: 'eq',
-                    value: slug
+                    value: detail.name
                 }
             ]
         }));
         setLoading(false);
     }, [selectedFilter]);
 
+
     useEffect(() => {
-        if (dataHolder?.data) {
+        if (postOverviewDataHolder?.data) {
             setPosts(posts.concat(
-                dataHolder.data
+                postOverviewDataHolder.data
             ));
         }
-    }, [dataHolder]);
+    }, [postOverviewDataHolder]);
 
-    function loadMorePosts() {
+    function loadMore() {
         setLoading(true);
 
         const newPage = {
@@ -94,6 +143,16 @@ export function TopicDetailPage(): JSX.Element {
         setLoading(false);
     }
 
+    function followTopic(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+        e.preventDefault();
+        if (authState !== AuthType.LOGGED_IN) {
+            dispatch(openAuthPopupAction());
+            return;
+        }
+        dispatch(TopicActions.followTopic(detail.id));
+        setFollow(!follow);
+    }
+
     return (
         <ClientLayout>
             <Container>
@@ -103,19 +162,22 @@ export function TopicDetailPage(): JSX.Element {
                             <Breadcrumb.Item>
                                 <Link to='/topics'>Topics</Link>
                             </Breadcrumb.Item>
-                            <Breadcrumb.Item>{slug}</Breadcrumb.Item>
+                            <Breadcrumb.Item>{detail.slug}</Breadcrumb.Item>
                         </Breadcrumb>
 
                         <Title>
-                            {slug}
+                            {detail.name}
                         </Title>
 
                         <div>
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio repellat illo a omnis, aspernatur, quasi distinctio voluptates expedita temporibus, odio neque doloribus nostrum nam ratione recusandae veritatis placeat nihil ipsum.
+                            {detail.summary}
                         </div>
 
-                        <Button danger className='mt-5'>
-                                Follow
+                        <Button
+                            danger={follow} className='mt-5'
+                            onClick={followTopic}
+                        >
+                            {follow ? 'Following' : 'Follow'}
                         </Button>
                     </div>
 
@@ -125,7 +187,7 @@ export function TopicDetailPage(): JSX.Element {
                         <Col span={16}>
                             <div className='flex justify-between'>
                                 <div>
-                                Best of {slug}
+                                Best of {detail.name}
                                 </div>
 
                                 <FilterDropdown
@@ -138,7 +200,7 @@ export function TopicDetailPage(): JSX.Element {
 
                             <InfiniteScroll
                                 dataLength={posts.length}
-                                next={loadMorePosts}
+                                next={loadMore}
                                 hasMore={true}
                                 loader={<Spin />}
                             >

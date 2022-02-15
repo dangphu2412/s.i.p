@@ -56,6 +56,7 @@ export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX
                         </Title>}
                         description={
                             <div className='mt-3'>
+                                <div>{data.summary}</div>
                                 <span className='mr-3'>
                                     <FontAwesomeIcon icon="comment" className='mr-3'/>
                                 80
