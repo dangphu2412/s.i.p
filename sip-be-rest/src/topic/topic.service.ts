@@ -1,4 +1,3 @@
-import { ArrayUtils } from './../external/utils/array/array.utils';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import {
   Injectable,

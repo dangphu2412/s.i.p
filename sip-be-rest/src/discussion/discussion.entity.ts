@@ -13,7 +13,7 @@ import {
 
 @Entity('discussions')
 @Tree('materialized-path')
-export class Discussion extends TimeEntityGenerator(TimeType.TimeTracker) {
+export class Discussion extends TimeEntityGenerator(TimeType.Time) {
   @PrimaryGeneratedColumn()
   public id: string;
 

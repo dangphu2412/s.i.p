@@ -8,5 +8,5 @@ export class BaseTracker {
   updatedAt: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deleted: Date;
+  deletedAt: Date;
 }

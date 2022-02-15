@@ -1,5 +1,4 @@
 import { DiscussionModule } from '@discussion/discussion.module';
-import { DiscussionService } from '@discussion/discussion.service';
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TopicModule } from '@topic/topic.module';

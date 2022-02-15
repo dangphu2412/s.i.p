@@ -45,7 +45,6 @@ export class PermissionService {
 
   public toPermissionRules(permissions: Permission[]): Record<string, number> {
     const RULE_IS_WORKING = 1;
-    const DISABLE_RULE = 0; // Will be develop in permission in future
 
     const rules: Record<string, number> = {};
     permissions.forEach((permission) => {

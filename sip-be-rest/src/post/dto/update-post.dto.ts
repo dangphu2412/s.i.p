@@ -1,5 +1,4 @@
 import { SocialMediaDto } from '@media/dto/gallery.dto';
-import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   PricingType,
@@ -7,7 +6,6 @@ import {
 } from '@post/enums/post-status.enum';
 import {
   IsArray,
-  IsBoolean,
   IsDate,
   IsEnum,
   IsObject,
