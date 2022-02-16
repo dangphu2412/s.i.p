@@ -1,10 +1,11 @@
+import { DiscussionVote } from '@vote/entities/vote-discussion.entity';
 import { Module } from '@nestjs/common';
 import { VoteService } from './vote.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Vote } from './vote.entity';
+import { Vote } from './entities/vote.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Vote])],
+  imports: [TypeOrmModule.forFeature([Vote, DiscussionVote])],
   providers: [VoteService],
   exports: [VoteService],
 })

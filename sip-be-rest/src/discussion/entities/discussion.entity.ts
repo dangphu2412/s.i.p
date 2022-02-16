@@ -1,10 +1,11 @@
 import { TimeEntityGenerator, TimeType } from '@database/base/time-entity';
-import { Post } from '@post/post.entity';
 import { User } from '@user/user.entity';
+import { DiscussionVote } from '@vote/entities/vote-discussion.entity';
 import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
@@ -27,8 +28,14 @@ export class Discussion extends TimeEntityGenerator(TimeType.Time) {
   public author: User;
 
   @TreeChildren()
-  replies: Discussion[];
+  public replies: Discussion[];
 
   @TreeParent({ onDelete: 'CASCADE' })
-  parent: Discussion;
+  public parent: Discussion;
+
+  @OneToMany(() => DiscussionVote, (vote) => vote.discussion)
+  public votes: DiscussionVote[];
+
+  public totalVotes: number;
+  public totalReplies: number;
 }

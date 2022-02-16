@@ -1,30 +1,40 @@
 import { UserCredential } from '@auth/client/user-cred';
-import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
 import { AccessRights } from '@constants/access-rights.enum';
+import { Identity } from '@database/identity';
+import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
+import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '@post/post.entity';
 import { User } from '@user/user.entity';
+import { UserService } from '@user/user.service';
+import { DiscussionVote } from '@vote/entities/vote-discussion.entity';
+import { VoteService } from '@vote/vote.service';
+import { keyBy } from 'lodash';
 import { TreeRepository } from 'typeorm';
-import { Comment } from './entities/comment.entity';
+import { UpsertDiscussionVoteDto } from './../vote/dto/upsert-discussion-vote.dto';
+import { DiscussionOverview } from './client/discussion-overview';
+import { GetDiscussionType } from './constants/get-discussion-type.enum';
+import { DiscussionRepository } from './discussion.repository';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateDiscussionDto } from './dto/update-discussion.dto';
+import { Comment } from './entities/comment.entity';
 import { Discussion } from './entities/discussion.entity';
-import { UserService } from '@user/user.service';
 
 @Injectable()
 export class DiscussionService {
   constructor(
     @InjectRepository(Comment)
     private readonly commentRepository: TreeRepository<Comment>,
-    @InjectRepository(Discussion)
-    private readonly discussionRepository: TreeRepository<Discussion>,
+    private readonly discussionRepository: DiscussionRepository,
+    private readonly voteService: VoteService,
     private readonly userService: UserService,
   ) {}
 
@@ -97,6 +107,29 @@ export class DiscussionService {
     return this.discussionRepository.save(discussion);
   }
 
+  public async findManyDiscussion(
+    searchCriteria: SearchCriteria,
+    authContext: UserCredential | undefined,
+  ): Promise<DiscussionOverview> {
+    const getType = FilterUtils.get(searchCriteria.filters, 'type');
+    let discussions: DiscussionOverview;
+    switch (getType) {
+      case GetDiscussionType.NEW:
+        discussions = await this.discussionRepository.findLatest(
+          searchCriteria,
+        );
+        break;
+      case GetDiscussionType.POPULAR:
+      default:
+        throw new BadRequestException('Unexpected get type');
+    }
+    const user: User | null = authContext
+      ? await this.userService.findById(+authContext.userId)
+      : null;
+    await this.markIsVotedByAuthor(discussions, user);
+    return discussions;
+  }
+
   public findDiscussionsOfPost(post: Post, searchCriteria: SearchCriteria) {
     return this.commentRepository.find({
       where: {
@@ -129,5 +162,58 @@ export class DiscussionService {
       comment.content = updateDiscussionDto.content;
       await this.commentRepository.update(id, comment);
     }
+  }
+
+  public async upsertVoteOfDiscussion(
+    discussionId: number,
+    authContext: UserCredential,
+  ) {
+    const discussion = await this.discussionRepository.findOne(discussionId);
+
+    if (!discussion) {
+      throw new UnprocessableEntityException(
+        'Post you are voting is not available',
+      );
+    }
+
+    const user = await this.userService.findById(+authContext.userId);
+
+    if (!user) {
+      throw new UnprocessableEntityException(
+        'User is not available to create post now',
+      );
+    }
+
+    const voteDto = new UpsertDiscussionVoteDto();
+
+    voteDto.author = user;
+    voteDto.discussion = discussion;
+
+    return this.voteService.upsertForDiscussionVote(voteDto);
+  }
+
+  private async markIsVotedByAuthor(
+    discussions: DiscussionOverview,
+    optionalAuthor: User | undefined,
+  ) {
+    if (optionalAuthor) {
+      const discussionVotes: DiscussionVote[] =
+        await this.voteService.findByAuthorAndDiscussions(
+          optionalAuthor,
+          <Identity[]>discussions,
+        );
+
+      const discussionMap = keyBy(discussionVotes, 'discussion');
+
+      discussions.forEach((discussion) => {
+        discussion.isVoted = !!discussionMap[`${discussion.id}`];
+      });
+
+      return;
+    }
+
+    discussions.forEach((discussion) => {
+      discussion.isVoted = false;
+    });
   }
 }

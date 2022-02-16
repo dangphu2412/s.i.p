@@ -1,6 +1,9 @@
-import { DiscussionService } from 'src/discussion/discussion.service';
+import { Identity } from '@database/identity';
+import { CreateCommentDto } from '@discussion/dto/create-comment.dto';
+import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayMapper } from '@external/mappers/array.mapper';
+import { ArrayUtils } from '@external/utils/array/array.utils';
 import {
   BadRequestException,
   ConflictException,
@@ -12,13 +15,14 @@ import { Topic } from '@topic/topic.entity';
 import { TopicService } from '@topic/topic.service';
 import { User } from '@user/user.entity';
 import { SlugUtils } from '@utils/slug';
-import { Vote } from '@vote/vote.entity';
+import { UpsertVoteDto } from '@vote/dto/upsert-vote.dto';
+import { Vote } from '@vote/entities/vote.entity';
 import { VoteService } from '@vote/vote.service';
 import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
+import { DiscussionService } from 'src/discussion/discussion.service';
 import { UserService } from 'src/user/user.service';
-import { ArrayUtils } from '@external/utils/array/array.utils';
-import { UpsertVoteDto } from '@vote/dto/upsert-vote.dto';
+import { EditablePostView } from './client/post-editable';
 import { PostOverview } from './client/post-overview.api';
 import { InitPostDto } from './dto/init-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -30,9 +34,6 @@ import {
 } from './enums/post-status.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
-import { CreateCommentDto } from '@discussion/dto/create-comment.dto';
-import { EditablePostView } from './client/post-editable';
-import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 
 @Injectable()
 export class PostService {
@@ -297,7 +298,7 @@ export class PostService {
     voteDto.author = user;
     voteDto.post = post;
 
-    return this.voteService.upsertOne(voteDto);
+    return this.voteService.upsertForPostVote(voteDto);
   }
 
   private async saveAsDraft(id: number, updatePostDto: UpdatePostDto) {
@@ -498,7 +499,7 @@ export class PostService {
     if (optionalAuthor) {
       const votes: Vote[] = await this.voteService.findByAuthorAndPosts(
         optionalAuthor,
-        <Post[]>posts,
+        <Identity[]>posts,
       );
 
       const postMap = keyBy(votes, 'post');

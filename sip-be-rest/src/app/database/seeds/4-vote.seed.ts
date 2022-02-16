@@ -1,4 +1,4 @@
-import { Vote } from '@vote/vote.entity';
+import { Vote } from '@vote/entities/vote.entity';
 import { Post } from 'src/post/post.entity';
 import { User } from 'src/user/user.entity';
 import { Connection } from 'typeorm';

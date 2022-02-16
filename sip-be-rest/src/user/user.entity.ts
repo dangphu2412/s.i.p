@@ -1,10 +1,11 @@
+import { DiscussionVote } from '@vote/entities/vote-discussion.entity';
 import { TimeEntityGenerator } from '@database/base/time-entity';
 import { Comment } from '@discussion/entities/comment.entity';
 import { Discussion } from '@discussion/entities/discussion.entity';
 import { Permission } from '@permission/permission.entity';
 import { Post } from '@post/post.entity';
 import { Topic } from '@topic/topic.entity';
-import { Vote } from '@vote/vote.entity';
+import { Vote } from '@vote/entities/vote.entity';
 import {
   Column,
   Entity,
@@ -66,6 +67,9 @@ export class User extends TimeEntityGenerator() {
 
   @OneToMany(() => Vote, (vote) => vote.author)
   public votes: Vote[];
+
+  @OneToMany(() => DiscussionVote, (discussionVote) => discussionVote.author)
+  public discussionVotes: DiscussionVote[];
 
   @OneToMany(() => Post, (post) => post.author)
   public posts: Post[];

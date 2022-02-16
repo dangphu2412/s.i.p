@@ -1,6 +1,6 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
-import { Vote } from '@vote/vote.entity';
 import { Comment } from '@discussion/entities/comment.entity';
+import { Vote } from '@vote/entities/vote.entity';
 import { Topic } from 'src/topic/topic.entity';
 import { User } from 'src/user/user.entity';
 import {
@@ -18,7 +18,6 @@ import {
   PricingType,
   ProductRunningStatus,
 } from './enums/post-status.enum';
-import { Discussion } from '@discussion/entities/discussion.entity';
 
 @Entity('posts')
 @Index(['slug'])

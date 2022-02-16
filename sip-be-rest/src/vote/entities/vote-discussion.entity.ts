@@ -1,4 +1,4 @@
-import { Post } from 'src/post/post.entity';
+import { Discussion } from '@discussion/entities/discussion.entity';
 import { User } from 'src/user/user.entity';
 import {
   Column,
@@ -9,9 +9,9 @@ import {
   Unique,
 } from 'typeorm';
 
-@Unique('once_per_author', ['author', 'post'])
-@Entity('votes')
-export class Vote {
+@Unique('once_vote_discussion_per_author', ['author', 'discussion'])
+@Entity('discussion_votes')
+export class DiscussionVote {
   @PrimaryGeneratedColumn()
   public id: string;
 
@@ -22,7 +22,9 @@ export class Vote {
   @JoinColumn({ name: 'author_id' })
   public author: User;
 
-  @ManyToOne(() => Post, (post) => post.votes, { nullable: false })
-  @JoinColumn({ name: 'post_id' })
-  public post: Post;
+  @ManyToOne(() => Discussion, (discussion) => discussion.votes, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'discussion_id' })
+  public discussion: Discussion;
 }

@@ -7,7 +7,7 @@ const initialState: AppMessage = {
     type: MessageType.NO_CONTENT
 };
 
-export function createErrorReducer(): Reducer<AppMessage> {
+export function createMessageReducer(): Reducer<AppMessage> {
     return (state = initialState, action: AnyAction) => produce(state, draft => {
         switch(action.type) {
         case fireMessage.type:
