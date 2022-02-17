@@ -5,7 +5,7 @@ import { Discussion } from './entities/discussion.entity';
 
 @EntityRepository(Discussion)
 export class DiscussionRepository extends TreeRepository<Discussion> {
-  public findLatest(
+  public async findLatest(
     searchCriteria: SearchCriteria,
   ): Promise<DiscussionOverview> {
     return this.createQueryBuilder('discussions')
@@ -13,6 +13,12 @@ export class DiscussionRepository extends TreeRepository<Discussion> {
         'discussions.totalVotes',
         'discussions.votes',
         'votes',
+        (qb) => qb.andWhere('votes.isVoted = true'),
+      )
+      .loadRelationCountAndMap(
+        'discussions.totalReplies',
+        'discussions.replies',
+        'replies',
       )
       .limit(searchCriteria.limit)
       .offset(searchCriteria.offset)

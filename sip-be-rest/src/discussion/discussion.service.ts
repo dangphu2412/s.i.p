@@ -172,7 +172,7 @@ export class DiscussionService {
 
     if (!discussion) {
       throw new UnprocessableEntityException(
-        'Post you are voting is not available',
+        'Discussion you are voting is not available',
       );
     }
 
@@ -180,7 +180,7 @@ export class DiscussionService {
 
     if (!user) {
       throw new UnprocessableEntityException(
-        'User is not available to create post now',
+        'User is not available to create vote discussion now',
       );
     }
 
