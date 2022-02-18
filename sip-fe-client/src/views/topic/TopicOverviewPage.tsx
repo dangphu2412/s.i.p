@@ -9,6 +9,7 @@ import { Container } from 'src/components/container/Container';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
+import { cleanData } from 'src/modules/data/data.action';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { selectLoading } from 'src/modules/loading/loading.selector';
 import { Page } from 'src/modules/query/interface';
@@ -38,7 +39,7 @@ export function TopicOverviewPage(): JSX.Element {
         };
         setTopics([]);
         setPage(resetPage);
-        dispatch(TopicActions.findMany({
+        dispatch(TopicActions.getMany({
             filters: [{
                 column: 'type',
                 comparator: 'eq',
@@ -47,6 +48,10 @@ export function TopicOverviewPage(): JSX.Element {
             sorts: [],
             page: resetPage
         }));
+
+        return () => {
+            dispatch(cleanData(VIEW_SELECTOR.SEARCH_TOPIC));
+        };
     }, [filterSelected]);
 
     useEffect(() => {
@@ -60,7 +65,7 @@ export function TopicOverviewPage(): JSX.Element {
             page: page.page + 1,
             size: page.size
         };
-        dispatch(TopicActions.findMany({
+        dispatch(TopicActions.getMany({
             filters: [{
                 column: 'type',
                 comparator: 'eq',
@@ -81,7 +86,7 @@ export function TopicOverviewPage(): JSX.Element {
             size: 20
         });
         setTopics([]);
-        dispatch(TopicActions.findMany({
+        dispatch(TopicActions.getMany({
             filters: [{
                 column: 'type',
                 comparator: 'eq',
@@ -118,7 +123,7 @@ export function TopicOverviewPage(): JSX.Element {
                                     value={search}
                                 />
 
-                                <Select 
+                                <Select
                                     defaultValue={filterSelected}
                                     style={{ width: 120 }}
                                     onSelect={filter => { setFilterSelected(filter);}}
@@ -127,7 +132,7 @@ export function TopicOverviewPage(): JSX.Element {
                                         Object.keys(GetTopicType).map((typeKey) => {
                                             const filterValue = GetTopicType[typeKey as keyof typeof GetTopicType];
                                             return <Select.Option
-                                                key={filterValue} 
+                                                key={filterValue}
                                                 value={filterValue}
                                             >
                                                 {filterValue}

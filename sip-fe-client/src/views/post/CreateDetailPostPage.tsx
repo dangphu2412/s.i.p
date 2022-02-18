@@ -198,7 +198,7 @@ export function CreateDetailPostPage(): JSX.Element {
     function onTopicSearchEvent(event: React.ChangeEvent<HTMLInputElement>) {
         setTopicSearch(event.target.value);
         if (event.target.value) {
-            dispatch(TopicActions.findMany({
+            dispatch(TopicActions.getMany({
                 filters: [],
                 sorts: [],
                 page: {

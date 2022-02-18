@@ -60,7 +60,7 @@ export class VoteService {
     return this.discussionVoteRepository.find({
       where: {
         author,
-        discussions: In(discussions.map((discussion) => discussion.id)),
+        discussion: In(discussions.map((discussion) => discussion.id)),
         isVoted: true,
       },
       loadRelationIds: true,

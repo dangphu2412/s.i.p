@@ -9,6 +9,7 @@ import { Reply } from '../api/discussion.api';
 import { DiscussionActions } from '../discussion.action';
 import { DiscussionEditor } from './Editor.component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DateUtils } from 'src/modules/utils/date.utils';
 
 export interface CommentHandlerProps extends CommentProps {
     slug: string;
@@ -99,7 +100,7 @@ export function CommentHandler(props: CommentHandlerProps): JSX.Element {
                                         author={reply.author.fullName}
                                         avatar={<Avatar src={reply.author.avatar} />}
                                         content={reply.content}
-                                        datetime={reply.updatedAt}
+                                        datetime={DateUtils.diff(new Date(), new Date(reply.updatedAt))}
                                     ></Comment>
                                 );
                             })

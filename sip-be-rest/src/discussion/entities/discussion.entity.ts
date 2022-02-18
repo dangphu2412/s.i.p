@@ -21,6 +21,9 @@ export class Discussion extends TimeEntityGenerator(TimeType.Time) {
   @Column({ name: 'title', nullable: false })
   public title: string;
 
+  @Column({ name: 'slug', nullable: false })
+  public slug: string;
+
   @Column({ name: 'content', type: 'text' })
   public content: string;
 

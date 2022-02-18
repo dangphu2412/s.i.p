@@ -14,6 +14,7 @@ import { DiscussionService } from './discussion.service';
 import { CreateDiscussionDto } from './dto/create-discussion.dto';
 import { UpdateDiscussionDto } from './dto/update-discussion.dto';
 import { FetchDiscussionOverviewValidator } from './pipes/discussion-overview.validator';
+import { toPage } from '@external/crud/extensions/typeorm-pageable';
 
 @ApiTags('discussions')
 @Controller('v1/discussions')
@@ -34,15 +35,16 @@ export class DiscussionController {
 
   @OptionalProtected
   @Get()
-  findMany(
+  async findMany(
     @SearchQuery(FetchDiscussionOverviewValidator)
     searchCriteria: SearchCriteria,
     @AuthContext() authContext: UserCredential | undefined,
   ) {
-    return this.discussionService.findManyDiscussion(
+    const data = await this.discussionService.findManyDiscussion(
       searchCriteria,
       authContext,
     );
+    return toPage(data, searchCriteria);
   }
 
   @Protected

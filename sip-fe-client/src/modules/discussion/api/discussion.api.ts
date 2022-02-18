@@ -20,3 +20,17 @@ export interface CreateDiscussionDto {
     content: string;
     title: string;
 }
+
+export interface DiscussionSummary {
+    id: string;
+    title: string;
+    slug: string;
+    content: string;
+    author: Author;
+    totalReplies: number;
+    totalVotes: number;
+    isVoted: boolean;
+    createdAt: string;
+}
+
+export type DiscussionOverview = DiscussionSummary[];

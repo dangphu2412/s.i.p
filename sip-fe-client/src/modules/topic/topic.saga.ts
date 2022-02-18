@@ -10,7 +10,7 @@ import { followTopic, getTopicDetail, searchTopics } from './topic.service';
 
 export function* TopicSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
-        TopicActions.findMany,
+        TopicActions.getMany,
         handleSearchTopics
     );
 
@@ -20,7 +20,7 @@ export function* TopicSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     );
 
     yield takeLatest(
-        TopicActions.findDetail,
+        TopicActions.getDetail,
         handleGetTopicDetail
     );
 }

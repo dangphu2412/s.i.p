@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { AuthType } from 'src/modules/auth/auth.reducer';
-import { voteForPost } from 'src/modules/vote/vote.action';
+import { VoteActions } from 'src/modules/vote/vote.action';
 import { PostSummary } from '../../api/post.api';
 import './index.scss';
 
@@ -33,7 +33,7 @@ export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX
             dispatch(openAuthPopupAction());
             return;
         }
-        dispatch(voteForPost({
+        dispatch(VoteActions.voteForPost({
             postId: data.id
         }));
         setVote({

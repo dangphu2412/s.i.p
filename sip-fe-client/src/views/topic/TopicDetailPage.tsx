@@ -51,7 +51,7 @@ export function TopicDetailPage(): JSX.Element {
     const authState = useSelector(selectAuthState);
 
     useEffect(() => {
-        dispatch(TopicActions.findDetail(slug));
+        dispatch(TopicActions.getDetail(slug));
     }, []);
 
     useEffect(() => {

@@ -18,7 +18,7 @@ import { TopFeatureBadge } from 'src/modules/post/components/badge/TopFeatureBad
 import { VoteState } from 'src/modules/post/components/card/CardItemOverview';
 import { PricingType } from 'src/modules/post/constants/post-status.enum';
 import { PostActions } from 'src/modules/post/post.action';
-import { voteForPost } from 'src/modules/vote/vote.action';
+import { VoteActions } from 'src/modules/vote/vote.action';
 import { ArrayUtils } from 'src/utils/array.utils';
 import { SimpleCard } from '../../components/card/SimpleCard';
 import { PostDetail } from '../../modules/post/api/post.api';
@@ -175,7 +175,7 @@ export function PostDetailPage(): JSX.Element {
             dispatch(openAuthPopupAction());
             return;
         }
-        dispatch(voteForPost({
+        dispatch(VoteActions.voteForPost({
             postId: postDetail.id
         }));
         setVote({

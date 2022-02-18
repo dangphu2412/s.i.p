@@ -7,6 +7,7 @@ import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { selectProfile } from 'src/modules/auth/auth.selector';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
+import { DateUtils } from 'src/modules/utils/date.utils';
 import { Discussion } from '../api/discussion.api';
 import { DiscussionActions } from '../discussion.action';
 import { CommentHandler } from './CommentHandler';
@@ -95,7 +96,7 @@ export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
                             author={props.author.fullName}
                             avatar={<Avatar src={props.author.avatar} />}
                             content={props.content}
-                            datetime={props.updatedAt}
+                            datetime={DateUtils.diff(new Date(), new Date(props.updatedAt))}
                             replies={props.replies}
                         />;
                     }}

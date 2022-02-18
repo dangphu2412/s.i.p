@@ -1,13 +1,14 @@
-import { fireMessage } from '../message/message.action';
-import { CreatCommentDto, CreatReplyDto as CreateReplyDto, DiscussionActions } from './discussion.action';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { createComment, createDiscussion, createReply, getPostComments } from './discussion.service';
-import { saveData } from '../data/data.action';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
-import { CreateDiscussionDto } from './api/discussion.api';
 import { MessageType } from '../app.types';
+import { saveData } from '../data/data.action';
+import { fireMessage } from '../message/message.action';
+import { Query } from '../query/interface';
+import { CreateDiscussionDto } from './api/discussion.api';
+import { CreatCommentDto, CreatReplyDto as CreateReplyDto, DiscussionActions } from './discussion.action';
+import { createComment, createDiscussion, createReply, getDiscussions, getPostComments } from './discussion.service';
 
 export function* DiscussionSagaTree(): SagaIterator {
     yield takeLatest(
@@ -28,6 +29,11 @@ export function* DiscussionSagaTree(): SagaIterator {
     yield takeLatest(
         DiscussionActions.getPostComments.type,
         handleGetPostComments
+    );
+
+    yield takeLatest(
+        DiscussionActions.getDiscussions.type,
+        handleGetDiscussions
     );
 }
 
@@ -58,7 +64,6 @@ function* handleGetPostComments(action: PayloadAction<{ slug: string }>): SagaIt
         data: data.data,
         view: VIEW_SELECTOR.FIND_POST_COMMENTS
     }));
-    return;
 }
 
 function* handleDiscussionCreation(action: PayloadAction<CreateDiscussionDto>): SagaIterator {
@@ -70,4 +75,13 @@ function* handleDiscussionCreation(action: PayloadAction<CreateDiscussionDto>): 
             message: 'Discussion created successfully'
         }));
     }
+}
+
+function* handleGetDiscussions(action: PayloadAction<Query>): SagaIterator {
+    const request = getDiscussions(action.payload);
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data: data.data,
+        view: VIEW_SELECTOR.FIND_DISCUSSIONS
+    }));
 }

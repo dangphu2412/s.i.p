@@ -9,6 +9,7 @@ export class DiscussionRepository extends TreeRepository<Discussion> {
     searchCriteria: SearchCriteria,
   ): Promise<DiscussionOverview> {
     return this.createQueryBuilder('discussions')
+      .leftJoinAndSelect('discussions.author', 'author')
       .loadRelationCountAndMap(
         'discussions.totalVotes',
         'discussions.votes',

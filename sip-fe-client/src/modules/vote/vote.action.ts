@@ -4,4 +4,7 @@ export interface PostVoting {
     postId: string;
 }
 
-export const voteForPost = createAction<PostVoting>('VOTE/SAVE');
+export const VoteActions = {
+    voteForPost: createAction<PostVoting>('VOTE/TOGGLE_POST'),
+    voteForDiscussion: createAction<string>('VOTE/TOGGLE_DISCUSSION')
+};

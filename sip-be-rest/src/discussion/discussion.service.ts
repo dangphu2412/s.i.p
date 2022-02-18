@@ -15,6 +15,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '@post/post.entity';
 import { User } from '@user/user.entity';
 import { UserService } from '@user/user.service';
+import { SlugUtils } from '@utils/slug';
 import { DiscussionVote } from '@vote/entities/vote-discussion.entity';
 import { VoteService } from '@vote/vote.service';
 import { keyBy } from 'lodash';
@@ -102,6 +103,7 @@ export class DiscussionService {
 
     discussion.title = createDiscussionDto.title;
     discussion.content = createDiscussionDto.content;
+    discussion.slug = SlugUtils.normalizeWithUUID(createDiscussionDto.title);
     discussion.author = await this.userService.findById(+authContext.userId);
 
     return this.discussionRepository.save(discussion);
@@ -120,6 +122,8 @@ export class DiscussionService {
         );
         break;
       case GetDiscussionType.POPULAR:
+        discussions = [];
+        break;
       default:
         throw new BadRequestException('Unexpected get type');
     }
