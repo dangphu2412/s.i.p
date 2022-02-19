@@ -1,4 +1,4 @@
-import { DiscussionModule } from '@discussion/discussion.module';
+import { CommentModule } from '@comment/comment.module';
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TopicModule } from '@topic/topic.module';
@@ -14,7 +14,7 @@ import { PostService } from './post.service';
     VoteModule,
     UserModule,
     TopicModule,
-    DiscussionModule,
+    CommentModule,
   ],
   controllers: [PostController],
   providers: [PostService, Logger],

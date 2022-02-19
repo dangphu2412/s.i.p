@@ -25,7 +25,6 @@ export interface DiscussionSummary {
     id: string;
     title: string;
     slug: string;
-    content: string;
     author: Author;
     totalReplies: number;
     totalVotes: number;
@@ -34,3 +33,7 @@ export interface DiscussionSummary {
 }
 
 export type DiscussionOverview = DiscussionSummary[];
+
+export interface DiscussionDetail extends DiscussionSummary {
+    content: string;
+}

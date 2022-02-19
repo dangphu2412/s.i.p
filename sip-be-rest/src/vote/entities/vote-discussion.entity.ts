@@ -1,4 +1,4 @@
-import { Discussion } from '@discussion/entities/discussion.entity';
+import { Discussion } from 'src/discussion/discussion.entity';
 import { User } from 'src/user/user.entity';
 import {
   Column,

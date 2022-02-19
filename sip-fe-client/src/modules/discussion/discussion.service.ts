@@ -16,12 +16,28 @@ export function getDiscussions(query: Query): RequestProcessor<DiscussionOvervie
     }));
 }
 
+export function getDiscussionDetail(slug: string): RequestProcessor<Discussion> {
+    return createRequest<Discussion, void>(axios.get(`/v1/discussions/${slug}`));
+}
+
+export function getDiscussionComments(slug: string): RequestProcessor<Discussion[]> {
+    return createRequest<Discussion[], void>(axios.get(`/v1/discussions/${slug}/comments`));
+}
+
 export function createComment(createCommentDto: CreatCommentDto): RequestProcessor<unknown> {
     return createRequest<unknown, CreatCommentDto>(axios.post(`/v1/posts/${createCommentDto.slug}/comments`, createCommentDto));
 }
 
+export function createDiscussionComment(createCommentDto: CreatCommentDto): RequestProcessor<unknown> {
+    return createRequest<unknown, CreatCommentDto>(axios.post(`/v1/discussions/${createCommentDto.slug}/comments`, createCommentDto));
+}
+
 export function createReply(createReplyDto: CreatReplyDto): RequestProcessor<unknown> {
     return createRequest<unknown, CreatReplyDto>(axios.post(`/v1/posts/${createReplyDto.slug}/comments/${createReplyDto.commentId}/replies`, createReplyDto));
+}
+
+export function createDiscussionCommentReply(createReplyDto: CreatReplyDto): RequestProcessor<unknown> {
+    return createRequest<unknown, CreatReplyDto>(axios.post(`/v1/discussions/${createReplyDto.slug}/comments/${createReplyDto.commentId}/replies`, createReplyDto));
 }
 
 export function createDiscussion(createDiscussionDto: CreateDiscussionDto): RequestProcessor<unknown> {

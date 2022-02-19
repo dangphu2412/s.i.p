@@ -8,9 +8,14 @@ import { fireMessage } from '../message/message.action';
 import { Query } from '../query/interface';
 import { CreateDiscussionDto } from './api/discussion.api';
 import { CreatCommentDto, CreatReplyDto as CreateReplyDto, DiscussionActions } from './discussion.action';
-import { createComment, createDiscussion, createReply, getDiscussions, getPostComments } from './discussion.service';
+import { createComment, createDiscussion, createDiscussionComment, createDiscussionCommentReply, createReply, getDiscussionComments, getDiscussionDetail, getDiscussions, getPostComments } from './discussion.service';
 
 export function* DiscussionSagaTree(): SagaIterator {
+    yield takeLatest(
+        DiscussionActions.getPostComments.type,
+        handleGetPostComments
+    );
+
     yield takeLatest(
         DiscussionActions.createComment.type,
         handleCommentCreation
@@ -22,19 +27,35 @@ export function* DiscussionSagaTree(): SagaIterator {
     );
 
     yield takeLatest(
+        DiscussionActions.createDiscussionCommentReply.type,
+        handleDiscussionCommentReplyCreation
+    );
+
+    yield takeLatest(
         DiscussionActions.createDiscussion.type,
         handleDiscussionCreation
     );
 
     yield takeLatest(
-        DiscussionActions.getPostComments.type,
-        handleGetPostComments
+        DiscussionActions.createDiscussionComment.type,
+        handleDiscussionCommentCreation
     );
 
     yield takeLatest(
         DiscussionActions.getDiscussions.type,
         handleGetDiscussions
     );
+
+    yield takeLatest(
+        DiscussionActions.getDiscussionDetail.type,
+        handleGetDiscussionDetail
+    );
+
+    yield takeLatest(
+        DiscussionActions.getDiscussionComments.type,
+        handleGetDiscussionComments
+    );
+
 }
 
 function* handleCommentCreation(action: PayloadAction<CreatCommentDto>): SagaIterator {
@@ -44,7 +65,15 @@ function* handleCommentCreation(action: PayloadAction<CreatCommentDto>): SagaIte
         data,
         view: VIEW_SELECTOR.CREATE_COMMENT
     }));
-    return;
+}
+
+function* handleDiscussionCommentCreation(action: PayloadAction<CreatCommentDto>): SagaIterator {
+    const request = createDiscussionComment(action.payload);
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data,
+        view: VIEW_SELECTOR.CREATE_COMMENT
+    }));
 }
 
 function* handleReplyCreation(action: PayloadAction<CreateReplyDto>): SagaIterator {
@@ -54,7 +83,15 @@ function* handleReplyCreation(action: PayloadAction<CreateReplyDto>): SagaIterat
         data,
         view: VIEW_SELECTOR.CREATE_REPLY
     }));
-    return;
+}
+
+function* handleDiscussionCommentReplyCreation(action: PayloadAction<CreateReplyDto>): SagaIterator {
+    const request = createDiscussionCommentReply(action.payload);
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data,
+        view: VIEW_SELECTOR.CREATE_REPLY
+    }));
 }
 
 function* handleGetPostComments(action: PayloadAction<{ slug: string }>): SagaIterator {
@@ -83,5 +120,23 @@ function* handleGetDiscussions(action: PayloadAction<Query>): SagaIterator {
     yield put(saveData({
         data: data.data,
         view: VIEW_SELECTOR.FIND_DISCUSSIONS
+    }));
+}
+
+function* handleGetDiscussionDetail(action: PayloadAction<string>): SagaIterator {
+    const request = getDiscussionDetail(action.payload);
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data: data,
+        view: VIEW_SELECTOR.FIND_DISCUSSION_DETAIL
+    }));
+}
+
+function* handleGetDiscussionComments(action: PayloadAction<Partial<Query> & { slug: string }>): SagaIterator {
+    const request = getDiscussionComments(action.payload.slug);
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data: data.data,
+        view: VIEW_SELECTOR.FIND_DISCUSSION_COMMENTS
     }));
 }

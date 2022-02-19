@@ -1,4 +1,4 @@
-import { CreateCommentDto } from '@discussion/dto/create-comment.dto';
+import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { toPage } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';

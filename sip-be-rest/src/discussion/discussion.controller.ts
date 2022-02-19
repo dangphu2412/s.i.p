@@ -1,20 +1,18 @@
-import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { UserCredential } from '@auth/client/user-cred';
 import {
   OptionalProtected,
   Protected,
 } from '@auth/decorator/protected.decorator';
 import { AuthContext } from '@auth/decorator/user-cred.decorator';
+import { CreateCommentDto } from '@comment/dto/create-comment.dto';
+import { toPage } from '@external/crud/extensions/typeorm-pageable';
+import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
-import { RuleManager } from '@external/racl/core/rule.manager';
-import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DiscussionService } from './discussion.service';
 import { CreateDiscussionDto } from './dto/create-discussion.dto';
-import { UpdateDiscussionDto } from './dto/update-discussion.dto';
 import { FetchDiscussionOverviewValidator } from './pipes/discussion-overview.validator';
-import { toPage } from '@external/crud/extensions/typeorm-pageable';
 
 @ApiTags('discussions')
 @Controller('v1/discussions')
@@ -33,6 +31,36 @@ export class DiscussionController {
     );
   }
 
+  @Protected
+  @Post(':slug/comments')
+  async createComment(
+    @Param('slug') slug: string,
+    @Body() createDiscussionDto: CreateCommentDto,
+    @AuthContext() author: UserCredential,
+  ) {
+    return this.discussionService.createCommentForDiscussion(
+      slug,
+      createDiscussionDto,
+      author,
+    );
+  }
+
+  @Protected
+  @Post(':slug/comments/:commentId/replies')
+  async createReply(
+    @Param('slug') slug: string,
+    @Param('commentId') commentId: string,
+    @Body() createDiscussionDto: CreateCommentDto,
+    @AuthContext() author: UserCredential,
+  ) {
+    return this.discussionService.createReplyOForDiscussion(
+      slug,
+      commentId,
+      createDiscussionDto,
+      author,
+    );
+  }
+
   @OptionalProtected
   @Get()
   async findMany(
@@ -47,16 +75,27 @@ export class DiscussionController {
     return toPage(data, searchCriteria);
   }
 
-  @Protected
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateDiscussionDto: UpdateDiscussionDto,
-    @AuthContext() author: UserCredential,
-    @ExtractRuleManager() ruleManager: RuleManager,
+  @OptionalProtected
+  @Get('/:slug/comments')
+  async findCommentsOfDiscussion(
+    @Param('slug') slug: string,
+    @SearchQuery()
+    searchCriteria: SearchCriteria,
   ) {
-    updateDiscussionDto.authorId = +author.userId;
-    return this.discussionService.update(+id, updateDiscussionDto, ruleManager);
+    const data = await this.discussionService.findCommentsOfDiscussion(
+      slug,
+      searchCriteria,
+    );
+    return toPage(data, searchCriteria);
+  }
+
+  @OptionalProtected
+  @Get('/:slug')
+  async findOne(
+    @Param('slug') slug: string,
+    @AuthContext() authContext: UserCredential | undefined,
+  ) {
+    return this.discussionService.findOneDiscussion(slug, authContext);
   }
 
   @Protected

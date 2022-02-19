@@ -1,7 +1,7 @@
 import { DiscussionVote } from '@vote/entities/vote-discussion.entity';
 import { TimeEntityGenerator } from '@database/base/time-entity';
-import { Comment } from '@discussion/entities/comment.entity';
-import { Discussion } from '@discussion/entities/discussion.entity';
+import { Comment } from 'src/comment/entities/comment.entity';
+import { Discussion } from 'src/discussion/discussion.entity';
 import { Permission } from '@permission/permission.entity';
 import { Post } from '@post/post.entity';
 import { Topic } from '@topic/topic.entity';
@@ -15,6 +15,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { DiscussionComment } from '@comment/entities/discussion-comment.entity';
 
 @Entity('users')
 export class User extends TimeEntityGenerator() {
@@ -61,6 +62,12 @@ export class User extends TimeEntityGenerator() {
 
   @OneToMany(() => Comment, (comment) => comment.author)
   public comments: Comment[];
+
+  @OneToMany(
+    () => DiscussionComment,
+    (discussionComment) => discussionComment.author,
+  )
+  public discussionComments: DiscussionComment[];
 
   @OneToMany(() => Discussion, (discussion) => discussion.author)
   public discussions: Discussion[];

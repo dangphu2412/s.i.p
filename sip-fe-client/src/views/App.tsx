@@ -21,6 +21,7 @@ import { Products } from './user/Products';
 import { Settings } from './user/Settings';
 import { CreateDiscussionPage } from './dicussion/CreateDicussionPage';
 import { DiscussionOverviewPage } from './dicussion/DicussionOverviewPage';
+import { DiscussionDetailPage } from './dicussion/DiscussionDetailPage';
 
 configApp();
 
@@ -39,6 +40,7 @@ function App(): JSX.Element {
                             { path: '/topics/:slug', element: TopicDetailPage },
                             { path: '/topics', element: TopicOverviewPage },
                             { path: '/discussions', element: DiscussionOverviewPage },
+                            { path: '/discussions/:slug', element: DiscussionDetailPage },
                             { path: '/discussions/new', element: CreateDiscussionPage, protected: true },
                             { path: '/sipers/:hashTag', element: Profile, protected: true },
                             { path: '/me/products', element: Products, protected: true },

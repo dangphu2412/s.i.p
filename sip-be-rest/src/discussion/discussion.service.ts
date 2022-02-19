@@ -1,93 +1,36 @@
 import { UserCredential } from '@auth/client/user-cred';
-import { AccessRights } from '@constants/access-rights.enum';
+import { CommentService } from '@comment/comment.service';
+import { CreateCommentDto } from '@comment/dto/create-comment.dto';
 import { Identity } from '@database/identity';
-import { CreateDiscussionDto } from '@discussion/dto/create-discussion.dto';
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
-import { RuleManager } from '@external/racl/core/rule.manager';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from '@post/post.entity';
 import { User } from '@user/user.entity';
 import { UserService } from '@user/user.service';
 import { SlugUtils } from '@utils/slug';
+import { UpsertDiscussionVoteDto } from '@vote/dto/upsert-discussion-vote.dto';
 import { DiscussionVote } from '@vote/entities/vote-discussion.entity';
 import { VoteService } from '@vote/vote.service';
 import { keyBy } from 'lodash';
-import { TreeRepository } from 'typeorm';
-import { UpsertDiscussionVoteDto } from './../vote/dto/upsert-discussion-vote.dto';
 import { DiscussionOverview } from './client/discussion-overview';
 import { GetDiscussionType } from './constants/get-discussion-type.enum';
+import { Discussion } from './discussion.entity';
 import { DiscussionRepository } from './discussion.repository';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateDiscussionDto } from './dto/update-discussion.dto';
-import { Comment } from './entities/comment.entity';
-import { Discussion } from './entities/discussion.entity';
+import { CreateDiscussionDto } from './dto/create-discussion.dto';
 
 @Injectable()
 export class DiscussionService {
   constructor(
-    @InjectRepository(Comment)
-    private readonly commentRepository: TreeRepository<Comment>,
     private readonly discussionRepository: DiscussionRepository,
     private readonly voteService: VoteService,
     private readonly userService: UserService,
+    private readonly commentService: CommentService,
   ) {}
-
-  public async createComment(
-    post: Post,
-    createDiscussionDto: CreateCommentDto,
-    author: User,
-  ) {
-    createDiscussionDto.content = createDiscussionDto.content.trim();
-
-    if (!createDiscussionDto.content) {
-      throw new BadRequestException('Content of comment can not be empty');
-    }
-
-    const comment = new Comment();
-
-    comment.content = createDiscussionDto.content;
-    comment.author = author;
-    comment.post = post;
-    comment.parent = null;
-
-    await this.commentRepository.save(comment);
-
-    return comment;
-  }
-
-  public async createReply(
-    commentId: string,
-    createReplyDto: CreateCommentDto,
-    author: User,
-    post: Post,
-  ) {
-    createReplyDto.content = createReplyDto.content.trim();
-
-    if (!createReplyDto.content) {
-      throw new BadRequestException('Content of comment can not be empty');
-    }
-
-    const discussion = await this.commentRepository.findOne(commentId);
-
-    if (!discussion) {
-      throw new NotFoundException('No parent comment found');
-    }
-
-    const reply = new Comment();
-
-    reply.content = createReplyDto.content;
-    reply.author = author;
-    reply.parent = discussion;
-    reply.post = post;
-    return this.commentRepository.save(reply);
-  }
 
   public async createDiscussion(
     createDiscussionDto: CreateDiscussionDto,
@@ -107,6 +50,73 @@ export class DiscussionService {
     discussion.author = await this.userService.findById(+authContext.userId);
 
     return this.discussionRepository.save(discussion);
+  }
+
+  public async createCommentForDiscussion(
+    slug: string,
+    createDiscussionDto: CreateCommentDto,
+    authContext: UserCredential,
+  ) {
+    const discussion = await this.discussionRepository.findBySlug(slug);
+
+    if (!discussion) {
+      throw new NotFoundException('Not found post with slug ' + slug);
+    }
+
+    const author = await this.userService.findById(+authContext.userId);
+
+    if (!author) {
+      throw new UnprocessableEntityException('User is not available');
+    }
+
+    return this.commentService.createCommentForDiscussion(
+      discussion,
+      createDiscussionDto,
+      author,
+    );
+  }
+
+  public async createReplyOForDiscussion(
+    slug: string,
+    commentId: string,
+    createDiscussionDto: CreateCommentDto,
+    authContext: UserCredential,
+  ) {
+    const discussion = await this.discussionRepository.findBySlug(slug);
+
+    if (!discussion) {
+      throw new NotFoundException('Not found post with slug ' + slug);
+    }
+
+    const author = await this.userService.findById(+authContext.userId);
+
+    if (!author) {
+      throw new UnprocessableEntityException('User is not available');
+    }
+
+    return this.commentService.createReplyForDiscussion(
+      commentId,
+      createDiscussionDto,
+      author,
+      discussion,
+    );
+  }
+
+  public async findCommentsOfDiscussion(
+    slug: string,
+    searchCriteria: SearchCriteria,
+  ) {
+    const discussion = await this.discussionRepository.findBySlug(slug);
+
+    if (!discussion) {
+      throw new UnprocessableEntityException(
+        `Post with id: ${slug} does not exist that cannot find discussions`,
+      );
+    }
+    return this.commentService.findCommentsOfDiscussion(
+      discussion,
+      searchCriteria,
+    );
   }
 
   public async findManyDiscussion(
@@ -134,38 +144,25 @@ export class DiscussionService {
     return discussions;
   }
 
-  public findDiscussionsOfPost(post: Post, searchCriteria: SearchCriteria) {
-    return this.commentRepository.find({
-      where: {
-        post,
-        parent: null,
-      },
-      relations: ['author', 'replies', 'replies.author'],
-      skip: searchCriteria.offset,
-      take: searchCriteria.limit,
-    });
-  }
-
-  public async update(
-    id: number,
-    updateDiscussionDto: UpdateDiscussionDto,
-    ruleManager: RuleManager,
+  public async findOneDiscussion(
+    slug: string,
+    authContext: UserCredential | undefined,
   ) {
-    const comment = await this.commentRepository.findOne(id);
+    const discussion = await this.discussionRepository.findOneDetailBySlug(
+      slug,
+    );
 
-    if (!comment) {
-      throw new NotFoundException('No comment found for updating');
+    if (!discussion) {
+      throw new NotFoundException('No discussion found');
     }
 
-    ruleManager.throwIfCannot(AccessRights.RootAccess.EDIT_OWN, {
-      authorId: updateDiscussionDto.authorId,
-      ownerId: comment.author.id,
-    });
+    const user: User | null = authContext
+      ? await this.userService.findById(+authContext.userId)
+      : null;
 
-    if (comment.content !== updateDiscussionDto.content) {
-      comment.content = updateDiscussionDto.content;
-      await this.commentRepository.update(id, comment);
-    }
+    await this.markIsVotedByAuthor([discussion], user);
+
+    return discussion;
   }
 
   public async upsertVoteOfDiscussion(

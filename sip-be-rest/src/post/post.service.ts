@@ -1,5 +1,5 @@
 import { Identity } from '@database/identity';
-import { CreateCommentDto } from '@discussion/dto/create-comment.dto';
+import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayMapper } from '@external/mappers/array.mapper';
@@ -20,7 +20,7 @@ import { Vote } from '@vote/entities/vote.entity';
 import { VoteService } from '@vote/vote.service';
 import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
-import { DiscussionService } from 'src/discussion/discussion.service';
+import { CommentService } from '@comment/comment.service';
 import { UserService } from 'src/user/user.service';
 import { EditablePostView } from './client/post-editable';
 import { PostOverview } from './client/post-overview.api';
@@ -42,7 +42,7 @@ export class PostService {
     private readonly voteService: VoteService,
     private readonly userService: UserService,
     private readonly topicService: TopicService,
-    private readonly discussionService: DiscussionService,
+    private readonly commentService: CommentService,
   ) {}
 
   public async init(initPostDto: InitPostDto, authContext: UserCredential) {
@@ -105,7 +105,7 @@ export class PostService {
       throw new UnprocessableEntityException('User is not available');
     }
 
-    return this.discussionService.createComment(
+    return this.commentService.createCommentForPost(
       post,
       createDiscussionDto,
       author,
@@ -130,7 +130,7 @@ export class PostService {
       throw new UnprocessableEntityException('User is not available');
     }
 
-    return this.discussionService.createReply(
+    return this.commentService.createReplyForPost(
       commentId,
       createDiscussionDto,
       author,
@@ -255,7 +255,7 @@ export class PostService {
         `Post with id: ${slug} does not exist that cannot find discussions`,
       );
     }
-    return this.discussionService.findDiscussionsOfPost(post, searchCriteria);
+    return this.commentService.findCommentsOfPost(post, searchCriteria);
   }
 
   public remove(id: number) {

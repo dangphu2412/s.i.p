@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PayloadActionCreator } from '@reduxjs/toolkit';
 import { Avatar, Collapse, Comment, CommentProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -5,13 +7,13 @@ import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { Profile } from 'src/modules/auth/auth.service';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
-import { Reply } from '../api/discussion.api';
-import { DiscussionActions } from '../discussion.action';
-import { DiscussionEditor } from './Editor.component';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DateUtils } from 'src/modules/utils/date.utils';
+import { Reply } from '../api/discussion.api';
+import { CreatReplyDto } from '../discussion.action';
+import { DiscussionEditor } from './Editor.component';
 
 export interface CommentHandlerProps extends CommentProps {
+    createReplyAction: PayloadActionCreator<CreatReplyDto, string>;
     slug: string;
     key: string;
     commentId: string;
@@ -45,7 +47,7 @@ export function CommentHandler(props: CommentHandlerProps): JSX.Element {
                 dispatch(openAuthPopupAction());
                 return;
             }
-            dispatch(DiscussionActions.createReply({
+            dispatch(props.createReplyAction({
                 commentId: props.commentId,
                 content: currentReply,
                 slug: props.slug

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { selectProfile } from 'src/modules/auth/auth.selector';
-import { cleanData } from 'src/modules/data/data.action';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { DateUtils } from 'src/modules/utils/date.utils';
 import { Discussion } from '../api/discussion.api';
@@ -14,26 +13,22 @@ import { DiscussionActions } from '../discussion.action';
 import { CommentHandler } from './CommentHandler';
 import { DiscussionEditor } from './Editor.component';
 
-export interface CommentContainerProps {
+export interface DiscussionContainerProps {
     slug: string;
 }
 
-export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
+export function DiscussionContainer({ slug }: DiscussionContainerProps): JSX.Element {
     const dispatch = useDispatch();
     const [comments, setComments] = useState<Discussion[]>([]);
     const [comment, setComment] = useState<string>('');
     const author = useSelector(selectProfile);
-    const commentsDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_COMMENTS));
+    const commentsDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_DISCUSSION_COMMENTS));
     const commentCreatedResponse = useSelector(selectDataHolderByView(VIEW_SELECTOR.CREATE_COMMENT));
 
     useEffect(() => {
         if (slug) {
-            dispatch(DiscussionActions.getPostComments({ slug }));
+            dispatch(DiscussionActions.getDiscussionComments({ slug }));
         }
-        return () => {
-            dispatch(cleanData(VIEW_SELECTOR.FIND_POST_COMMENTS));
-            dispatch(cleanData(VIEW_SELECTOR.CREATE_COMMENT));
-        };
     }, [slug]);
 
     useEffect(() => {
@@ -60,7 +55,7 @@ export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
             }
 
             setComment('');
-            dispatch(DiscussionActions.createComment({
+            dispatch(DiscussionActions.createDiscussionComment({
                 content: comment,
                 slug
             }));
@@ -94,7 +89,7 @@ export function CommentContainer({ slug }: CommentContainerProps): JSX.Element {
                     itemLayout="horizontal"
                     renderItem={props => {
                         return <CommentHandler
-                            createReplyAction={DiscussionActions.createReply}
+                            createReplyAction={DiscussionActions.createDiscussionCommentReply}
                             slug={slug}
                             key={`${props.id}`}
                             commentId={props.id}

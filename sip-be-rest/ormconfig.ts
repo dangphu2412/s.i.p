@@ -13,6 +13,11 @@ export = [
     migrations: ['src/app/database/migrations/*.ts'],
     factories: ['src/app/database/factories/**/*.factory{.ts,.js}'],
     seeds: [`src/app/database/seeds/**/*.seed{.ts,.js}`],
+    ssl: ConfigService.getBoolean('DB_SSL')
+      ? {
+          rejectUnauthorized: false,
+        }
+      : false,
     cli: {
       migrationsDir: 'src/app/database/migrations',
       subscribersDir: 'src/**/*.subscriber.{.ts,.js}',

@@ -1,8 +1,9 @@
+import { DiscussionModule } from '@discussion/discussion.module';
 import { AuthModule } from '@auth/auth.module';
 import '@config/crud.config';
 import { RuleConfig } from '@config/rule.config';
 import { getTypeOrmModule } from '@config/typeorm.config';
-import { DiscussionModule } from '@discussion/discussion.module';
+import { CommentModule } from '@comment/comment.module';
 import { RaclModule } from '@external/racl/rule.module';
 import { MediaModule } from '@media/media.module';
 import { Module } from '@nestjs/common';
@@ -26,6 +27,7 @@ import { VoteModule } from '@vote/vote.module';
     MediaModule,
     TopicModule,
     PostModule,
+    CommentModule,
     DiscussionModule,
     VoteModule,
   ],
