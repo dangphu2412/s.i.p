@@ -15,6 +15,7 @@ export interface InitPost {
 
 export const PostActions = {
     getOverviewData: createAction<Partial<Query>>('POST/GET_OVERVIEW_DATA'),
+    getIdeas: createAction<Partial<Query>>('POST/GET_IDEA_DATA'),
     getAuthorIdeas: createAction<Partial<Query> & { hashTag: string }>('POST/GET_AUTHOR_IDEAS'),
     getDetailData: createAction<PostDetailRequest>('POST/GET_DETAIL_DATA'),
     getPatchData: createAction<PostDetailRequest>('POST/GET_PATCH_DaTA'),

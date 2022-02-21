@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
+import { Footer } from 'src/components/footer/Footer';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
@@ -63,6 +64,10 @@ export function DiscussionDetailPage(): JSX.Element {
     useEffect(() => {
         if (detailDataHolder?.data) {
             setDetail(detailDataHolder.data as DiscussionDetail);
+            setVote({
+                totalVotes: detailDataHolder.data.totalVotes,
+                isVoted: detailDataHolder.data.isVoted,
+            });
         }
         return () => {
             dispatch(cleanData(VIEW_SELECTOR.FIND_DISCUSSION_DETAIL));
@@ -90,10 +95,10 @@ export function DiscussionDetailPage(): JSX.Element {
                     <div>
                         <Breadcrumb separator=">">
                             <Breadcrumb.Item>
-                                <Link to='/topics'>Discussions</Link>
+                                <Link to='/discussions'>Discussions</Link>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item>
-                                <Link to={`/topics/${detail.slug}`}>
+                                <Link to={`/discussions/${detail.slug}`}>
                                     {detail.title}
                                 </Link>
                             </Breadcrumb.Item>
@@ -103,9 +108,9 @@ export function DiscussionDetailPage(): JSX.Element {
                         <Col span={2}>
                             <Button className='sticky' style={{height: '64px', width: '52px'}} onClick={onVoteEvent}>
                                 <div>
-                                    <CaretUpOutlined />
+                                    <CaretUpOutlined className={vote.isVoted ? 'btn-color' : ''}/>
                                 </div>
-                                {detail.totalVotes}
+                                {vote.totalVotes}
                             </Button>
                         </Col>
                         <Col span={16}>
@@ -137,10 +142,13 @@ export function DiscussionDetailPage(): JSX.Element {
                                 }
                             </div>
 
-                            <DiscussionContainer slug={slug}/>
+                            <DiscussionContainer
+                                className='mt-5'
+                                slug={slug}
+                            />
                         </Col>
                         <Col span={6}>
-                            Here text
+                            <Footer/>
                         </Col>
                     </Row>
                 </div>

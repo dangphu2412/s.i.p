@@ -46,6 +46,12 @@ export class UserController {
     return this.userService.findMakers(searchQuery);
   }
 
+  @Protected
+  @Get('/sipers/:hashTag')
+  public findDetail(@Param('hashTag') hashTag: string) {
+    return this.userService.findDetail(hashTag);
+  }
+
   @Post()
   public createOne(@Body() createUserDto: CreateUserDto) {
     return this.userService.createOne(createUserDto);

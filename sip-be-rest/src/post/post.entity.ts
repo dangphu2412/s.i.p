@@ -57,6 +57,9 @@ export class Post extends TimeEntityGenerator() {
   @Column({ name: 'thumbnail' })
   public thumbnail: string;
 
+  @Column({ name: 'video_thumbnail' })
+  public videoThumbnail: string;
+
   @Column({ name: 'social_preview_image' })
   public socialPreviewImage: string;
 
@@ -77,6 +80,8 @@ export class Post extends TimeEntityGenerator() {
 
   public isVoted?: boolean;
 
+  public totalReplies: number;
+
   @Column({
     select: false,
     insert: false,
@@ -85,6 +90,7 @@ export class Post extends TimeEntityGenerator() {
     nullable: true,
   })
   public totalVotes?: number;
+
   /**
    * END VIRTUAL FIELDS
    */

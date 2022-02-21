@@ -22,6 +22,7 @@ import { Settings } from './user/Settings';
 import { CreateDiscussionPage } from './dicussion/CreateDicussionPage';
 import { DiscussionOverviewPage } from './dicussion/DicussionOverviewPage';
 import { DiscussionDetailPage } from './dicussion/DiscussionDetailPage';
+import { IdeaOverviewPage } from './post/IdeaOverviewPage';
 
 configApp();
 
@@ -35,7 +36,7 @@ function App(): JSX.Element {
                         AuthRouteMapper.toRoutes([
                             { path: '/success', element: LoginSuccessPage },
                             { path: '/posts/:slug', element: PostDetailPage },
-                            { path: '/posts/new/:slug', element: CreateDetailPostPage, protected: true },
+                            { path: '/posts/edit/:slug', element: CreateDetailPostPage, protected: true },
                             { path: '/posts/new', element: CreatePostPage, protected: true },
                             { path: '/topics/:slug', element: TopicDetailPage },
                             { path: '/topics', element: TopicOverviewPage },
@@ -46,6 +47,7 @@ function App(): JSX.Element {
                             { path: '/me/products', element: Products, protected: true },
                             { path: '/settings', element: Settings, protected: true },
                             { path: '/forbidden', element: UnAuthenticatePage },
+                            { path: '/ideas', element: IdeaOverviewPage },
                             { path: '/', element: HomePage }
                         ], {
                             noPublicGuard: true

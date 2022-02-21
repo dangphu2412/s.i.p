@@ -29,6 +29,9 @@ export function ProfileCardContainer(props: ProfileCardContainerProps): JSX.Elem
     const authState = useSelector(selectAuthState);
 
     useEffect(() => {
+        if (!props.hashTag) {
+            return;
+        }
         dispatch(PostActions.getAuthorIdeas({
             page,
             filters: [],

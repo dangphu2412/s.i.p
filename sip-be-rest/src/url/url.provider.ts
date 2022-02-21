@@ -13,4 +13,8 @@ export class UrlProvider {
     url.searchParams.append('accessToken', loginSuccessResponse.accessToken);
     return url.toString();
   }
+
+  public getYoutubeThumbnailUrl(videoId: string) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
 }

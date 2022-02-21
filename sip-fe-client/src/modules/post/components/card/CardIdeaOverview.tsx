@@ -1,4 +1,3 @@
-import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Button, Card, List } from 'antd';
 import Title from 'antd/lib/typography/Title';
@@ -6,8 +5,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { AuthType } from 'src/modules/auth/auth.reducer';
-import { VoteActions } from 'src/modules/vote/vote.action';
-import { PostSummary } from '../../api/post.api';
+import { IdeaSummary } from '../../api/post.api';
 import './index.scss';
 
 export interface VoteState {
@@ -16,30 +14,21 @@ export interface VoteState {
 }
 
 interface CardItemOverviewProps {
-    data: PostSummary;
+    data: IdeaSummary;
     authType: AuthType;
 }
 
-export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX.Element {
+export function CardIdeaOverview({ data, authType }: CardItemOverviewProps): JSX.Element {
     const dispatch = useDispatch();
-    const [vote, setVote] = useState<VoteState>({
-        isVoted: data.isVoted,
-        voteTotal: +data.totalVotes
-    });
+    const [followed, setFollowed] = useState<boolean>(false);
 
-    function handleVote(e: React.MouseEvent<HTMLElement, MouseEvent>): void {
+    function handleFollow(e: React.MouseEvent<HTMLElement, MouseEvent>) {
         e.preventDefault();
         if (authType !== AuthType.LOGGED_IN) {
             dispatch(openAuthPopupAction());
             return;
         }
-        dispatch(VoteActions.voteForPost({
-            postId: data.id
-        }));
-        setVote({
-            isVoted: !vote.isVoted,
-            voteTotal: vote.isVoted ? vote.voteTotal - 1 : vote.voteTotal + 1
-        });
+        setFollowed(!followed);
     }
 
     return (
@@ -70,15 +59,7 @@ export function CardItemOverview({ data, authType }: CardItemOverviewProps): JSX
                         }
                     />
                     <div className='pr-10'>
-                        <Button className={vote.isVoted ? 'upvote-style btn': 'upvote-style'} onClick={handleVote}>
-                            {
-                                vote.isVoted ?
-                                    <CaretUpOutlined/>
-                                    : <CaretDownOutlined/>
-                            }
-                            <div>
-                                { vote.voteTotal }
-                            </div>
+                        <Button onClick={handleFollow}>
 
                         </Button>
                     </div>

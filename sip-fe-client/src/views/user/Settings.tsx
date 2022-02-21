@@ -51,7 +51,7 @@ export function Settings(): JSX.Element {
                         requiredMark={false}
                     >
                         <Form.Item label="Name" required>
-                            <Input 
+                            <Input
                                 placeholder="Place your cool name here"
                                 value={profile.fullName}
                                 onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
@@ -59,7 +59,7 @@ export function Settings(): JSX.Element {
                         </Form.Item>
 
                         <Form.Item label="Headline" required>
-                            <Input 
+                            <Input
                                 placeholder="Place your headline here"
                                 value={profile.headline}
                                 onChange={(e) => setProfile({ ...profile, headline: e.target.value })}
@@ -104,7 +104,9 @@ export function Settings(): JSX.Element {
                                         }
                                     }}
                                 >
-                                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                    <Button>
+                                        <UploadOutlined/> Click to Upload
+                                    </Button>
                                 </Upload>
                             </div>
 
@@ -113,7 +115,7 @@ export function Settings(): JSX.Element {
                             </div>
                         </Col>
                     </Row>
-                    
+
                     <Dragger>
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
@@ -126,7 +128,7 @@ export function Settings(): JSX.Element {
                     <div>
                         Recommended size: 1500x500px
                     </div>
-                </Col> 
+                </Col>
             </Row>
         </Container>
     </ClientLayout>;

@@ -45,6 +45,7 @@ define(
       facebookLink: 'https://www.facebook.com/',
       pricingType: faker.random.arrayElement(Object.values(PricingType)),
       videoLink: 'https://www.youtube.com/embed/nTtpHxnO9zA',
+      videoThumbnail: 'https://img.youtube.com/vi/nTtpHxnO9zA/hqdefault.jpg',
       status: faker.random.arrayElement(postStatusValues),
       runningStatus: faker.random.arrayElement(runningStatusValues),
     });

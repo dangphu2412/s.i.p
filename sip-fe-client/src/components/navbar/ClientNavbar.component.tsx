@@ -68,21 +68,26 @@ export function ClientNavbar(): JSX.Element {
                         <Input style={{backgroundColor: '#F0F9FF'}} className='bg-sky-light' placeholder="Search Products ..." />
                     </div>
 
-                    <div className='max-w-2xl w-full'>
+                    <div className='max-w-3xl w-full'>
                         <Menu mode="horizontal" className='override-line-height-menu cover-bg'>
                             <Menu.Item className='cover-bg' key="1">
                                 <Link to="/">
-                                Products
+                                    Products
                                 </Link>
                             </Menu.Item>
                             <Menu.Item className='cover-bg' key="2">
-                                <Link to="/topics">
-                                Topics
+                                <Link to="/ideas">
+                                    Ideas
                                 </Link>
                             </Menu.Item>
                             <Menu.Item className='cover-bg' key="3">
+                                <Link to="/topics">
+                                    Topics
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item className='cover-bg' key="4">
                                 <Link to="/discussions">
-                                Discussions
+                                    Discussions
                                 </Link>
                             </Menu.Item>
                         </Menu>

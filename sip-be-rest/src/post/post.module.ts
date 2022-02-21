@@ -1,4 +1,5 @@
 import { CommentModule } from '@comment/comment.module';
+import { MediaModule } from '@media/media.module';
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TopicModule } from '@topic/topic.module';
@@ -15,6 +16,7 @@ import { PostService } from './post.service';
     UserModule,
     TopicModule,
     CommentModule,
+    MediaModule,
   ],
   controllers: [PostController],
   providers: [PostService, Logger],

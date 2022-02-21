@@ -1,4 +1,4 @@
-import { CaretDownFilled, CaretUpOutlined, FacebookFilled, InstagramFilled } from '@ant-design/icons';
+import { CaretDownFilled, CaretUpOutlined, FacebookFilled } from '@ant-design/icons';
 import { Avatar, Button, Col, Divider, Image, List, Row, Tooltip } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import React, { useEffect, useState } from 'react';
@@ -33,6 +33,7 @@ const contentStyle: React.CSSProperties = {
 interface GalleryItem {
     type: 'image' | 'video',
     src: string;
+    thumbnail: string;
 }
 
 const followers = [
@@ -120,6 +121,7 @@ export function PostDetailPage(): JSX.Element {
             topics: [],
             totalVotes: 0,
             videoLink: '',
+            videoThumbnail: '',
         }
     );
     const [vote, setVote] = useState<VoteState>({
@@ -148,21 +150,23 @@ export function PostDetailPage(): JSX.Element {
         }
     }, [postDetailDataHolder]);
 
-    function toGallery(imgs: string[] | undefined, videoLink: string | undefined): GalleryItem[] {
+    function getGallery(): GalleryItem[] {
         const gallery: GalleryItem[] = [];
-        if (!ArrayUtils.isEmpty(imgs)) {
-            imgs.forEach(img => {
+        if (!ArrayUtils.isEmpty(postDetail.galleryImages)) {
+            postDetail.galleryImages.forEach(img => {
                 gallery.push({
                     src: img,
-                    type: 'image'
+                    type: 'image',
+                    thumbnail: img
                 });
             });
         }
 
-        if (videoLink) {
+        if (postDetail.videoLink) {
             gallery.push({
-                src: videoLink,
-                type: 'video'
+                src: postDetail.videoLink,
+                type: 'video',
+                thumbnail: postDetail.videoThumbnail
             });
         }
 
@@ -239,16 +243,23 @@ export function PostDetailPage(): JSX.Element {
                                     showArrows={false}
                                     showStatus={false}
                                     showIndicators={false}
-                                    renderThumbs={children => {
-                                        let j = 0;
-                                        return children.map(() => {
-                                            j++;
-                                            return (<img key={j} src="https://joeschmoe.io/api/v1/random"/>);
-                                        });
-                                    }}
+                                    renderThumbs={
+                                        () => {
+                                            return getGallery()
+                                                .map((item, index) => {
+                                                    return <Image
+                                                        key={index}
+                                                        src={item.thumbnail}
+                                                        style={contentStyle}
+                                                        preview={false}
+                                                        alt='alt'
+                                                    />;
+                                                });
+                                        }
+                                    }
                                 >
                                     {
-                                        toGallery(postDetail.galleryImages, postDetail.videoLink)
+                                        getGallery()
                                             .map((item, index) => {
                                                 if (item.type === 'image') {
                                                     return (
@@ -304,7 +315,7 @@ export function PostDetailPage(): JSX.Element {
                             <Row className='rounded'>
                                 <Col span={12} className='pr-2'>
                                     <Button danger className=' w-full'>
-                                        <a href='#'>
+                                        <a href={postDetail.productLink} target='_blank' rel="noreferrer">
                                         Go to product
                                         </a>
                                     </Button>
@@ -347,13 +358,16 @@ export function PostDetailPage(): JSX.Element {
                             </Row>
 
                             <Row className='my-5 gap-3'>
-                                <a href='#' className='text-lg button-text-color'>
-                                    <FacebookFilled className='text-lg'/>
-                                </a>
-
-                                <a href='#' className='text-lg button-text-color'>
-                                    <InstagramFilled/>
-                                </a>
+                                {
+                                    postDetail.facebookLink &&
+                                    <a
+                                        href={postDetail.facebookLink} className='text-lg button-text-color'
+                                        target='_blank'
+                                        rel='noreferrer'
+                                    >
+                                        <FacebookFilled className='text-lg'/>
+                                    </a>
+                                }
                             </Row>
 
                             {/* Hunter and maker */}
@@ -366,16 +380,17 @@ export function PostDetailPage(): JSX.Element {
                                     description={postDetail.author.headline}
                                     image={postDetail.author.avatar}
                                 />
-                                <div>
+                                <div className='mt-5'>
                                     {postDetail.makers.length} Sip-ers
                                 </div>
 
-                                <div className='mt-5 maker-container'>
+                                <div className='mt-3 maker-container'>
                                     <List
                                         dataSource={postDetail.makers}
                                         itemLayout="horizontal"
                                         renderItem={maker => (
                                             <List.Item.Meta
+                                                className='my-2'
                                                 avatar={<Avatar src={maker.avatar} />}
                                                 title={<a href="https://ant.design">{maker.fullName}</a>}
                                                 description={maker.headline}

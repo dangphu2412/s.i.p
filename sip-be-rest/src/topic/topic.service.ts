@@ -86,6 +86,9 @@ export class TopicService {
         slug,
       },
     });
+    if (!topic) {
+      throw new NotFoundException('Topic is not found');
+    }
     if (authContext) {
       user = await this.userService.findByIdWithFollowedTopics(
         +authContext.userId,

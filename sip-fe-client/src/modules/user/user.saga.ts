@@ -5,7 +5,7 @@ import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { Profile } from '../auth/auth.service';
 import { saveData } from '../data/data.action';
 import { Query } from '../query/interface';
-import { FindSiperRequest, UserActions } from './user.action';
+import { UserActions } from './user.action';
 import { findSiper, searchMakers, updateProfile } from './user.service';
 
 export function* UserSagaTree(): Generator<ForkEffect<never>, void, unknown> {
@@ -34,8 +34,8 @@ function* handleSearchMakers(action: PayloadAction<Query>): SagaIterator {
     }));
 }
 
-function* handleFindSiper(action: PayloadAction<FindSiperRequest>): SagaIterator {
-    const request = findSiper(action.payload.hashTag);
+function* handleFindSiper(action: PayloadAction<string>): SagaIterator {
+    const request = findSiper(action.payload);
     const data = yield call(request.handle);
     yield put(saveData({
         data,

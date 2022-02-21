@@ -35,4 +35,12 @@ export class ArrayUtils {
 
     return [...uniqueMap.values()].some((val) => val === 1);
   }
+
+  public static moreThan<T>(count: number, arr: T[]): boolean {
+    return ArrayUtils.isPresent(arr) && arr.length > count;
+  }
+
+  public static has<T>(count: number, arr: T[]): boolean {
+    return ArrayUtils.isPresent(arr) && arr.length === count;
+  }
 }

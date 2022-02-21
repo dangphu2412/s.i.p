@@ -12,6 +12,6 @@ export function AuthRestoreGuard({ children }: BrowserRouterProps): JSX.Element 
     }, []);
 
     return restoreStatus
-        ? (<div>{ children }</div>)
+        ? (<>{ children }</>)
         : null;
 }

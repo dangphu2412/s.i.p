@@ -8,6 +8,7 @@ export interface PostSummary {
   slug: string;
   isVoted: boolean;
   totalVotes: number;
+  totalReplies: number;
   topics: Topic[];
   author?: User;
   thumbnail: string;

@@ -1,12 +1,13 @@
 import { ExclamationCircleOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    Avatar, Button, Checkbox, Col, Divider, Dropdown, Form, Image,
-    Input, List, Menu, Modal, Radio, Row, Space, Steps, Upload
+    Avatar, Button, Checkbox, Col, Divider, Dropdown, Form, Image, DatePicker,
+    Input, List, Menu, Modal, Radio, RadioChangeEvent, Row, Space, Steps, Upload
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Title from 'antd/lib/typography/Title';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
+import dayFormatter from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -80,9 +81,9 @@ export function CreateDetailPostPage(): JSX.Element {
 
     const productRunningPlans: ProductPlan[] = [
         {
-            key: ProductRunningStatus.STILL_IDEA,
+            key: ProductRunningStatus.IDEA,
             title: 'Idea phase',
-            description: 'This is a still idea',
+            description: 'This is still an idea',
             detail: 'This is still an idea phase. You need to add product link to get started looking for members.'
         },
         {
@@ -92,10 +93,10 @@ export function CreateDetailPostPage(): JSX.Element {
             detail: 'Oh now you are looking for makers. Wait for them to join your project. You can add them to your project in Sip-ers Tab.'
         },
         {
-            key: ProductRunningStatus.UP_COMING,
-            title: 'Upcoming',
-            description: 'You scheduled your product to be launched',
-            detail: 'You scheduled your product to be launched. Be ready for it!'
+            key: ProductRunningStatus.PRE_RELEASED,
+            title: 'Before released',
+            description: 'Your product is ready for the community to use',
+            detail: 'Your product is about to release. You can share it with your friends and family.'
         },
         {
             key: ProductRunningStatus.RELEASED,
@@ -122,7 +123,7 @@ export function CreateDetailPostPage(): JSX.Element {
         topics: [],
         thumbnail: '',
         galleryImages: [],
-        runningStatus: ProductRunningStatus.STILL_IDEA,
+        runningStatus: ProductRunningStatus.IDEA,
         socialPreviewImage: '',
         status : PostStatus.DRAFT,
         facebookLink: '',
@@ -131,7 +132,7 @@ export function CreateDetailPostPage(): JSX.Element {
         isAuthorAlsoMaker: true,
         makers: [],
         pricingType: PricingType.FREE,
-        launchSchedule: new Date(),
+        launchSchedule: null,
         firstComment: ''
     });
 
@@ -225,6 +226,58 @@ export function CreateDetailPostPage(): JSX.Element {
         }
     }
 
+    function onHandleAuthorAsMaker(event: RadioChangeEvent) {
+        if (!profile) {
+            throw new Error('Profile is not set');
+        }
+        if (event.target.value) {
+            setData({
+                ...data,
+                isAuthorAlsoMaker: !data.isAuthorAlsoMaker,
+                makers: [...data.makers, {
+                    id: profile.id,
+                    fullName: profile.fullName,
+                    avatar: profile.avatar,
+                } as Author]
+            });
+        } else {
+            setData({
+                ...data,
+                isAuthorAlsoMaker: !data.isAuthorAlsoMaker,
+                makers:  [...data.makers.filter(maker => maker.id !== profile.id)]
+            });
+        }
+    }
+
+    function onProductLinkChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const productLink = event.target.value;
+        if (!productLink) {
+            setData({
+                ...data,
+                runningStatus: ProductRunningStatus.IDEA,
+                productLink
+            });
+            return;
+        }
+        if (data.runningStatus === ProductRunningStatus.IDEA) {
+            if (ArrayUtils.isPresent(data.makers)) {
+                setData({
+                    ...data,
+                    runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+                    productLink
+                });
+                return;
+            }
+
+            setData({
+                ...data,
+                runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+                productLink
+            });
+            setRunningStatus(getCurrentRunningStatus(ProductRunningStatus.LOOKING_FOR_MEMBERS));
+        }
+    }
+
     function updateData<T>(key: string, value: T) {
         setData({
             ...data,
@@ -278,6 +331,20 @@ export function CreateDetailPostPage(): JSX.Element {
         });
     }
 
+    function handleMakerRemoval(author: Author) {
+        if (!profile) {
+            throw new Error('Profile is not set');
+        }
+        const newMakers = data.makers.filter(maker => maker.id !== author.id);
+        if (author.id === profile.id) {
+            setData({
+                ...data,
+                makers: newMakers,
+                isAuthorAlsoMaker: false
+            });
+        }
+    }
+
     function showPublishConfirmation() {
         Modal.confirm({
             title: 'Do you want to publish this product?',
@@ -288,7 +355,7 @@ export function CreateDetailPostPage(): JSX.Element {
                     ...data,
                     status: PostStatus.PUBLISH
                 }));
-                navigate('/posts');
+                navigate('/');
             }
         });
     }
@@ -297,10 +364,18 @@ export function CreateDetailPostPage(): JSX.Element {
         Modal.confirm({
             title: 'Schedule this product to launch?',
             icon: <ExclamationCircleOutlined />,
-            content: 'You are about to schedule this product to launch.',
-            onOk() {
-                alert('Scheduling');
-            }
+            content: <>
+                <p>
+                    You are about to schedule this product to launch.
+                </p>
+                <DatePicker
+                    value={dayFormatter(data.launchSchedule)}
+                    onChange={e => {
+                        if (e) {
+                            updateData('launchSchedule', e.toDate());
+                        }
+                    }}/>
+            </>
         });
     }
 
@@ -409,34 +484,7 @@ export function CreateDetailPostPage(): JSX.Element {
                                             <Input
                                                 placeholder="https://..."
                                                 value={data.productLink}
-                                                onChange={e => {
-                                                    const productLink = e.target.value;
-                                                    if (!productLink) {
-                                                        setData({
-                                                            ...data,
-                                                            runningStatus: ProductRunningStatus.STILL_IDEA,
-                                                            productLink
-                                                        });
-                                                        return;
-                                                    }
-                                                    if (data.runningStatus === ProductRunningStatus.STILL_IDEA) {
-                                                        if (ArrayUtils.isPresent(data.makers)) {
-                                                            setData({
-                                                                ...data,
-                                                                runningStatus: ProductRunningStatus.UP_COMING,
-                                                                productLink
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        setData({
-                                                            ...data,
-                                                            runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
-                                                            productLink
-                                                        });
-                                                        setRunningStatus(getCurrentRunningStatus(ProductRunningStatus.LOOKING_FOR_MEMBERS));
-                                                    }
-                                                }}
+                                                onChange={onProductLinkChange}
                                             />
                                         </Form.Item>
 
@@ -468,6 +516,7 @@ export function CreateDetailPostPage(): JSX.Element {
                                                                     <Menu.Item
                                                                         key={topic.id}
                                                                         onClick={() => {
+                                                                            setTopicSearch('');
                                                                             updateData('topics', [...data.topics, topic]);
                                                                         }}
                                                                     >
@@ -586,11 +635,14 @@ export function CreateDetailPostPage(): JSX.Element {
                                         {
                                             data.socialPreviewImage
                                             &&
-                                            <Image
-                                                src={data.socialPreviewImage}
-                                                alt='Preview image'
-                                                preview={false}
-                                            />
+                                            <div className='my-5'>
+                                                <Image
+                                                    src={data.socialPreviewImage}
+                                                    alt='Preview image'
+                                                    preview={false}
+                                                />
+                                            </div>
+
                                         }
 
                                         <Upload
@@ -654,29 +706,7 @@ export function CreateDetailPostPage(): JSX.Element {
                                         </div>
 
                                         <Radio.Group
-                                            onChange={(e) => {
-                                                if (!profile) {
-                                                    throw new Error('Profile is not set');
-                                                }
-                                                if (e.target.value) {
-                                                    setData({
-                                                        ...data,
-                                                        isAuthorAlsoMaker: !data.isAuthorAlsoMaker,
-                                                        makers: [...data.makers, {
-                                                            id: profile.id,
-                                                            fullName: profile.fullName,
-                                                            avatar: profile.avatar,
-                                                        } as Author]
-                                                    });
-                                                } else {
-                                                    setData({
-                                                        ...data,
-                                                        isAuthorAlsoMaker: !data.isAuthorAlsoMaker,
-                                                        makers:  [...data.makers.filter(maker => maker.id !== profile.id)]
-                                                    });
-                                                }
-
-                                            }}
+                                            onChange={onHandleAuthorAsMaker}
                                             value={data.isAuthorAlsoMaker}
                                         >
                                             <Space direction="vertical">
@@ -709,7 +739,11 @@ export function CreateDetailPostPage(): JSX.Element {
                                                                 return (
                                                                     <Menu.Item
                                                                         key={maker.id}
-                                                                        onClick={() => { updateData('makers', [...data.makers, maker]);}}
+                                                                        onClick={() => {
+                                                                            const newMakers = [...data.makers, maker];
+                                                                            setMakerSearch('');
+                                                                            updateData('makers', newMakers);
+                                                                        }}
                                                                     >
                                                                         {
                                                                             maker.fullName
@@ -739,19 +773,7 @@ export function CreateDetailPostPage(): JSX.Element {
                                                     renderItem={item => {
                                                         return <List.Item
                                                             key={item.id}
-                                                            onClick={() => {
-                                                                if (!profile) {
-                                                                    throw new Error('Profile is not set');
-                                                                }
-                                                                const newMakers = data.makers.filter(maker => maker.id !== item.id);
-                                                                if (item.id === profile.id) {
-                                                                    setData({
-                                                                        ...data,
-                                                                        makers: newMakers,
-                                                                        isAuthorAlsoMaker: false
-                                                                    });
-                                                                }
-                                                            }}
+                                                            onClick={() => handleMakerRemoval(item)}
                                                         >
                                                             <List.Item.Meta
                                                                 avatar={<Avatar src={item.avatar} />}
@@ -959,7 +981,7 @@ export function CreateDetailPostPage(): JSX.Element {
                                     <Button
                                         className='mt-5'
                                         onClick={() => showScheduleModal()}
-                                        disabled={!data.title || !data.summary || !data.description || !data.thumbnail || !data.socialPreviewImage || data.galleryImages.length === 0}
+                                        disabled={!data.title || !data.summary || !data.description || !data.thumbnail || !data.socialPreviewImage || data.galleryImages.length === 0 || data.makers.length === 0 || (data.makers.length === 1 && data.isAuthorAlsoMaker)}
                                     >
                                         Schedule launch later
                                     </Button>

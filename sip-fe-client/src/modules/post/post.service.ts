@@ -1,9 +1,9 @@
-import { RequestProcessor } from './../http/http-request';
 import axios from 'axios';
 import { REACT_APP_API_URL } from 'src/config/constant.config';
 import { createRequest } from '../http/http-request';
 import { Query } from '../query/interface';
 import { parseToSearchParams } from '../query/search-parser';
+import { RequestProcessor } from './../http/http-request';
 import { PostDetail, PostOverview, UpdatePostDto } from './api/post.api';
 import { FetchDetailType } from './constants/get-type';
 import { InitPost, PostDetailRequest } from './post.action';
@@ -62,6 +62,10 @@ export function updatePostData(data: UpdatePostDto): RequestProcessor<Record<str
             }
         }
     ));
+}
+
+export function deleteDraftPost(postId: string): RequestProcessor<void> {
+    return createRequest<void, void>(axios.delete('/v1/posts/' + postId));
 }
 
 export function getUploadUrl(): string {

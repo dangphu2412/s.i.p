@@ -7,14 +7,13 @@ import { selectLoading } from '../../modules/loading/loading.selector';
 export function LoadingOverlay<T>(props: { children: T}): JSX.Element {
     const loading: AppLoading = useSelector(selectLoading);
     return (
-        <div>
-            <LoadingOverlayComponent
-                active={loading.isLoading}
-                spinner
-                text={loading.content}
-            >
-                {props.children}
-            </LoadingOverlayComponent>
-        </div>
+        <LoadingOverlayComponent
+            active={loading.isLoading}
+            spinner
+            text={loading.content}
+            className='h-full'
+        >
+            {props.children}
+        </LoadingOverlayComponent>
     );
 }

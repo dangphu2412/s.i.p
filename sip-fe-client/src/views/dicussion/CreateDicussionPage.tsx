@@ -1,3 +1,4 @@
+import './create.scss';
 import { Button, Form, Input } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Title from 'antd/lib/typography/Title';
@@ -31,10 +32,10 @@ export function CreateDiscussionPage(): JSX.Element {
         });
     }
 
-    return (<>
-        <ClientLayout>
-            <Container>
-                <div className='py-10 flex justify-center'>
+    return (
+        <ClientLayout className='background' style={{backgroundImage: 'url(\'/img/discussion-create.jpg\')'}}>
+            <Container className='h-full'>
+                <div className='flex justify-center items-center h-full'>
                     <div className='shadow hover:shadow-md rounded-md content-bg p-10 transition delay-100 w-full max-w-2xl'>
                         <Form
                             layout="vertical"
@@ -75,5 +76,5 @@ export function CreateDiscussionPage(): JSX.Element {
                 </div>
             </Container>
         </ClientLayout>
-    </>);
+    );
 }

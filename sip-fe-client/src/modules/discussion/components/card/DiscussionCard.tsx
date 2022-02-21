@@ -1,5 +1,6 @@
 import { CaretUpOutlined } from '@ant-design/icons';
 import { Avatar, List } from 'antd';
+import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -61,9 +62,9 @@ export function DiscussionCard(props: DiscussionCardProps): JSX.Element {
                 <Link
                     to={`/discussions/${props.slug}`}
                 >
-                    <h4>
+                    <Title level={5}>
                         {props.title}
-                    </h4>
+                    </Title>
                 </Link>
             }
             description={
@@ -77,7 +78,7 @@ export function DiscussionCard(props: DiscussionCardProps): JSX.Element {
                                 {props.totalReplies}
                             </span>
                             <span className='mr-2'>
-                                            Replies
+                                Replies
                             </span>
                             <span className='mr-2'>
                                 {DateUtils.diff(new Date(), new Date(props.createdAt))}

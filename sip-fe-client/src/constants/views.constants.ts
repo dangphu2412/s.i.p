@@ -1,5 +1,6 @@
 export const VIEW_SELECTOR = {
     FIND_POST_OVERVIEW: 'findPostOverview',
+    FIND_IDEA_OVERVIEW: 'findIdeaOverview',
     FIND_POST_DETAIL: 'findPostDetail',
     FIND_POST_PATCH_DETAIL: 'findPostPatchDetail',
     FIND_SIPER: 'findSiper',

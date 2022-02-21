@@ -5,19 +5,19 @@ import { NotificationContainer } from '../../components/progress/NotificationCon
 import { LoadingOverlay } from '../../components/progress/LoadingOverlay';
 import './index.scss';
 
-interface Props {
-    children: React.ReactNode;
-}
+export type Props = React.ComponentProps<'div'>;
 
-export function ClientLayout(props: Props): JSX.Element {
+export function ClientLayout({className, ...rest}: Props): JSX.Element {
     return (
-        <div>
+        <>
             <NotificationContainer/>
             <AuthModal/>
             <LoadingOverlay>
                 <ClientNavbar/>
-                {props.children}
+                <div {...rest} className={`h-full ${className ? className : ''}`}>
+                    {rest.children}
+                </div>
             </LoadingOverlay>
-        </div>
+        </>
     );
 }

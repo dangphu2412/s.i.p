@@ -9,12 +9,17 @@ export interface PostSummary {
   summary: string;
   isVoted: boolean;
   totalVotes: string;
+  totalReplies: string;
   thumbnail: string;
   topics: Topic[];
   author: Author;
 }
 
+export type IdeaSummary =  (Omit<PostSummary, 'isVoted'> & { followed: boolean });
+
 export type PostOverview = PostSummary[];
+
+export type IdeaOverview = IdeaSummary[];
 
 export interface PostDetail {
   id: string;
@@ -26,6 +31,7 @@ export interface PostDetail {
   productLink: string;
   facebookLink: string;
   videoLink: string;
+  videoThumbnail: string;
   thumbnail: string;
   socialPreviewImage: string;
   galleryImages: string[];
@@ -58,7 +64,7 @@ export interface PatchPostDetail {
     status: PostStatus;
     runningStatus: ProductRunningStatus;
     pricingType: PricingType;
-    launchSchedule: Date;
+    launchSchedule: Date | null;
     firstComment: string;
 }
 

@@ -122,6 +122,15 @@ export class UserService {
     });
   }
 
+  public findDetail(hashTag: string) {
+    return this.userRepository.findOne({
+      where: {
+        hashTag,
+      },
+      relations: ['followedTopics'],
+    });
+  }
+
   public findById(id: number) {
     return this.userRepository.findOne(id);
   }

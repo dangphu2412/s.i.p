@@ -1,9 +1,11 @@
+import { CommentService } from '@comment/comment.service';
 import { Identity } from '@database/identity';
-import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayMapper } from '@external/mappers/array.mapper';
+import { RuleManager } from '@external/racl/core/rule.manager';
 import { ArrayUtils } from '@external/utils/array/array.utils';
+import { MediaService } from '@media/media.service';
 import {
   BadRequestException,
   ConflictException,
@@ -20,7 +22,7 @@ import { Vote } from '@vote/entities/vote.entity';
 import { VoteService } from '@vote/vote.service';
 import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
-import { CommentService } from '@comment/comment.service';
+import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { UserService } from 'src/user/user.service';
 import { EditablePostView } from './client/post-editable';
 import { PostOverview } from './client/post-overview.api';
@@ -43,6 +45,7 @@ export class PostService {
     private readonly userService: UserService,
     private readonly topicService: TopicService,
     private readonly commentService: CommentService,
+    private readonly mediaService: MediaService,
   ) {}
 
   public async init(initPostDto: InitPostDto, authContext: UserCredential) {
@@ -68,11 +71,10 @@ export class PostService {
     post.title = initPostDto.title;
     post.slug = SlugUtils.normalize(post.title);
     post.status = PostStatus.DRAFT;
-    post.runningStatus = initPostDto.productLink
-      ? ProductRunningStatus.UP_COMING
-      : ProductRunningStatus.STILL_IDEA;
+    post.runningStatus = ProductRunningStatus.IDEA;
     post.productLink = '';
     post.videoLink = '';
+    post.videoThumbnail = '';
     post.facebookLink = '';
 
     post.summary = '';
@@ -155,6 +157,9 @@ export class PostService {
         break;
       case FetchPostType.HOTTEST:
         posts = await this.postRepository.findHottestPosts(searchQuery);
+        break;
+      case FetchPostType.IDEA:
+        posts = await this.postRepository.findIdeaPosts(searchQuery);
         break;
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
@@ -258,8 +263,35 @@ export class PostService {
     return this.commentService.findCommentsOfPost(post, searchCriteria);
   }
 
-  public remove(id: number) {
-    return `This action removes a #${id} post`;
+  public async remove(
+    id: number,
+    authContext: UserCredential,
+    ruleManager: RuleManager,
+  ) {
+    const post = await this.postRepository.findOne(id, {
+      where: {
+        relations: ['author'],
+      },
+    });
+    if (!post) {
+      throw new NotFoundException(`There is no post with id ${id} to delete`);
+    }
+
+    if (post.status !== PostStatus.DRAFT) {
+      throw new UnprocessableEntityException(
+        `Post with id: ${id} is not draft that cannot be deleted`,
+      );
+    }
+    const author = await this.userService.findById(+authContext.userId);
+    if (!author) {
+      throw new UnprocessableEntityException('User is not available');
+    }
+    if (post.author.id !== author.id) {
+      throw new UnprocessableEntityException(
+        `User with id: ${author.id} is not author of post with id: ${id}`,
+      );
+    }
+    return this.postRepository.remove(post);
   }
 
   public update(id: number, status: PostStatus, updatePostDto: UpdatePostDto) {
@@ -352,6 +384,11 @@ export class PostService {
     post.productLink = updatePostDto.links.productLink;
     post.facebookLink = updatePostDto.socialMedia.facebookLink;
     post.videoLink = updatePostDto.socialMedia.videoLink;
+    post.videoThumbnail = updatePostDto.socialMedia.videoLink
+      ? this.mediaService.getYoutubeThumbnail(
+          updatePostDto.socialMedia.videoLink,
+        )
+      : '';
     post.thumbnail = updatePostDto.socialMedia.thumbnail;
     post.galleryImages = updatePostDto.socialMedia.galleryImages;
     post.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
@@ -361,24 +398,26 @@ export class PostService {
     post.pricingType = updatePostDto.pricingType;
 
     if (
-      !updatePostDto.links.productLink &&
-      post.runningStatus !== ProductRunningStatus.STILL_IDEA
+      updatePostDto.runningStatus === ProductRunningStatus.IDEA &&
+      ((updatePostDto.isAuthorAlsoMaker &&
+        updatePostDto.makerIds.length === 1) ||
+        ArrayUtils.isEmpty(post.makers))
     ) {
-      post.runningStatus = ProductRunningStatus.STILL_IDEA;
+      post.runningStatus = ProductRunningStatus.LOOKING_FOR_MEMBERS;
     }
 
     if (
-      updatePostDto.runningStatus === ProductRunningStatus.STILL_IDEA &&
-      !!updatePostDto.links.productLink
+      ArrayUtils.isPresent(updatePostDto.makerIds) &&
+      ((updatePostDto.isAuthorAlsoMaker && updatePostDto.makerIds.length > 1) ||
+        (!updatePostDto.isAuthorAlsoMaker && updatePostDto.makerIds.length > 0))
     ) {
-      post.runningStatus = ProductRunningStatus.LOOKING_FOR_MEMBERS;
+      post.runningStatus = ProductRunningStatus.PRE_RELEASED;
     }
 
     if (!!updatePostDto.launchSchedule) {
       if (ArrayUtils.isEmpty(updatePostDto.makerIds)) {
         throw new UnprocessableEntityException('Makers are required to launch');
       }
-      post.runningStatus = ProductRunningStatus.UP_COMING;
     }
 
     return this.postRepository.save(post);
@@ -419,13 +458,13 @@ export class PostService {
       );
     }
 
-    if (updatePostDto.runningStatus === ProductRunningStatus.STILL_IDEA) {
+    if (updatePostDto.runningStatus === ProductRunningStatus.IDEA) {
       if (
         updatePostDto.links.productLink &&
         ArrayUtils.isPresent(updatePostDto.makerIds)
       ) {
         throw new UnprocessableEntityException(
-          `Product is in idea status that we dont need product link and maker. Should it be updated to ${ProductRunningStatus.LOOKING_FOR_MEMBERS} or ${ProductRunningStatus.UP_COMING}`,
+          `Product is in idea status that we dont need product link and maker. Should it be updated to ${ProductRunningStatus.LOOKING_FOR_MEMBERS}`,
         );
       }
     }
@@ -441,12 +480,8 @@ export class PostService {
       }
     }
 
-    if (updatePostDto.runningStatus === ProductRunningStatus.UP_COMING) {
-      if (!updatePostDto.launchSchedule) {
-        throw new UnprocessableEntityException(
-          'Required launch schedule date to prepare for this upcoming product',
-        );
-      }
+    if (updatePostDto.runningStatus === ProductRunningStatus.PRE_RELEASED) {
+      updatePostDto.runningStatus = ProductRunningStatus.RELEASED;
     }
 
     if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
@@ -482,6 +517,9 @@ export class PostService {
     post.summary = updatePostDto.summary;
     post.facebookLink = updatePostDto.socialMedia.facebookLink;
     post.videoLink = updatePostDto.socialMedia.videoLink;
+    post.videoThumbnail = this.mediaService.getYoutubeThumbnail(
+      updatePostDto.socialMedia.videoLink,
+    );
     post.galleryImages = updatePostDto.socialMedia.galleryImages;
     post.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
     post.thumbnail = updatePostDto.socialMedia.thumbnail;

@@ -8,12 +8,16 @@ import { Query } from '../query/interface';
 import { fireMessage } from '../message/message.action';
 import { PatchPostDetail, UpdatePostDto } from './api/post.api';
 import { PostActions, PostDetailRequest } from './post.action';
-import { getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
+import { deleteDraftPost, getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
 
 export function* PostSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
         PostActions.getOverviewData.type,
         handleFetchPosts
+    );
+    yield takeLatest(
+        PostActions.getIdeas.type,
+        handleFetchIdeas
     );
 
     yield takeLatest(
@@ -35,6 +39,11 @@ export function* PostSagaTree(): Generator<ForkEffect<never>, void, unknown> {
         PostActions.saveData.type,
         handleSavePostData
     );
+
+    yield takeLatest(
+        PostActions.deleteDraft.type,
+        handleDeletePostDraft
+    );
 }
 
 function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
@@ -48,6 +57,24 @@ function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
         data: data.data,
         query: {},
         view: VIEW_SELECTOR.FIND_POST_OVERVIEW
+    }));
+}
+
+function* handleFetchIdeas(action: PayloadAction<Query>): SagaIterator {
+    const request = getPostsOverview({
+        page: action.payload.page,
+        filters: [{
+            column: 'type',
+            comparator: 'eq',
+            value: 'Idea'
+        }],
+        sorts: []
+    });
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data: data.data,
+        query: {},
+        view: VIEW_SELECTOR.FIND_IDEA_OVERVIEW
     }));
 }
 
@@ -111,4 +138,9 @@ function* handleSavePostData(action: PayloadAction<PatchPostDetail>): SagaIterat
         }));
     }
     return;
+}
+
+function* handleDeletePostDraft(action: PayloadAction<string>): SagaIterator {
+    const request = deleteDraftPost(action.payload);
+    yield call(request.handle);
 }

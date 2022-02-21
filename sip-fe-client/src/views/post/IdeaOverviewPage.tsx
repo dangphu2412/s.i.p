@@ -3,21 +3,20 @@ import { Content } from 'antd/lib/layout/layout';
 import Title from 'antd/lib/typography/Title';
 import React from 'react';
 import { Footer } from 'src/components/footer/Footer';
-import { CardContainer } from 'src/modules/post/components/card/CardContainer';
-import { FollowProductCardContainer } from 'src/modules/post/components/card/FollowProductCardContainer';
+import { IdeaContainer } from 'src/modules/post/components/card/IdeaContainer';
 import { Container } from '../../components/container/Container';
 import { ClientLayout } from '../../layouts/client/ClientLayout';
 
-export function HomePage(): JSX.Element {
+export function IdeaOverviewPage(): JSX.Element {
     return (
         <ClientLayout>
             <Container className='py-10'>
                 <Row>
                     <Col span={16}>
-                        <Title level={2}>Let&#39;s get some products 💩</Title>
+                        <Title level={2}>Up coming products 💩</Title>
 
                         <Content>
-                            <CardContainer/>
+                            <IdeaContainer/>
                         </Content>
                     </Col>
 
@@ -26,14 +25,6 @@ export function HomePage(): JSX.Element {
                     </Col>
 
                     <Col span={7}>
-                        <div>
-                            <div>
-                                    UPCOMING PRODUCTS
-                            </div>
-
-                            <FollowProductCardContainer/>
-                        </div>
-
                         <Divider/>
 
                         <Footer />

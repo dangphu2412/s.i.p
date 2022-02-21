@@ -17,7 +17,7 @@ export function SimpleCard(props: SimpleCardProps): JSX.Element {
             </Col>
 
             <Col span={20}>
-                <a href='#'>
+                <a href={`/sipers/${props.title}`}>
                     {props.title}
                 </a>
                 <div>{props.description}</div>

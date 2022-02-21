@@ -1,14 +1,13 @@
 import React from 'react';
 import './index.scss';
 
-interface ContainerProps {
-    children: React.ReactNode;
-    className?: string;
-}
+export type Props = React.ComponentProps<'div'>;
 
-export function Container(props: ContainerProps): JSX.Element {
+export function Container({className, ...props}: Props): JSX.Element {
     return (
-        <div className={props.className ? `${props.className} container` : 'container '}>
+        <div className={`container ${className ? className : ''}`}
+            {...props}
+        >
             { props.children }
         </div>
     );

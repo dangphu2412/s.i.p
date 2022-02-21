@@ -30,6 +30,8 @@ import { FetchAuthorPostsValidator } from './pipes/author-posts-search.validator
 import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
 import { FetchPostsDetailValidator } from './pipes/post-detail.validator';
 import { PostService } from './post.service';
+import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
+import { RuleManager } from '@external/racl/core/rule.manager';
 
 @ApiTags('posts')
 @Controller('v1/posts')
@@ -149,8 +151,13 @@ export class PostController {
     );
   }
 
+  @Protected
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  remove(
+    @Param('id') id: string,
+    @AuthContext() authContext: UserCredential,
+    @ExtractRuleManager() ruleManager: RuleManager,
+  ) {
+    return this.postService.remove(+id, authContext, ruleManager);
   }
 }

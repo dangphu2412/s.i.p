@@ -4,10 +4,12 @@ import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
+import { Footer } from 'src/components/footer/Footer';
 import { HorizontalSelection } from 'src/components/selection/HorizontalSelection';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { DiscussionCardContainer } from 'src/modules/discussion/components/card/DiscussionCardContainer';
 import { GetDiscussionType } from 'src/modules/discussion/constants/get-discussion-type.enum';
+import { ListingTopic } from 'src/modules/topic/components/ListingTopic';
 import './overview.scss';
 
 export function DiscussionOverviewPage(): JSX.Element {
@@ -75,7 +77,11 @@ export function DiscussionOverviewPage(): JSX.Element {
                         <Col span={1}/>
 
                         <Col span={7}>
-                        Here is text
+                            <ListingTopic />
+
+                            <Divider/>
+
+                            <Footer/>
                         </Col>
                     </Row>
                 </div>

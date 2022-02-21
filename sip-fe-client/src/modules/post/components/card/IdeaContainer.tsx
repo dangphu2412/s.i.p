@@ -8,25 +8,21 @@ import { selectAuthState } from 'src/modules/auth/auth.selector';
 import { cleanData } from 'src/modules/data/data.action';
 import { Page } from 'src/modules/query/interface';
 import { selectDataHolderByView } from '../../../data/data.selector';
-import { PostOverview } from '../../api/post.api';
-import { PostFilter } from '../../constants/post-filter.enum';
+import { IdeaOverview } from '../../api/post.api';
 import { PostActions } from '../../post.action';
-import { FilterDropdown } from '../dropdown/FilterDropdown';
-import { CardItemOverview } from './CardItemOverview';
+import { CardIdeaOverview } from './CardIdeaOverview';
 
-// UI to load posts
-export function CardContainer(): JSX.Element {
+export function IdeaContainer(): JSX.Element {
     const dispatch = useDispatch();
 
-    const [posts, setPosts] = useState<PostOverview>([]);
+    const [posts, setPosts] = useState<IdeaOverview>([]);
     const [isLoading, setLoading] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState<PostFilter>(PostFilter.HOTTEST);
     const [page, setPage] = useState<Page>({
         page: 1,
         size: 20
     });
 
-    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_OVERVIEW));
+    const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_IDEA_OVERVIEW));
     const authState = useSelector(selectAuthState);
 
     useEffect(() => {
@@ -37,21 +33,14 @@ export function CardContainer(): JSX.Element {
             size: 20
         };
         setPage(newPage);
-        dispatch(PostActions.getOverviewData({
+        dispatch(PostActions.getIdeas({
             page: newPage,
-            filters: [
-                {
-                    column: 'type',
-                    comparator: 'eq',
-                    value: selectedFilter
-                }
-            ]
         }));
         setLoading(false);
         return () => {
             dispatch(cleanData(VIEW_SELECTOR.FIND_POST_OVERVIEW));
         };
-    }, [selectedFilter]);
+    }, []);
 
     useEffect(() => {
         if (dataHolder?.data) {
@@ -69,15 +58,8 @@ export function CardContainer(): JSX.Element {
             page: page.page + 1,
         };
 
-        dispatch(PostActions.getOverviewData({
+        dispatch(PostActions.getIdeas({
             page: newPage,
-            filters: [
-                {
-                    column: 'type',
-                    comparator: 'eq',
-                    value: selectedFilter
-                }
-            ]
         }));
 
         setPage(newPage);
@@ -87,12 +69,6 @@ export function CardContainer(): JSX.Element {
 
     return (
         <div>
-            <FilterDropdown
-                selectedValue={selectedFilter}
-                setSelected={setSelectedFilter}
-                options={Object.values(PostFilter)}
-            />
-
             <InfiniteScroll
                 dataLength={posts.length}
                 next={loadMorePosts}
@@ -106,7 +82,7 @@ export function CardContainer(): JSX.Element {
                             key={post.id}
                             className='cursor-pointer my-2 transition delay-50'
                         >
-                            <CardItemOverview
+                            <CardIdeaOverview
                                 key={post.id}
                                 data={post}
                                 authType={authState}

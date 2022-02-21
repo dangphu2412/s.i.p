@@ -13,11 +13,11 @@ import { DiscussionActions } from '../discussion.action';
 import { CommentHandler } from './CommentHandler';
 import { DiscussionEditor } from './Editor.component';
 
-export interface DiscussionContainerProps {
+export interface DiscussionContainerProps extends React.ComponentProps<'div'> {
     slug: string;
 }
 
-export function DiscussionContainer({ slug }: DiscussionContainerProps): JSX.Element {
+export function DiscussionContainer({ slug, ...props }: DiscussionContainerProps): JSX.Element {
     const dispatch = useDispatch();
     const [comments, setComments] = useState<Discussion[]>([]);
     const [comment, setComment] = useState<string>('');
@@ -68,9 +68,9 @@ export function DiscussionContainer({ slug }: DiscussionContainerProps): JSX.Ele
     }
 
     return (
-        <>
+        <div {...props}>
             <Title level={5}>
-                Tell us what do you think about our product?
+                Reply to  {author?.fullName}
             </Title>
 
             <DiscussionEditor
@@ -103,6 +103,6 @@ export function DiscussionContainer({ slug }: DiscussionContainerProps): JSX.Ele
                     }}
                 />
             }
-        </>
+        </div>
     );
 }

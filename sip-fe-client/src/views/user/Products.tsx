@@ -64,11 +64,6 @@ export function Products(): JSX.Element {
         });
     }
 
-    function onDeleteProduct(e: React.MouseEvent<HTMLElement, MouseEvent>) {
-        e.preventDefault();
-        dispatch(PostActions.deleteDraft('1'));
-    }
-
     return <ClientLayout>
         <Container>
             <InfiniteScroll
@@ -85,7 +80,7 @@ export function Products(): JSX.Element {
                             My ideas
                         </Title>
                     }
-                    renderItem={({canDelete, canUpdate, status, thumbnail, title, readonly, slug}) => {
+                    renderItem={({canDelete, canUpdate, status, thumbnail, title, readonly, slug, id}) => {
                         return <List.Item className={'flex justify-between items-center'}>
                             <List.Item.Meta
                                 avatar={<Avatar shape='square' size={86} src={thumbnail} />}
@@ -98,7 +93,7 @@ export function Products(): JSX.Element {
                                     className='ml-5'
                                 >
                                     <Link
-                                        to={`/posts/new/${slug}`}
+                                        to={`/posts/edit/${slug}`}
                                     >
                                     Continue Editing
                                     </Link>
@@ -109,7 +104,7 @@ export function Products(): JSX.Element {
                                 canDelete && <Button
                                     style={{width: '126px'}}
                                     className='ml-5'
-                                    onClick={onDeleteProduct}
+                                    onClick={() => dispatch(PostActions.deleteDraft(id))}
                                 >
                                     <FontAwesomeIcon
                                         icon='trash'

@@ -1,19 +1,24 @@
+import { YOUTUBE_VIDEO_ID_MATCHER } from './constants/index';
+import { ArrayUtils } from './../external/utils/array/array.utils';
 import {
   BadGatewayException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { UploadApiResponse } from 'cloudinary';
 import { CloudinaryProvider } from './providers/cloudinary.provider';
 import { unlink } from 'fs/promises';
 import { toSecuredUrls } from './mapper/media.mapper';
+import { UrlProvider } from '@url/url.provider';
 @Injectable()
 export class MediaService {
   constructor(
     private cloudinaryProvider: CloudinaryProvider,
     private logger: Logger,
+    private readonly urlProvider: UrlProvider,
   ) {}
 
   public async uploadImages(files: Array<Express.Multer.File>) {
@@ -30,6 +35,16 @@ export class MediaService {
     }
 
     return toSecuredUrls(uploadedResults);
+  }
+
+  public getYoutubeThumbnail(url: string) {
+    const urlItems = url.match(YOUTUBE_VIDEO_ID_MATCHER);
+    if (!ArrayUtils.has(2, urlItems)) {
+      throw new UnprocessableEntityException(
+        'Cannot find youtube video id in url',
+      );
+    }
+    return this.urlProvider.getYoutubeThumbnailUrl(urlItems[1]);
   }
 
   private getUploadProcess(files: Array<Express.Multer.File>) {

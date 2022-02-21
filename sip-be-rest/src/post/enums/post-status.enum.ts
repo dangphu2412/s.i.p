@@ -4,9 +4,9 @@ export enum PostStatus {
 }
 
 export enum ProductRunningStatus {
-  STILL_IDEA = 'STILL_IDEA',
+  IDEA = 'IDEA',
   LOOKING_FOR_MEMBERS = 'LOOKING_FOR_MEMBERS',
-  UP_COMING = 'UP_COMING',
+  PRE_RELEASED = 'PRE_RELEASED',
   RELEASED = 'RELEASED',
 }
 

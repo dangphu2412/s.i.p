@@ -3,12 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Divider, Row, Tabs } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import Title from 'antd/lib/typography/Title';
-import React, { useState } from 'react';
+import createDateFormatter from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
+import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
+import { cleanData } from 'src/modules/data/data.action';
+import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { ProfileCardContainer } from 'src/modules/post/components/card/ProfileCardContainer';
-import { Topic } from 'src/modules/topic/api/topic.api';
+import { ProfileDetail } from 'src/modules/user/api/user.api';
+import { UserActions } from 'src/modules/user/user.action';
 
 
 enum ProfileTab {
@@ -33,27 +39,37 @@ export function Profile(): JSX.Element {
         }
     ];
 
-    const topics: Topic[] = [
-        {
-            id: '1',
-            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            name: 'Topic 1',
-            slug: 'topic-1',
-            summary: 'Topic 1 summary',
-        },
-        {
-            id: '2',
-            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            name: 'Topic 2',
-            slug: 'topic-2',
-            summary: 'Topic 2 summary',
-        }
-    ];
-
     const { hashTag } = useParams();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [activeKey, setActiveKey] = useState<ProfileTab>(ProfileTab.Idea);
-    
+    const [profile, setProfile] = useState<ProfileDetail>({
+        id: 'UNKNOWN',
+        username: '',
+        avatar: '',
+        fullName: '',
+        headline: '',
+        hashTag: '',
+        createdAt: new Date(),
+        followedTopics: []
+    });
+    const profileDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_SIPER));
+    if (!hashTag) {
+        throw new Error('Missing hash tag when render profile page. Please check routing');
+    }
+
+    useEffect(() => {
+        dispatch(UserActions.findSiper(hashTag));
+        return () => {
+            dispatch(cleanData(VIEW_SELECTOR.FIND_SIPER));
+        };
+    }, []);
+
+    useEffect(() => {
+        if (profileDataHolder?.data) {
+            setProfile(profileDataHolder.data);
+        }
+    }, [profileDataHolder]);
 
     return <ClientLayout>
         <Container>
@@ -62,33 +78,33 @@ export function Profile(): JSX.Element {
                     className='flex p-10 rounded-t'
                     style={{backgroundImage: 'linear-gradient(rgb(49, 27, 128) 0%, rgb(0, 51, 126) 100%)'}}
                 >
-                    <Avatar 
+                    <Avatar
                         size={164}
-                        src='https://joeschmoe.io/api/v1/random'
+                        src={profile.avatar}
                         className='border-2 border-white'
                     />
 
                     <div  className='ml-5 content-color'>
                         <Title level={2} className='content-color'>
-                            Phu Dang
+                            {profile.fullName}
                         </Title>
                         <div>
-                            Some description about me
+                            {profile.headline}
                         </div>
                         <div className='my-3'>
-                            @dangphu2412
+                            {profile.hashTag}
                         </div>
                         <Button ghost onClick={() => navigate('/settings')}>
                             Edit profile
                         </Button>
                     </div>
-                    
+
                 </div>
 
                 <div className='px-5'>
-                    <Tabs 
-                        size='large' 
-                        activeKey={activeKey} 
+                    <Tabs
+                        size='large'
+                        activeKey={activeKey}
                         onChange={key => setActiveKey(key as ProfileTab)}
                         className='pl-5'
                     >
@@ -101,7 +117,7 @@ export function Profile(): JSX.Element {
                                 />;
                             })
                         }
-                    
+
                     </Tabs>
                 </div>
             </div>
@@ -109,7 +125,7 @@ export function Profile(): JSX.Element {
             <Row>
                 <Col span={16}>
                     {
-                        activeKey === ProfileTab.Idea && <ProfileCardContainer hashTag={hashTag || ''}/>
+                        activeKey === ProfileTab.Idea && <ProfileCardContainer hashTag={hashTag}/>
                     }
                 </Col>
 
@@ -120,7 +136,7 @@ export function Profile(): JSX.Element {
                                 icon={'birthday-cake'}
                             />
                             <span className='ml-3 my-10'>
-                                Joined on July 27th, 2020
+                                Joined on {createDateFormatter(profile.createdAt).format('MMDDYYYY')}
                             </span>
                         </div>
 
@@ -135,13 +151,15 @@ export function Profile(): JSX.Element {
 
                         <div className='flex space-x-2'>
                             {
-                                topics.map(topic => {
-                                    return <span key={topic.id}>
-                                        <Link to={`/topics/${topic.slug}`}>
-                                            {topic.name}
-                                        </Link>
-                                    </span>;
-                                })
+                                profile.followedTopics.length > 0
+                                    ? profile.followedTopics.map(topic => {
+                                        return <span key={topic.id}>
+                                            <Link to={`/topics/${topic.slug}`}>
+                                                {topic.name}
+                                            </Link>
+                                        </span>;
+                                    })
+                                    : 'You still not follow any topic'
                             }
                         </div>
 

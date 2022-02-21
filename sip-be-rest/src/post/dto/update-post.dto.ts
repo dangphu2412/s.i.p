@@ -6,7 +6,7 @@ import {
 } from '@post/enums/post-status.enum';
 import {
   IsArray,
-  IsDate,
+  IsDateString,
   IsEnum,
   IsObject,
   IsOptional,
@@ -60,7 +60,7 @@ export class UpdatePostDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   public launchSchedule: Date;
 
   @ApiProperty()
