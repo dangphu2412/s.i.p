@@ -34,7 +34,7 @@
       "@topic/*": ["./src/topic/*"],
       "@url/*": ["./src/url/*"],
       "@vote/*": ["./src/vote/*"],
-      "@validator": ["./src/validator/*"],
+      "@validator/*": ["./src/validator/*"],
     }
   }
 }

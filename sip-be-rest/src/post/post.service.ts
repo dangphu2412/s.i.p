@@ -24,7 +24,6 @@ import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { UserService } from 'src/user/user.service';
-import { ValidatorHandler } from 'src/validator/validator-handler';
 import { EditablePostView } from './client/post-editable';
 import { PostOverview } from './client/post-overview.api';
 import { InitPostDto } from './dto/init-post.dto';
@@ -37,6 +36,7 @@ import {
 } from './enums/post-status.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
+import { PostUpdateDraftValidator } from './validator/post-update.validator';
 
 @Injectable()
 export class PostService {
@@ -47,7 +47,7 @@ export class PostService {
     private readonly topicService: TopicService,
     private readonly commentService: CommentService,
     private readonly mediaService: MediaService,
-    private readonly validatorHandler: ValidatorHandler,
+    private readonly postUpdateValidator: PostUpdateDraftValidator,
   ) {}
 
   public async init(initPostDto: InitPostDto, authContext: UserCredential) {
@@ -332,11 +332,6 @@ export class PostService {
       relations: ['topics', 'makers'],
     });
 
-    const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(post.topics, 'id');
-    const oldMakerIds = ArrayMapper.mapByKey<User, string>(post.makers, 'id');
-    const newTopicIds = [...new Set(updatePostDto.topicIds)];
-    const newMakerIds = [...new Set(updatePostDto.makerIds)];
-
     if (!post) {
       throw new NotFoundException(`Post ${id} not found to update`);
     }
@@ -347,45 +342,7 @@ export class PostService {
       );
     }
 
-    if (updatePostDto.title !== post.title) {
-      if (await this.postRepository.isTitleConflict(updatePostDto.title)) {
-        throw new ConflictException(
-          `Can not update post which is conflict with title: ${updatePostDto.title}`,
-        );
-      }
-    }
-
-    if (post.title !== updatePostDto.title) {
-      post.title = updatePostDto.title;
-      post.slug = SlugUtils.normalize(post.title);
-    }
-
-    if (!ArrayUtils.isDiff(oldTopicIds, newTopicIds)) {
-      post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
-    }
-
-    if (!ArrayUtils.isDiff(oldMakerIds, newMakerIds)) {
-      post.makers = await this.userService.findByIds(updatePostDto.makerIds);
-    }
-
-    post.description = updatePostDto.description;
-    post.summary = updatePostDto.summary;
-
-    post.productLink = updatePostDto.links.productLink;
-    post.facebookLink = updatePostDto.socialMedia.facebookLink;
-    post.videoLink = updatePostDto.socialMedia.videoLink;
-    post.videoThumbnail = updatePostDto.socialMedia.videoLink
-      ? this.mediaService.getYoutubeThumbnail(
-          updatePostDto.socialMedia.videoLink,
-        )
-      : '';
-    post.thumbnail = updatePostDto.socialMedia.thumbnail;
-    post.galleryImages = updatePostDto.socialMedia.galleryImages;
-    post.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
-
-    post.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
-
-    post.pricingType = updatePostDto.pricingType;
+    await this.postUpdateValidator.compare(post, updatePostDto);
 
     if (
       updatePostDto.runningStatus === ProductRunningStatus.IDEA &&
@@ -410,6 +367,8 @@ export class PostService {
       }
     }
 
+    await this.updatePost(post, updatePostDto);
+
     return this.postRepository.save(post);
   }
 
@@ -422,25 +381,7 @@ export class PostService {
       throw new NotFoundException(`Post ${id} not found to update`);
     }
 
-    const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(post.topics, 'id');
-    const oldMakerIds = ArrayMapper.mapByKey<User, string>(post.makers, 'id');
-    const newTopicIds = [...new Set(updatePostDto.topicIds)];
-    const newMakerIds = [...new Set(updatePostDto.makerIds)];
-
-    // Update title and slug
-    if (updatePostDto.title !== post.title) {
-      // --  Can separate this validation logic
-      const isTitleConflict = await this.postRepository.isTitleConflict(
-        updatePostDto.title,
-      );
-
-      if (isTitleConflict) {
-        throw new ConflictException(
-          `Can not update post which is conflict with title: ${updatePostDto.title}`,
-        );
-      }
-      // --
-    }
+    await this.postUpdateValidator.compare(post, updatePostDto);
 
     if (ArrayUtils.isEmpty(updatePostDto.topicIds)) {
       throw new UnprocessableEntityException(
@@ -455,6 +396,14 @@ export class PostService {
       ) {
         throw new UnprocessableEntityException(
           `Product is in idea status that we dont need product link and maker. Should it be updated to ${ProductRunningStatus.LOOKING_FOR_MEMBERS}`,
+        );
+      }
+    }
+
+    if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
+      if (!updatePostDto.links.productLink) {
+        throw new UnprocessableEntityException(
+          'Missing product link that we cannot find your product',
         );
       }
     }
@@ -474,14 +423,6 @@ export class PostService {
       updatePostDto.runningStatus = ProductRunningStatus.RELEASED;
     }
 
-    if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
-      if (!updatePostDto.links.productLink) {
-        throw new UnprocessableEntityException(
-          'Missing product link that we cannot find your product',
-        );
-      }
-    }
-
     if (
       updatePostDto.links.productLink &&
       ArrayUtils.isPresent(updatePostDto.makerIds) &&
@@ -490,31 +431,7 @@ export class PostService {
       post.runningStatus = ProductRunningStatus.RELEASED;
     }
 
-    if (post.title !== updatePostDto.title) {
-      post.title = updatePostDto.title;
-      post.slug = SlugUtils.normalize(post.title);
-    }
-
-    if (!ArrayUtils.isDiff(oldTopicIds, newTopicIds)) {
-      post.topics = await this.topicService.findByIds(updatePostDto.topicIds);
-    }
-
-    if (!ArrayUtils.isDiff(oldMakerIds, newMakerIds)) {
-      post.makers = await this.userService.findByIds(updatePostDto.makerIds);
-    }
-
-    post.description = updatePostDto.description;
-    post.summary = updatePostDto.summary;
-    post.facebookLink = updatePostDto.socialMedia.facebookLink;
-    post.videoLink = updatePostDto.socialMedia.videoLink;
-    post.videoThumbnail = this.mediaService.getYoutubeThumbnail(
-      updatePostDto.socialMedia.videoLink,
-    );
-    post.galleryImages = updatePostDto.socialMedia.galleryImages;
-    post.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
-    post.thumbnail = updatePostDto.socialMedia.thumbnail;
-    post.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
-    post.pricingType = updatePostDto.pricingType;
+    await this.updatePost(post, updatePostDto);
 
     post.status = PostStatus.PUBLISH;
     return this.postRepository.save(post);
@@ -584,5 +501,50 @@ export class PostService {
         readonly: !canModify,
       };
     });
+  }
+
+  private async updatePost(baseData: Post, updatePostDto: UpdatePostDto) {
+    const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(
+      baseData.topics,
+      'id',
+    );
+    const oldMakerIds = ArrayMapper.mapByKey<User, string>(
+      baseData.makers,
+      'id',
+    );
+    const newTopicIds = [...new Set(updatePostDto.topicIds)];
+    const newMakerIds = [...new Set(updatePostDto.makerIds)];
+
+    if (baseData.title !== updatePostDto.title) {
+      baseData.title = updatePostDto.title;
+      baseData.slug = SlugUtils.normalize(baseData.title);
+    }
+
+    if (!ArrayUtils.isDiff(oldTopicIds, newTopicIds)) {
+      baseData.topics = await this.topicService.findByIds(
+        updatePostDto.topicIds,
+      );
+    }
+
+    if (!ArrayUtils.isDiff(oldMakerIds, newMakerIds)) {
+      baseData.makers = await this.userService.findByIds(
+        updatePostDto.makerIds,
+      );
+    }
+
+    baseData.description = updatePostDto.description;
+    baseData.summary = updatePostDto.summary;
+    baseData.facebookLink = updatePostDto.socialMedia.facebookLink;
+    baseData.videoLink = updatePostDto.socialMedia.videoLink;
+    baseData.videoThumbnail = updatePostDto.socialMedia.videoLink
+      ? this.mediaService.getYoutubeThumbnail(
+          updatePostDto.socialMedia.videoLink,
+        )
+      : '';
+    baseData.galleryImages = updatePostDto.socialMedia.galleryImages;
+    baseData.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
+    baseData.thumbnail = updatePostDto.socialMedia.thumbnail;
+    baseData.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
+    baseData.pricingType = updatePostDto.pricingType;
   }
 }

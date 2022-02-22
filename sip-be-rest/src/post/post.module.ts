@@ -8,6 +8,7 @@ import { VoteModule } from '@vote/vote.module';
 import { PostController } from './post.controller';
 import { PostRepository } from './post.repository';
 import { PostService } from './post.service';
+import { PostUpdateDraftValidator } from './validator/post-update.validator';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { PostService } from './post.service';
     MediaModule,
   ],
   controllers: [PostController],
-  providers: [PostService, Logger],
+  providers: [PostService, Logger, PostUpdateDraftValidator],
   exports: [PostService],
 })
 export class PostModule {}
