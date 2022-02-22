@@ -3,6 +3,7 @@ import { toOrders } from '@external/crud/common/pipes/order.pipe';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayMapper } from '@external/mappers/array.mapper';
 import { ArrayUtils } from '@external/utils/array/array.utils';
+import { Optional } from '@external/utils/optional/optional.util';
 import {
   Injectable,
   InternalServerErrorException,
@@ -131,8 +132,17 @@ export class UserService {
     });
   }
 
-  public findById(id: number) {
+  public async findById(id: number) {
     return this.userRepository.findOne(id);
+  }
+
+  public async findByIdOrElseThrowNotFoundExp(id: number) {
+    return new Optional(await this.userRepository.findOne(id)).orElseThrow(
+      () =>
+        new NotFoundException(
+          `User is now not available in the system. Please contact system owner`,
+        ),
+    );
   }
 
   public findByIdWithFollowedTopics(id: number) {

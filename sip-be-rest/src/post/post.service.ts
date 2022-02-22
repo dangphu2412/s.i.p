@@ -24,6 +24,7 @@ import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { UserService } from 'src/user/user.service';
+import { ValidatorHandler } from 'src/validator/validator-handler';
 import { EditablePostView } from './client/post-editable';
 import { PostOverview } from './client/post-overview.api';
 import { InitPostDto } from './dto/init-post.dto';
@@ -46,26 +47,19 @@ export class PostService {
     private readonly topicService: TopicService,
     private readonly commentService: CommentService,
     private readonly mediaService: MediaService,
+    private readonly validatorHandler: ValidatorHandler,
   ) {}
 
   public async init(initPostDto: InitPostDto, authContext: UserCredential) {
-    const isTitleConflict = await this.postRepository.isTitleConflict(
-      initPostDto.title,
-    );
-
-    if (isTitleConflict) {
+    if (await this.postRepository.isTitleConflict(initPostDto.title)) {
       throw new ConflictException(
         `Can not create post which is conflict with title: ${initPostDto.title}`,
       );
     }
 
-    const author = await this.userService.findById(+authContext.userId);
-
-    if (!author) {
-      throw new NotFoundException(
-        `User is now not available in the system. Please contact system owner`,
-      );
-    }
+    const author = await this.userService.findByIdOrElseThrowNotFoundExp(
+      +authContext.userId,
+    );
 
     const post = new Post();
     post.title = initPostDto.title;
@@ -354,11 +348,7 @@ export class PostService {
     }
 
     if (updatePostDto.title !== post.title) {
-      const isTitleConflict = await this.postRepository.isTitleConflict(
-        updatePostDto.title,
-      );
-
-      if (isTitleConflict) {
+      if (await this.postRepository.isTitleConflict(updatePostDto.title)) {
         throw new ConflictException(
           `Can not update post which is conflict with title: ${updatePostDto.title}`,
         );

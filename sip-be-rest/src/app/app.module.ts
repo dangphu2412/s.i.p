@@ -1,3 +1,4 @@
+import { ValidatorModule } from './../validator/validator.module';
 import { DiscussionModule } from '@discussion/discussion.module';
 import { AuthModule } from '@auth/auth.module';
 import '@config/crud.config';
@@ -30,6 +31,7 @@ import { VoteModule } from '@vote/vote.module';
     CommentModule,
     DiscussionModule,
     VoteModule,
+    ValidatorModule,
   ],
 })
 export class AppModule {}

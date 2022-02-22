@@ -3,7 +3,7 @@ import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { User } from '@user/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { PostOverview } from './client/post-overview.api';
-import { PostStatus } from './enums/post-status.enum';
+import { PostStatus, ProductRunningStatus } from './enums/post-status.enum';
 import { Post } from './post.entity';
 
 @EntityRepository(Post)
@@ -87,7 +87,9 @@ export class PostRepository extends Repository<Post> {
         'posts.comments',
         'comments',
       )
-      .where('posts.schedule NOT NULL')
+      .where('posts.running_status = :runningStatus', {
+        runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+      })
       .orderBy('posts.createdAt', 'DESC')
       .take(searchCriteria.limit)
       .skip(searchCriteria.offset)
