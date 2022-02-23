@@ -23,6 +23,7 @@ import { CreateDiscussionPage } from './dicussion/CreateDicussionPage';
 import { DiscussionOverviewPage } from './dicussion/DicussionOverviewPage';
 import { DiscussionDetailPage } from './dicussion/DiscussionDetailPage';
 import { IdeaOverviewPage } from './post/IdeaOverviewPage';
+import { UpdateDetailPostPage } from './post/UpdateDetailPage';
 
 configApp();
 
@@ -36,7 +37,8 @@ function App(): JSX.Element {
                         AuthRouteMapper.toRoutes([
                             { path: '/success', element: LoginSuccessPage },
                             { path: '/posts/:slug', element: PostDetailPage },
-                            { path: '/posts/edit/:slug', element: CreateDetailPostPage, protected: true },
+                            { path: '/posts/new/:slug', element: CreateDetailPostPage, protected: true },
+                            { path: '/posts/edit/:slug', element: UpdateDetailPostPage, protected: true },
                             { path: '/posts/new', element: CreatePostPage, protected: true },
                             { path: '/topics/:slug', element: TopicDetailPage },
                             { path: '/topics', element: TopicOverviewPage },
