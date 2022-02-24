@@ -43,4 +43,8 @@ export class ArrayUtils {
   public static has<T>(count: number, arr: T[]): boolean {
     return ArrayUtils.isPresent(arr) && arr.length === count;
   }
+
+  public static atLeast<T>(count: number, arr: T[]): boolean {
+    return ArrayUtils.isPresent(arr) && arr.length >= count;
+  }
 }

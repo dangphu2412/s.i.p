@@ -13,15 +13,17 @@ J
 src/views/user/Profile.tsx,e\9\e9b1d0210d4793ee893a12f722b8c5ff26658895
 K
 src/views/user/Settings.tsx,9\7\97c4870e6e96f1c39697d6a9726c2cb0e6fb57ef
-W
-'src/views/post/CreateDetailPostPage.tsx,e\8\e81ff814c5835f879e5b233ef52a64237ccf3375
-=
-src/index.tsx,5\a\5ab44fe33ca96299f51ad4778a73e425b92bf439
 f
 6src/modules/discussion/components/CommentContainer.tsx,3\0\30f2f67791c36689e36f8f73152fecee203c87f8
-U
-%src/views/topic/TopicOverviewPage.tsx,3\e\3ee80bffeed27f400865063f63105b100e14c47d
-A
-src/views/App.tsx,8\0\80792464e7166e49ee2007195e0ebe00b4cd81a0
 K
 src/views/user/Products.tsx,d\2\d2e7be829b2c52cbd7bfc0bb58c2a2e320d8d47c
+O
+src/modules/post/post.action.ts,8\8\8804585e271f28940b9db4f497473a71066850db
+A
+src/views/App.tsx,8\0\80792464e7166e49ee2007195e0ebe00b4cd81a0
+U
+%src/views/topic/TopicOverviewPage.tsx,3\e\3ee80bffeed27f400865063f63105b100e14c47d
+=
+src/index.tsx,5\a\5ab44fe33ca96299f51ad4778a73e425b92bf439
+W
+'src/views/post/CreateDetailPostPage.tsx,e\8\e81ff814c5835f879e5b233ef52a64237ccf3375

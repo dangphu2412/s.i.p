@@ -47,7 +47,7 @@ export function CreatePostPage(): JSX.Element {
             return;
         }
 
-        navigate(`/posts/edit/${request.getData().slug}`);
+        navigate(`/posts/new/${request.getData().slug}`);
 
         return;
     }

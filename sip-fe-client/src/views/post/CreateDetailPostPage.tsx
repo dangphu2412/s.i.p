@@ -1,8 +1,7 @@
 import { ExclamationCircleOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    Avatar, Button, Checkbox, Col, Divider, Dropdown, Form, Image, DatePicker,
-    Input, List, Menu, Modal, Radio, RadioChangeEvent, Row, Space, Steps, Upload
+    Avatar, Button, Checkbox, Col, DatePicker, Divider, Dropdown, Form, Image, Input, List, Menu, Modal, Radio, RadioChangeEvent, Row, Select, Space, Steps, Upload
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Title from 'antd/lib/typography/Title';
@@ -13,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
+import { UNKNOWN_ID } from 'src/constants/data.constants';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { selectProfile } from 'src/modules/auth/auth.selector';
@@ -26,7 +26,6 @@ import { Topic } from 'src/modules/topic/api/topic.api';
 import { TopicActions } from 'src/modules/topic/topic.action';
 import { Author } from 'src/modules/user/api/user.api';
 import { UserActions } from 'src/modules/user/user.action';
-import { ArrayUtils } from 'src/utils/array.utils';
 import './create-post-detail.scss';
 
 interface MenuProps {
@@ -116,7 +115,7 @@ export function CreateDetailPostPage(): JSX.Element {
     const profile: Profile | undefined = useSelector(selectProfile);
     const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_PATCH_DETAIL));
     const [data, setData] = useState<PatchPostDetail>({
-        id: 'UNKNOWN',
+        id: UNKNOWN_ID,
         title: '',
         summary: '',
         description: '',
@@ -178,8 +177,8 @@ export function CreateDetailPostPage(): JSX.Element {
 
     useEffect(() => {
         if (postDetailDataHolder?.data) {
-            const runningStatus = getCurrentRunningStatus((postDetailDataHolder.data as PatchPostDetail).runningStatus);
-            if (runningStatus === -1) {
+            const currentRunningStatus = getCurrentRunningStatus((postDetailDataHolder.data as PatchPostDetail).runningStatus);
+            if (currentRunningStatus === -1) {
                 throw new Error('Invalid running status');
             }
             setData(postDetailDataHolder.data);
@@ -192,9 +191,17 @@ export function CreateDetailPostPage(): JSX.Element {
                         url: image,
                     } as UploadFile;
                 }));
-            setRunningStatus(runningStatus);
+            setRunningStatus(currentRunningStatus);
         }
     }, [postDetailDataHolder]);
+
+    function canRelease(input: PatchPostDetail) {
+        return !input.title || !input.summary || !input.description || !input.thumbnail || !input.socialPreviewImage || input.galleryImages.length === 0;
+    }
+
+    function canSchedulePreRelease(input: PatchPostDetail) {
+        return canRelease(input) ||  data.makers.length === 0 || (data.makers.length === 1 && data.isAuthorAlsoMaker);
+    }
 
     function onTopicSearchEvent(event: React.ChangeEvent<HTMLInputElement>) {
         setTopicSearch(event.target.value);
@@ -252,29 +259,8 @@ export function CreateDetailPostPage(): JSX.Element {
     function onProductLinkChange(event: React.ChangeEvent<HTMLInputElement>) {
         const productLink = event.target.value;
         if (!productLink) {
-            setData({
-                ...data,
-                runningStatus: ProductRunningStatus.IDEA,
-                productLink
-            });
+            updateData('productLink', productLink);
             return;
-        }
-        if (data.runningStatus === ProductRunningStatus.IDEA) {
-            if (ArrayUtils.isPresent(data.makers)) {
-                setData({
-                    ...data,
-                    runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
-                    productLink
-                });
-                return;
-            }
-
-            setData({
-                ...data,
-                runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
-                productLink
-            });
-            setRunningStatus(getCurrentRunningStatus(ProductRunningStatus.LOOKING_FOR_MEMBERS));
         }
     }
 
@@ -948,6 +934,16 @@ export function CreateDetailPostPage(): JSX.Element {
                                             Running plan
                                         </Title>
 
+                                        <Select value={data.runningStatus} style={{ width: 120 }} onChange={(value) => updateData('runningStatus', value)}>
+                                            {
+                                                productRunningPlans.map(plan => {
+                                                    return (
+                                                        <Select.Option key={plan.key} value={plan.key}>{plan.title}</Select.Option>
+                                                    );
+                                                })
+                                            }
+                                        </Select>
+
                                         <div className='button-text-color mb-5'>
                                             {
                                                 productRunningPlans[runningStatus].detail
@@ -973,7 +969,7 @@ export function CreateDetailPostPage(): JSX.Element {
                                     <Button
                                         className='mt-5'
                                         onClick={() => showPublishConfirmation()}
-                                        disabled={!data.title || !data.summary || !data.description || !data.thumbnail || !data.socialPreviewImage || data.galleryImages.length === 0}
+                                        disabled={canRelease(data)}
                                     >
                                         Launch now
                                     </Button>
@@ -981,7 +977,7 @@ export function CreateDetailPostPage(): JSX.Element {
                                     <Button
                                         className='mt-5'
                                         onClick={() => showScheduleModal()}
-                                        disabled={!data.title || !data.summary || !data.description || !data.thumbnail || !data.socialPreviewImage || data.galleryImages.length === 0 || data.makers.length === 0 || (data.makers.length === 1 && data.isAuthorAlsoMaker)}
+                                        disabled={canSchedulePreRelease(data)}
                                     >
                                         Schedule launch later
                                     </Button>

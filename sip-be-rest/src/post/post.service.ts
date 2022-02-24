@@ -36,7 +36,9 @@ import {
 } from './enums/post-status.enum';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
-import { PostUpdateDraftValidator } from './validator/post-update.validator';
+import { PostPublishValidator } from './validator/post-publish.validator';
+import { PostReleaseValidator } from './validator/post-release.validatot';
+import { PostUpdateValidator } from './validator/post-update.validator';
 
 @Injectable()
 export class PostService {
@@ -47,7 +49,9 @@ export class PostService {
     private readonly topicService: TopicService,
     private readonly commentService: CommentService,
     private readonly mediaService: MediaService,
-    private readonly postUpdateValidator: PostUpdateDraftValidator,
+    private readonly postUpdateValidator: PostUpdateValidator,
+    private readonly postPublishValidator: PostPublishValidator,
+    private readonly postReleaseValidator: PostReleaseValidator,
   ) {}
 
   public async init(initPostDto: InitPostDto, authContext: UserCredential) {
@@ -344,29 +348,6 @@ export class PostService {
 
     await this.postUpdateValidator.compare(post, updatePostDto);
 
-    if (
-      updatePostDto.runningStatus === ProductRunningStatus.IDEA &&
-      ((updatePostDto.isAuthorAlsoMaker &&
-        updatePostDto.makerIds.length === 1) ||
-        ArrayUtils.isEmpty(post.makers))
-    ) {
-      post.runningStatus = ProductRunningStatus.LOOKING_FOR_MEMBERS;
-    }
-
-    if (
-      ArrayUtils.isPresent(updatePostDto.makerIds) &&
-      ((updatePostDto.isAuthorAlsoMaker && updatePostDto.makerIds.length > 1) ||
-        (!updatePostDto.isAuthorAlsoMaker && updatePostDto.makerIds.length > 0))
-    ) {
-      post.runningStatus = ProductRunningStatus.PRE_RELEASED;
-    }
-
-    if (!!updatePostDto.launchSchedule) {
-      if (ArrayUtils.isEmpty(updatePostDto.makerIds)) {
-        throw new UnprocessableEntityException('Makers are required to launch');
-      }
-    }
-
     await this.updatePost(post, updatePostDto);
 
     return this.postRepository.save(post);
@@ -382,54 +363,8 @@ export class PostService {
     }
 
     await this.postUpdateValidator.compare(post, updatePostDto);
-
-    if (ArrayUtils.isEmpty(updatePostDto.topicIds)) {
-      throw new UnprocessableEntityException(
-        'Required topicIds to run this product',
-      );
-    }
-
-    if (updatePostDto.runningStatus === ProductRunningStatus.IDEA) {
-      if (
-        updatePostDto.links.productLink &&
-        ArrayUtils.isPresent(updatePostDto.makerIds)
-      ) {
-        throw new UnprocessableEntityException(
-          `Product is in idea status that we dont need product link and maker. Should it be updated to ${ProductRunningStatus.LOOKING_FOR_MEMBERS}`,
-        );
-      }
-    }
-
-    if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
-      if (!updatePostDto.links.productLink) {
-        throw new UnprocessableEntityException(
-          'Missing product link that we cannot find your product',
-        );
-      }
-    }
-
-    if (
-      updatePostDto.runningStatus === ProductRunningStatus.LOOKING_FOR_MEMBERS
-    ) {
-      if (
-        updatePostDto.isAuthorAlsoMaker &&
-        updatePostDto.makerIds.length > 1
-      ) {
-        updatePostDto.runningStatus = ProductRunningStatus.RELEASED;
-      }
-    }
-
-    if (updatePostDto.runningStatus === ProductRunningStatus.PRE_RELEASED) {
-      updatePostDto.runningStatus = ProductRunningStatus.RELEASED;
-    }
-
-    if (
-      updatePostDto.links.productLink &&
-      ArrayUtils.isPresent(updatePostDto.makerIds) &&
-      !updatePostDto.launchSchedule
-    ) {
-      post.runningStatus = ProductRunningStatus.RELEASED;
-    }
+    this.postPublishValidator.compare(post, updatePostDto);
+    this.postReleaseValidator.compare(post, updatePostDto);
 
     await this.updatePost(post, updatePostDto);
 
@@ -503,7 +438,10 @@ export class PostService {
     });
   }
 
-  private async updatePost(baseData: Post, updatePostDto: UpdatePostDto) {
+  private async updatePost(
+    baseData: Post,
+    updatePostDto: UpdatePostDto,
+  ): Promise<void> {
     const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(
       baseData.topics,
       'id',

@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 
 export class Assert {
   public static isTrue(condition: boolean, consumer?: () => Error): void {
-    if (condition) {
+    if (!condition) {
       if (consumer) {
         throw consumer();
       } else {
