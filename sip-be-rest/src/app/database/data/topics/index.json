@@ -1,0 +1,211 @@
+{
+    "data": {
+        "topics": {
+            "edges": [
+                {
+                    "cursor": "MQ==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:54Z",
+                        "description": "When you need to get on the road (or air) for work. These products have got your ticket.",
+                        "image": "https://ph-files.imgix.net/5d1299ab-88e4-4ee3-95fa-196513c152f5.jpeg?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Business Travel",
+                        "slug": "business-travel"
+                    }
+                },
+                {
+                    "cursor": "Mg==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:54Z",
+                        "description": "When you need a change of scenery, take a trip and order in some room service with these products. ",
+                        "image": "https://ph-files.imgix.net/a3b7a02c-34fa-4a16-9b56-06a594054872.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Hotels",
+                        "slug": "hotels"
+                    }
+                },
+                {
+                    "cursor": "Mw==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:54Z",
+                        "description": "Motorcycles offer simplicity when it comes to travel on the open road, but these products can help make that trip more enjoyable or even keep you safe.",
+                        "image": "https://ph-files.imgix.net/5c2275a9-b755-4edc-9513-6ef5291fc932.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Motorcycles",
+                        "slug": "motorcycles"
+                    }
+                },
+                {
+                    "cursor": "NA==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:54Z",
+                        "description": "The future is electric. Transportation is changing and electric cars are helping create cleaner mobility options for people around the world. ",
+                        "image": "https://ph-files.imgix.net/1cb42979-ae05-4827-bda4-50de94fd622b.gif?auto=compress&fm=webp&codec=mozjpeg&cs=strip&w=70&h=70&fit=max&frame=1&dpr=2",
+                        "name": "Electric Cars",
+                        "slug": "electric-cars"
+                    }
+                },
+                {
+                    "cursor": "NQ==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "",
+                        "image": "https://ph-files.imgix.net/03b70120-af50-4416-ac19-01f372495736.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Racing",
+                        "slug": "racing"
+                    }
+                },
+                {
+                    "cursor": "Ng==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "",
+                        "image": "https://ph-files.imgix.net/7ec8d361-cf8c-4388-87f7-ff236c46f1ca.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Climbing",
+                        "slug": "climbing"
+                    }
+                },
+                {
+                    "cursor": "Nw==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Create a trip with these products and you'll be on your way to the next adventure. ",
+                        "image": "https://ph-files.imgix.net/701fd26a-c028-48ec-a7e8-bf0f89d48e03.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Productivity",
+                        "slug": "productivity"
+                    }
+                },
+                {
+                    "cursor": "OA==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Discover the best products for your next adventure. ",
+                        "image": "https://ph-files.imgix.net/d6d55883-4b3b-4411-a52b-a75dadab5c19.jpeg?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Community",
+                        "slug": "community"
+                    }
+                },
+                {
+                    "cursor": "OQ==",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Evaluate your next adventure with these products. ",
+                        "image": "https://ph-files.imgix.net/bcfb0ae5-5ebf-4557-93ff-2684a4530c17.jpeg?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Developer tools",
+                        "slug": "developer-tools"
+                    }
+                },
+                {
+                    "cursor": "MTA=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "AI and machine learning are changing the way we think about travel. These products are helping us make better decisions and make the most of our time.",
+                        "image":"https://ph-files.imgix.net/0418cd04-f440-4021-8cf9-56be06164b0d.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "AI",
+                        "slug": "ai"
+                    }
+                },
+                {
+                    "cursor": "MTE=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Food and drink are the foundation of any adventure. ",
+                        "image": "https://ph-files.imgix.net/613e3b31-c298-4af7-8446-0eba75dcae95.jpeg?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Food Delivery",
+                        "slug": "food-delivery"
+                    }
+                },
+                {
+                    "cursor": "MTI=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Design your next adventure with these products. ",
+                        "image": "https://ph-files.imgix.net/0b3a0d78-0517-4ce8-b985-77e7e4e85801.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Design tools",
+                        "slug": "Design-tools"
+                    }
+                },
+                {
+                    "cursor": "MTM=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Security is a big part of our lives. We need to be able to protect ourselves and our data. ",
+                        "image": "https://ph-files.imgix.net/cb84a174-1b17-4b62-be4a-4f6f34918f23.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Security",
+                        "slug": "security"
+                    }
+                },
+                {
+                    "cursor": "MTQ=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Analysis of your next adventure with these products. ",
+                        "image": "https://ph-files.imgix.net/29a622e7-881b-48ff-b5c0-cb1924600247.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Analytics",
+                        "slug": "analytics"
+                    }
+                },
+                {
+                    "cursor": "MTU=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Internet of things is the future of the world. ",
+                        "image": "https://ph-files.imgix.net/c23aa1a5-664d-491d-b5fd-635dfbba56ae.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Internet of things",
+                        "slug": "internet-of-things"
+                    }
+                },
+                {
+                    "cursor": "MTY=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:53Z",
+                        "description": "Photo graph is a collection of products that help you take photos and share them with your friends. ",
+                        "image": "https://ph-files.imgix.net/2e0fc2dc-ef8f-4d72-a40c-6ea81324bc95.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Photography",
+                        "slug": "photography"
+                    }
+                },
+                {
+                    "cursor": "MTc=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:52Z",
+                        "description": "Webcam and video",
+                        "image": "https://ph-files.imgix.net/bdbc2bcc-3f64-4011-96e2-1b813bcbd8d4.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Webcam",
+                        "slug": "webcam"
+                    }
+                },
+                {
+                    "cursor": "MTg=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:52Z",
+                        "description": "Photo editing and processing tools. ",
+                        "image": "https://ph-files.imgix.net/e82a0155-4a3f-4ca5-961b-d8efdc2fd25c.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Photo editing",
+                        "slug": "photo-editing"
+                    }
+                },
+                {
+                    "cursor": "MTk=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:52Z",
+                        "description": "UX is the user experience. It's the way people interact with your products and services. ",
+                        "image": "https://ph-files.imgix.net/2d51fe9e-36e3-4275-8b52-3ee0b416741d.png?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "UX",
+                        "slug": "ux"
+                    }
+                },
+                {
+                    "cursor": "MjA=",
+                    "node": {
+                        "createdAt": "2022-01-28T14:33:52Z",
+                        "description": "Bot development",
+                        "image": "https://ph-files.imgix.net/caecc8f1-18c0-4c61-82b6-f451b9d1d68b.jpeg?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=70&h=70&fit=crop",
+                        "name": "Bots",
+                        "slug": "bots"
+                    }
+                }
+            ],
+            "pageInfo": {
+                "endCursor": "MjA="
+            }
+        }
+    }
+}

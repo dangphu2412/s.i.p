@@ -32,7 +32,8 @@
     "migrate:w-create": "npm run typeorm:w migration:create -- -n",
     "migrate:w-latest": "npm run typeorm:w migration:run",
     "migrate:w-rollback": "npm run typeorm:w migration:revert",
-    "db:dev-refresh": "npm run schema:drop && npm run schema:sync && npm run migrate:w-latest && npm run seed:w-run"
+    "db:dev-refresh": "npm run schema:drop && npm run schema:sync && npm run migrate:w-latest && npm run seed:w-run",
+    "db:prod-refresh": "npm run schema:drop && npm run schema:sync && npm run migrate:w-latest"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

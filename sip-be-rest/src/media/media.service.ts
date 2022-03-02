@@ -41,7 +41,7 @@ export class MediaService {
     const urlItems = url.match(YOUTUBE_VIDEO_ID_MATCHER);
     if (!ArrayUtils.has(2, urlItems)) {
       throw new UnprocessableEntityException(
-        'Cannot find youtube video id in url',
+        `Cannot find youtube video id in url ${url}`,
       );
     }
     return this.urlProvider.getYoutubeThumbnailUrl(urlItems[1]);

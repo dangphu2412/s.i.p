@@ -1,0 +1,43 @@
+{
+    posts {
+        pageInfo {
+            endCursor
+        },
+        edges {
+            cursor
+            node {
+                id,
+                name,
+                slug,
+                tagline,
+                description,
+                media {
+                    type,
+                    url,
+                    videoUrl
+                },
+                thumbnail { 
+                    type,
+                    url,
+                    videoUrl
+                },
+                makers {
+                   id
+                   name
+                   coverImage
+                   headline
+                   profileImage
+                },
+                comments {
+                    edges {
+                        node {
+                            body
+                            createdAt
+                        }
+                    }
+                }
+                createdAt
+            }
+        }
+    }
+}

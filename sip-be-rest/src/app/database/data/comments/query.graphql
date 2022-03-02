@@ -1,0 +1,20 @@
+{
+    posts {
+        pageInfo {
+            endCursor
+        },
+        edges {
+            cursor
+            node {
+                comments {
+                    edges {
+                        node {
+                            body
+                            createdAt
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

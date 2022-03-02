@@ -331,6 +331,55 @@ export class PostService {
     return this.voteService.upsertForPostVote(voteDto);
   }
 
+  private async updatePost(
+    baseData: Post,
+    updatePostDto: UpdatePostDto,
+  ): Promise<void> {
+    const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(
+      baseData.topics,
+      'id',
+    );
+    const oldMakerIds = ArrayMapper.mapByKey<User, string>(
+      baseData.makers,
+      'id',
+    );
+    const newTopicIds = [...new Set(updatePostDto.topicIds)];
+    const newMakerIds = [...new Set(updatePostDto.makerIds)];
+
+    if (baseData.title !== updatePostDto.title) {
+      baseData.title = updatePostDto.title;
+      baseData.slug = SlugUtils.normalize(baseData.title);
+    }
+
+    if (!ArrayUtils.isDiff(oldTopicIds, newTopicIds)) {
+      baseData.topics = await this.topicService.findByIds(
+        updatePostDto.topicIds,
+      );
+    }
+
+    if (!ArrayUtils.isDiff(oldMakerIds, newMakerIds)) {
+      baseData.makers = await this.userService.findByIds(
+        updatePostDto.makerIds,
+      );
+    }
+
+    baseData.description = updatePostDto.description;
+    baseData.summary = updatePostDto.summary;
+    baseData.facebookLink = updatePostDto.socialMedia.facebookLink;
+    baseData.videoLink = updatePostDto.socialMedia.videoLink;
+    baseData.videoThumbnail = updatePostDto.socialMedia.videoLink
+      ? this.mediaService.getYoutubeThumbnail(
+          updatePostDto.socialMedia.videoLink,
+        )
+      : '';
+    baseData.galleryImages = updatePostDto.socialMedia.galleryImages;
+    baseData.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
+    baseData.thumbnail = updatePostDto.socialMedia.thumbnail;
+    baseData.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
+    baseData.pricingType = updatePostDto.pricingType;
+    baseData.runningStatus = updatePostDto.runningStatus;
+  }
+
   private async saveAsDraft(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.postRepository.findOne(id, {
       relations: ['topics', 'makers'],
@@ -396,6 +445,23 @@ export class PostService {
     });
   }
 
+  private mapScopeForPosts(posts: PostOverview): EditablePostView {
+    return posts.map((post) => {
+      const canModify = post.status === PostStatus.DRAFT;
+      return {
+        id: post.id,
+        slug: post.slug,
+        status: post.status,
+        thumbnail: post.thumbnail,
+        title: post.title,
+        updatedAt: post.updatedAt,
+        canDelete: canModify,
+        canUpdate: canModify,
+        readonly: !canModify,
+      };
+    });
+  }
+
   private splitAuthorAndUsers(
     authorId: string,
     users: User[],
@@ -419,70 +485,5 @@ export class PostService {
       },
       [null, []],
     );
-  }
-
-  private mapScopeForPosts(posts: PostOverview): EditablePostView {
-    return posts.map((post) => {
-      const canModify = post.status === PostStatus.DRAFT;
-      return {
-        id: post.id,
-        slug: post.slug,
-        status: post.status,
-        thumbnail: post.thumbnail,
-        title: post.title,
-        updatedAt: post.updatedAt,
-        canDelete: canModify,
-        canUpdate: canModify,
-        readonly: !canModify,
-      };
-    });
-  }
-
-  private async updatePost(
-    baseData: Post,
-    updatePostDto: UpdatePostDto,
-  ): Promise<void> {
-    const oldTopicIds = ArrayMapper.mapByKey<Topic, string>(
-      baseData.topics,
-      'id',
-    );
-    const oldMakerIds = ArrayMapper.mapByKey<User, string>(
-      baseData.makers,
-      'id',
-    );
-    const newTopicIds = [...new Set(updatePostDto.topicIds)];
-    const newMakerIds = [...new Set(updatePostDto.makerIds)];
-
-    if (baseData.title !== updatePostDto.title) {
-      baseData.title = updatePostDto.title;
-      baseData.slug = SlugUtils.normalize(baseData.title);
-    }
-
-    if (!ArrayUtils.isDiff(oldTopicIds, newTopicIds)) {
-      baseData.topics = await this.topicService.findByIds(
-        updatePostDto.topicIds,
-      );
-    }
-
-    if (!ArrayUtils.isDiff(oldMakerIds, newMakerIds)) {
-      baseData.makers = await this.userService.findByIds(
-        updatePostDto.makerIds,
-      );
-    }
-
-    baseData.description = updatePostDto.description;
-    baseData.summary = updatePostDto.summary;
-    baseData.facebookLink = updatePostDto.socialMedia.facebookLink;
-    baseData.videoLink = updatePostDto.socialMedia.videoLink;
-    baseData.videoThumbnail = updatePostDto.socialMedia.videoLink
-      ? this.mediaService.getYoutubeThumbnail(
-          updatePostDto.socialMedia.videoLink,
-        )
-      : '';
-    baseData.galleryImages = updatePostDto.socialMedia.galleryImages;
-    baseData.socialPreviewImage = updatePostDto.socialMedia.socialPreviewImage;
-    baseData.thumbnail = updatePostDto.socialMedia.thumbnail;
-    baseData.isAuthorAlsoMaker = updatePostDto.isAuthorAlsoMaker;
-    baseData.pricingType = updatePostDto.pricingType;
   }
 }

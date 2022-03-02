@@ -1,9 +1,10 @@
+import { TimeEntityGenerator, TimeType } from '@database/base/time-entity';
 import { Post } from 'src/post/post.entity';
 import { User } from 'src/user/user.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('topics')
-export class Topic {
+export class Topic extends TimeEntityGenerator(TimeType.Time) {
   @PrimaryGeneratedColumn()
   public id: string;
 
