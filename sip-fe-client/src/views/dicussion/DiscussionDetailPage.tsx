@@ -1,6 +1,9 @@
 import { CaretUpOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Breadcrumb, Button, Col, Row } from 'antd';
+import Avatar from 'antd/lib/avatar/avatar';
 import Title from 'antd/lib/typography/Title';
+import createDateFormatter from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
@@ -147,7 +150,38 @@ export function DiscussionDetailPage(): JSX.Element {
                                 slug={slug}
                             />
                         </Col>
-                        <Col span={6}>
+                        <Col span={6} className='px-5'>
+                            <div className='shadow rounded-md p-7 hover:shadow-md transition delay-100'>
+                                <div>
+                                    <Avatar
+                                        src={detail.author.avatar}
+                                        size={46}
+                                        alt={detail.author.fullName}
+                                    />
+                                    <span className='ml-3'>
+                                        {detail.author.fullName}
+                                    </span>
+                                </div>
+                                <div className=' mt-3'>
+                                    <FontAwesomeIcon
+                                        icon={'birthday-cake'}
+                                    />
+                                    <span className='ml-2'>
+                                        Joined {createDateFormatter(detail.author.createdAt).format('MMM YYYY')}
+                                    </span>
+                                </div>
+                                {
+                                    detail.author.headline &&
+                                    <div className='mt-3'>
+                                        <span className='ml-2'>
+                                            {detail.author.headline}
+                                        </span>
+                                    </div>
+                                }
+                                <Button className='mt-3 w-full' danger>
+                                    FOLLOW
+                                </Button>
+                            </div>
                             <Footer/>
                         </Col>
                     </Row>

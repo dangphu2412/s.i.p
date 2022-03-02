@@ -13,6 +13,7 @@ import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { cleanData } from 'src/modules/data/data.action';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { ProfileCardContainer } from 'src/modules/post/components/card/ProfileCardContainer';
+import { ProfileDiscussionContainer } from 'src/modules/post/components/card/ProfileDiscussionContainer';
 import { ProfileDetail } from 'src/modules/user/api/user.api';
 import { UserActions } from 'src/modules/user/user.action';
 
@@ -126,6 +127,9 @@ export function Profile(): JSX.Element {
                 <Col span={16}>
                     {
                         activeKey === ProfileTab.Idea && <ProfileCardContainer hashTag={hashTag}/>
+                    }
+                    {
+                        activeKey === ProfileTab.Discussion && <ProfileDiscussionContainer hashTag={hashTag}/>
                     }
                 </Col>
 

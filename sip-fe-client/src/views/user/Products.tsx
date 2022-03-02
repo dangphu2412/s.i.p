@@ -1,23 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {ClientLayout} from 'src/layouts/client/ClientLayout';
-import {Container} from '../../components/container/Container';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Avatar, Button, List, Modal, Spin } from 'antd';
 import Title from 'antd/lib/typography/Title';
-import {Avatar, Button, List, Spin} from 'antd';
-import {EditPostViewDto} from '../../modules/post/api/post.api';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {Link} from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import {selectDataHolderByView} from '../../modules/data/data.selector';
-import {VIEW_SELECTOR} from '../../constants/views.constants';
-import {PostActions} from '../../modules/post/post.action';
-import { cleanData } from 'src/modules/data/data.action';
-import { selectProfile } from 'src/modules/auth/auth.selector';
-import { Page } from 'src/modules/query/interface';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { ClientLayout } from 'src/layouts/client/ClientLayout';
+import { selectProfile } from 'src/modules/auth/auth.selector';
+import { cleanData } from 'src/modules/data/data.action';
+import { Page } from 'src/modules/query/interface';
+import { Container } from '../../components/container/Container';
+import { VIEW_SELECTOR } from '../../constants/views.constants';
+import { selectDataHolderByView } from '../../modules/data/data.selector';
+import { EditPostViewDto } from '../../modules/post/api/post.api';
+import { PostActions } from '../../modules/post/post.action';
 
 export function Products(): JSX.Element {
     const dispatch = useDispatch();
 
+    const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState<EditPostViewDto[]>([]);
     const [page, setPage] = useState<Page>({
         page: 1,
@@ -43,6 +45,7 @@ export function Products(): JSX.Element {
     }, [selfProductsDataHolder]);
 
     function loadMore() {
+        setLoading(true);
         if (!profile) {
             throw new Error('Missing profile when loading self products');
         }
@@ -62,6 +65,23 @@ export function Products(): JSX.Element {
             ...page,
             page: page.page + 1
         });
+        setLoading(false);
+    }
+
+    function confirmDelete(id: string) {
+        Modal.confirm({
+            title: 'Are you sure you want to delete this draft?',
+            icon: <ExclamationCircleOutlined />,
+            content: <>
+                <p>
+                    You are about to delete your draft idea.
+                </p>
+            </>,
+            okType: 'danger',
+            onOk() {
+                dispatch(PostActions.deleteDraft(id));
+            }
+        });
     }
 
     return <ClientLayout>
@@ -69,7 +89,7 @@ export function Products(): JSX.Element {
             <InfiniteScroll
                 dataLength={products.length}
                 next={loadMore}
-                hasMore={true}
+                hasMore={loading}
                 loader={<Spin />}
             >
                 <List
@@ -104,7 +124,7 @@ export function Products(): JSX.Element {
                                 canDelete && <Button
                                     style={{width: '126px'}}
                                     className='ml-5'
-                                    onClick={() => dispatch(PostActions.deleteDraft(id))}
+                                    onClick={() => confirmDelete(id)}
                                 >
                                     <FontAwesomeIcon
                                         icon='trash'

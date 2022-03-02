@@ -21,6 +21,10 @@ export interface CreateDiscussionDto {
     title: string;
 }
 
+export interface UpdateDiscussionDto extends CreateDiscussionDto {
+    id: string;
+}
+
 export interface DiscussionSummary {
     id: string;
     title: string;

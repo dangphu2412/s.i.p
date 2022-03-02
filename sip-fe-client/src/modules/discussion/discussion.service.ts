@@ -43,3 +43,7 @@ export function createDiscussionCommentReply(createReplyDto: CreatReplyDto): Req
 export function createDiscussion(createDiscussionDto: CreateDiscussionDto): RequestProcessor<unknown> {
     return createRequest<unknown, CreateDiscussionDto>(axios.post('/v1/discussions', createDiscussionDto));
 }
+
+export function updateDiscussion(id: string, updateDiscussionDto: CreateDiscussionDto): RequestProcessor<unknown> {
+    return createRequest<unknown, CreateDiscussionDto>(axios.patch(`/v1/discussions/${id}`, updateDiscussionDto));
+}

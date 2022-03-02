@@ -258,7 +258,7 @@ export function CreateDetailPostPage(): JSX.Element {
 
     function onProductLinkChange(event: React.ChangeEvent<HTMLInputElement>) {
         const productLink = event.target.value;
-        if (!productLink) {
+        if (productLink) {
             updateData('productLink', productLink);
             return;
         }

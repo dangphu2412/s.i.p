@@ -1,6 +1,6 @@
-import { CreateDiscussionDto } from './api/discussion.api';
 import { createAction } from '@reduxjs/toolkit';
 import { Query } from '../query/interface';
+import { CreateDiscussionDto, UpdateDiscussionDto } from './api/discussion.api';
 
 export interface CreatCommentDto {
     slug: string;
@@ -17,6 +17,7 @@ export const DiscussionActions = {
     createReply: createAction<CreatReplyDto>('DISCUSSION/CREATE_REPLY'),
     createDiscussionCommentReply: createAction<CreatReplyDto>('DISCUSSION/CREATE_DISCUSSION_REPLY'),
     createDiscussion: createAction<CreateDiscussionDto>('DISCUSSION/CREATE_DISCUSSION'),
+    updateDiscussion: createAction<UpdateDiscussionDto>('DISCUSSION/UPDATE_DISCUSSION'),
     getPostComments: createAction<{ slug: string }>('DISCUSSION/GET_POST_COMMENTS'),
     getDiscussions: createAction<Partial<Query>>('DISCUSSION/GET_DISCUSSIONS'),
     getDiscussionDetail: createAction<string>('DISCUSSION/GET_DISCUSSION_DETAIL'),

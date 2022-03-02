@@ -267,9 +267,7 @@ export class PostService {
     ruleManager: RuleManager,
   ) {
     const post = await this.postRepository.findOne(id, {
-      where: {
-        relations: ['author'],
-      },
+      relations: ['author'],
     });
     if (!post) {
       throw new NotFoundException(`There is no post with id ${id} to delete`);

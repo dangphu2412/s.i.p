@@ -8,8 +8,287 @@
                 {
                     "cursor": "MQ==",
                     "node": {
+                        "name": "Help Ukraine Widget",
                         "comments": {
                             "edges": [
+                                {
+                                    "node": {
+                                        "body": "Awesome idea, well done!",
+                                        "createdAt": "2022-03-02T13:16:47Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Slava Ukraine!",
+                                        "createdAt": "2022-03-02T13:16:44Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "That is VERY VERY important what you do guys! We are with you! #StopWar. gonna have widgets on our websites! Slava Ukraine!",
+                                        "createdAt": "2022-03-02T12:41:59Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "💪💪💪",
+                                        "createdAt": "2022-03-02T12:35:09Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Glory to Ukraine!",
+                                        "createdAt": "2022-03-02T12:01:16Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey! As you know, we are in a state of war with Russia. A few days ago Russians bombarded Kharkiv, a city where my dad grew up. My parents are now in a basement waiting for another air attack. It is not a minor conflict as your media might be saying. It is a war.\n\nI know we've been on Product Hunt with a few products to support Ukraine nowadays and I don't want to spam you, but I feel like for us Product Hunt is one of the platforms that allows to grow international awareness. \n\nHunters, we've built this widget so you could easily support Ukrainians nowadays. It is a simple piece of code that would show our widget on your website and make your visitors aware of how they can support. \n\nThanks. Glory to Ukraine!",
+                                        "createdAt": "2022-03-02T11:56:04Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "Mg==",
+                    "node": {
+                        "name": "Asset Money",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "It's interesting!",
+                                        "createdAt": "2022-03-02T12:30:15Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congrats on you product launch and good luck!",
+                                        "createdAt": "2022-03-02T12:25:09Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Brilliant idea! Always on track with the worth of your NFTs. Thanks and good luck!",
+                                        "createdAt": "2022-03-02T12:13:25Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great idea, congrats on the launch!",
+                                        "createdAt": "2022-03-02T11:54:24Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Like the idea! Do you support Phantom?",
+                                        "createdAt": "2022-03-02T11:48:49Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "seems useful, do you track the performance of your best picks?",
+                                        "createdAt": "2022-03-02T11:30:38Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great idea! Congratulations on the launch guys!",
+                                        "createdAt": "2022-03-02T11:00:47Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great job ?makers! Love the way the site feels and some of the small touches (like the NGMI when you type in a wrong address). \n\nIt says I'm an Access Pass Holder but I don't believe I have the NFT. How do I ensure I keep this special title? :)\n\nCan't wait till the Tax function is live! @akhilbvs is there any estimated launch date for this? Also would love to have my pfp be my ENS image or a choice from an NFT.\n\nCongrats on the launch y'all, well done!",
+                                        "createdAt": "2022-03-02T10:34:42Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Love seeing how much my NFT collection is worth also according to the rarity of each NFT and not just the floor price!",
+                                        "createdAt": "2022-03-02T10:24:04Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Love it! So nice to see it finally launch on Product Hunt. Congrats @nameet @akhilbvs 🥳",
+                                        "createdAt": "2022-03-02T10:11:08Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congratulations guys! Nice to see this finally launch! 😍",
+                                        "createdAt": "2022-03-02T09:30:33Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great stuff, @nameet!",
+                                        "createdAt": "2022-03-02T09:29:08Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Checking random Twitter user's NFT value at Asset Money, is my favourite timepass. Loved the idea and execution.",
+                                        "createdAt": "2022-03-02T09:21:01Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great Idea! Absolutely love it. Congrats on the launch buddy!",
+                                        "createdAt": "2022-03-02T09:20:52Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great idea, Sleek design! Congrats on the launch folks 🙌🏼",
+                                        "createdAt": "2022-03-02T09:18:59Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Tried this one and loved it, Great work by the builders!",
+                                        "createdAt": "2022-03-02T09:15:18Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "What a superb product by Nameet and team ! Excited!",
+                                        "createdAt": "2022-03-02T09:14:10Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Way to gooooooo team :fire: :fire: :fire:",
+                                        "createdAt": "2022-03-02T09:11:29Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Brilliant implementation.",
+                                        "createdAt": "2022-03-02T09:11:18Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Super cool product Akhil and team. Congrats.",
+                                        "createdAt": "2022-03-02T09:07:03Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "Mw==",
+                    "node": {
+                        "name": "Content Analytics by Dreamdata",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "Cognrats on the launch, looks nice! Added your solution to my list of tools (3k+ tools, 300+ categories) under complex analytics section.\n\nhttps://marketingplayer.com/tool/dreamdata/ \n\nCrossing fingers for successful launch here 🤞",
+                                        "createdAt": "2022-03-02T12:39:05Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Looks like an amazing tool. Congrats on the launch!",
+                                        "createdAt": "2022-03-02T12:33:08Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Finally! im looking forward to trying this out! Great work guys!",
+                                        "createdAt": "2022-03-02T12:06:54Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Amazing, looking forward to trying this out!",
+                                        "createdAt": "2022-03-02T12:02:06Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Woah! This is a real game changer!! It's really difficult to measure ROI from content. I am really excited to introduce this product to my team. Love this! Congratulations on the launch, @steffen_hedebrandt 🚀🚀",
+                                        "createdAt": "2022-03-02T11:51:54Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hi all! I’m Mikkel, Director of Data Science at Dreamdata. 💻\n\nWe’re really excited to see our newest product Content Analytics now live! \n\nHere’s some background of why and how we’ve put the product together 👇\n\nContent Analytics is the result of B2B’s content marketers' struggle with tying their content efforts to pipeline and revenue.\n\nSo far, they’ve been unable to answer the simple question: does my content influence the bottom line.\n\nThat’s mostly because existing tools have only been able to track simple conversions happening in the same session.\n\nContent Analytics is tailored fully to the B2B customer journey. Where there are multiple sessions, by multiple users, on multiple devices, over a period of months.\n\nDreamdata is able to do this because our platform connects the whole go-to-market ecosystem, to track every session by every user of every account; revealing the end-to-end B2B customer journey.\n\nIf you have any questions or feedback about Content Analytics, or how we collect and model our data, I’m here to help! 😀",
+                                        "createdAt": "2022-03-02T11:49:09Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "the dream feature <3",
+                                        "createdAt": "2022-03-02T11:02:48Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Gamechanger! We've been using it for around 3 months now and it helps us make the right decisions when it comes to marketing. If you are fond of coming up with new ideas and testing them, Dreamdata can give you valuable insight to determine if the campaign is a fail or a pass. When you understand the impact of each marketing campaign, you can make a more informed decision to help your business grow. We are very satisfied so far. B2B companies should give this a try.",
+                                        "createdAt": "2022-03-02T10:43:12Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congrats, guys! Our team used the first/last click attribution before. But Dreamdata changed the way we do our marketing campaigns.\n\nImagine knowing what content works, and what doesn't. Getting the whole attribution view allowed us to scrap the campaigns that were not working so well and focus more on those which gets us more leads and conversion. \n\nIt's a challenge to work with new, complex attribution modelling though. But once you get the hang of it and you set to up using correct data, this tool is something that you would want to integrate in your marketing process.",
+                                        "createdAt": "2022-03-02T10:35:35Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "I see this as a powerful attribution tool. Businesses can easily use this to map revenue and conversion from different marketing campaigns.\nDreamdata can track both paid and unpaid channels so once you've set everything, it can provide crucial information on how much each marketing and campaign is generating, the lenth of the sales cycle, where the sales happen, and more. Marketers who love data will love this tool.\nCongrats on your launch!",
+                                        "createdAt": "2022-03-02T10:31:15Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Cool product, looking forward to follow your journey!!",
+                                        "createdAt": "2022-03-02T10:20:32Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Love it! 🙌 Congrats on the launch",
+                                        "createdAt": "2022-03-02T09:35:34Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "great product! Definitely useful for data-driven companies!",
+                                        "createdAt": "2022-03-02T09:29:24Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Exciting product! 🙌 Good luck with the launch 💪",
+                                        "createdAt": "2022-03-02T09:19:25Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congrats on the Launch Larry. what access, Dreamdata required to perform the analytics?",
+                                        "createdAt": "2022-03-02T08:48:42Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Amazing product!",
+                                        "createdAt": "2022-03-02T08:44:17Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Kudos @ launching ?makers 🥳🥳🥳",
+                                        "createdAt": "2022-03-02T08:40:57Z"
+                                    }
+                                },
                                 {
                                     "node": {
                                         "body": "Congrats on your work. Keep rocking!",
@@ -33,38 +312,111 @@
                     }
                 },
                 {
-                    "cursor": "Mg==",
+                    "cursor": "NA==",
                     "node": {
+                        "name": "Snippyly SDK",
                         "comments": {
                             "edges": [
                                 {
                                     "node": {
-                                        "body": "This looks amazing.. Cool Idea. Congrats on you product launch and best of luck for the future!",
-                                        "createdAt": "2022-03-02T08:35:03Z"
+                                        "body": "Can't wait to finally test Snippyly SDK! Been waiting for so long for such a thing!",
+                                        "createdAt": "2022-03-02T13:16:19Z"
                                     }
                                 },
                                 {
                                     "node": {
-                                        "body": "Brilliant idea! Loved it and solves real pain point of not being able to understand the value of your NFT.",
-                                        "createdAt": "2022-03-02T08:28:48Z"
+                                        "body": "Good stuff, congrats on the launch guys!",
+                                        "createdAt": "2022-03-02T12:40:50Z"
                                     }
                                 },
                                 {
                                     "node": {
-                                        "body": "Just when I was thinking we need a good asset management platform for NFTs!",
-                                        "createdAt": "2022-03-02T08:22:21Z"
+                                        "body": "Nice one.",
+                                        "createdAt": "2022-03-02T12:34:40Z"
                                     }
                                 },
                                 {
                                     "node": {
-                                        "body": "Hello Product Hunt 🙌🏽\n\nMillions of people are buying NFTs, but the art of valuing NFTs is still new. If you own an NFT, wouldn't you want to know its worth?\n\nBuying is easy, figuring out how much to sell your NFT for is hard. Otherwise, you'll end up listing it for the floor price. 😕\n\nWhile ‘NFT tracking’ tools exist, they often show you only the floor price of an NFT. 🤔\n\nIntroducing Asset.Money 🚨 - A platform where you can manage your NFTs and estimate their worth based on rarity, traits, and much more.\n\nThings you can do :\n\nPortfolio: You can track your entire NFT portfolio on the ERC chain.\n\nShowcase: You can connect your Sol and Tezos wallet, and see all your NFTs from Ethereum, Polygon, Solana, and Tezos in one place.\n\nCurrently, this acts as a showcase to share with your friends. Bringing in NFT data like traits, rarity, and estimated values for Polygon, SOL, and Tezos is on our roadmap.\n\nDo share your feedback and if you like it - Hit that 'Tweet' button on the dashboard and spread the word ﻿\n🙂\n\nHave questions, feedback, ideas, suggestions? Hop over and say Hi! 👋🏻\n\n(Want to know how we are estimating the value of every NFT and the mechanics behind it? Blog coming soon 🥸)\n\nOur Discord: https://discord.gg/xNagJgpRAn\n\nFollow us on Twitter: https://twitter.com/AssetMoneyHQ",
-                                        "createdAt": "2022-03-02T07:25:01Z"
+                                        "body": "Love the idea and the google chrome plugin. Congrats on the launch! ;)",
+                                        "createdAt": "2022-03-02T12:16:54Z"
                                     }
                                 },
                                 {
                                     "node": {
-                                        "body": "Easily track how much your NFTs are worth with Asset Money. Love the execution by the makers. Stoked to bring it to the web3 community within Product Hunt.",
-                                        "createdAt": "2022-03-01T20:21:02Z"
+                                        "body": "Great stuff guys! Love the video and the branding.",
+                                        "createdAt": "2022-03-02T12:08:53Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great Product you guys",
+                                        "createdAt": "2022-03-02T11:57:31Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Awesome, how does it handle undo/redo? Does it hook into any sort of state management system?",
+                                        "createdAt": "2022-03-02T11:26:34Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "I really like the idea. This could be huge add-on for many SaaS tools out there. Might think of launching few apps for Google Marketplace, Salesforce, etc. \n\nThis might be the missing piece of puzzle for them.",
+                                        "createdAt": "2022-03-02T10:59:07Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congratulations Rakesh and Olene. This is a game changer. I have often found myself taking screenshots on Amplitude, Even our own landing pages to discuss things with my team. This is going to make life much easier!",
+                                        "createdAt": "2022-03-02T10:40:56Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Didn’t tried yet but we have been trying to do this in house for a long time, looking forward to seeing it in action!",
+                                        "createdAt": "2022-03-02T10:36:37Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Makes a lot of sense! Congratulations on the launch 👍",
+                                        "createdAt": "2022-03-02T09:53:48Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Was waiting for this for a long time! Congrats on the launch guys 🔥",
+                                        "createdAt": "2022-03-02T09:40:53Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congrats on the Launch  🚀 Rakesh. this is great.",
+                                        "createdAt": "2022-03-02T08:57:14Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "A great idea, I like it! Good luck!",
+                                        "createdAt": "2022-03-02T08:22:01Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "I love the chrome plugin.",
+                                        "createdAt": "2022-03-02T08:20:06Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey Product Hunt 👋\n\nWe’re thrilled to launch our Snippyly SDK! \n\nWith Snippyly SDK, you can make your app multiplayer in 30 mins. It provides these out of the box capabilities: \n⚡️ UI Components: each feature comes with a beautiful customizable UI component. You can place it like any other HTML tag anywhere in your UI and style it the way you want.\n⚡️ APIs: if you don't want to use our UI components, you can use the APIs to access raw data to create your own UI. \n⚡️ Backend Infrastructure: we take care of the entire end to end real time infrastructure & ensure that it's fast, performant and secure. \n\nIt is designed to be:\n🔥 Platform agnostic:  it works well with popular JS frameworks like React, Angular, Vue etc.\n🔥 White label: we don't put our branding anywhere and want all our features to feel native to your app.\n🔥 Fully customizable: you can choose only the features you want and style them the way you want.\n\nWould love to hear the use cases that you have in mind for your app. We’re super excited to see what you build and look forward to your feedback!",
+                                        "createdAt": "2022-03-02T08:02:33Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Thanks @mwseibel for hunting us.\n\nHey Builders and Makers 👋,\n@SoleneOudet and I are building Snippyly to make the web multiplayer & collaborative 🚀We are super exited to launch it today!\n\nDuring covid, the workplace shifted to a remote first world. But 99% of the apps are still single player and not equipped to address remote collaboration needs. With Snippyly, we will change that.\n\nTEAM:\nWe’re a team of ex-Googlers. We’ve built several internal collaboration tools and launched products like AR mode in Google Maps & Search and expanded Google Local Services.\n\nFEATURES:\nWith Snippyly SDK, you can make your app multiplayer in just 30 mins 🔥. You can create asynchronous and real time collaboration experiences for your end users:\n1. Presence: See who is online on this page right now.\n2. Live cursors:  See each other’s cursor movement live on the page.\n3. Contextual comments: Add google docs like comments, voice notes and tag co-workers.\n4. Audio huddles: Start Slack-style spontaneous audio conversations with one click. \n5. Real-time state syncing:  See other people’s changes live without refreshing the page.\n\nUSE CASES:\n📱 App builders (e.g. Shopify)\nDesign and product teams can discuss design & copy changes directly inside the app.\n\n✉️ Email marketing & Survey Tools (eg: Mailchimp)\nMarketing and products teams can discuss automated journey configurations directly inside the app.\n\n📊 Analytics platforms (eg: Mixpanel)\nAnalytics and product teams can investigate spikes or drops in metrics directly inside the app.\n\nGet your API key before March 9th to get a special discount (30% off your first year!).\n\nPlease ping us with any feedback, ideas or suggestions you may have. ❤️\nWe can’t wait to see what you build with this. 🚀",
+                                        "createdAt": "2022-03-02T07:56:32Z"
                                     }
                                 }
                             ]
@@ -72,10 +424,165 @@
                     }
                 },
                 {
-                    "cursor": "Mw==",
+                    "cursor": "NQ==",
                     "node": {
+                        "name": "DevStream",
                         "comments": {
                             "edges": [
+                                {
+                                    "node": {
+                                        "body": "I like the idea DevOps as code.",
+                                        "createdAt": "2022-03-02T12:49:44Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Nice product. All the best!",
+                                        "createdAt": "2022-03-02T12:36:56Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congrats on the launch",
+                                        "createdAt": "2022-03-02T11:57:00Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congratulations on the launch. This is incredibly useful.",
+                                        "createdAt": "2022-03-02T11:26:40Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "I look forward to contributing to this project",
+                                        "createdAt": "2022-03-02T11:04:48Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Very nice approach ;) congrats",
+                                        "createdAt": "2022-03-02T10:55:44Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Woooooooo this is so great!🤩",
+                                        "createdAt": "2022-03-02T10:53:41Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Well done on the launch and demo!",
+                                        "createdAt": "2022-03-02T10:52:53Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "This will make getting into DevOps a lot easier!",
+                                        "createdAt": "2022-03-02T10:25:28Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Simple, clear, and precise presentation, awesome launch!",
+                                        "createdAt": "2022-03-02T10:23:28Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "I can see how this would help in system integration and necessary updates. Kudos!",
+                                        "createdAt": "2022-03-02T10:18:54Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Efficient and innovative, this should save hours of having to check and link systems.",
+                                        "createdAt": "2022-03-02T10:17:06Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "It is definitely impactful. Great work guys!",
+                                        "createdAt": "2022-03-02T10:13:20Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "This looks like a great product, congratulations on the launch team!",
+                                        "createdAt": "2022-03-02T10:10:15Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "The video presentation looks super easy to follow! Will check this out.",
+                                        "createdAt": "2022-03-02T08:57:42Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "As a devops engineer, this is a must have. It is a super easy way to build great DevOps process.",
+                                        "createdAt": "2022-03-02T08:49:42Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "It‘s interesting!",
+                                        "createdAt": "2022-03-02T08:08:11Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Define your desired DevOps tools in a single human-readable YAML config file, and at the press of a button (one single command), you will have your whole DevOps toolchain and SDLC workflow set up. Five Minutes. One Command.\n\nNobody grew up dreaming of building great DevOps processes, even though they're necessary! We wanted to make it as easy, fast, and simple as possible to  configure, launch and manage a personalized and flexible DevOps toolchain, so we built DevStream as an open source product to do exactly that. \n\nMonolithic DevOps platforms don't fit most agile teams, One-Size-Fits-All == One-Size-Fits-None. \n\nDevStream lets you choose the pieces you want, and build your own personalized DevOps platform with none of the operational overhead.\n\nIf you're just starting up, DevStream makes it easy to get the right products, processes, connections, and automations in place to scale great engineering. \n\nIf you're already established, DevStream equips you to freshen up and enhance the interoperability of your process. \n\nIs it sexy? Perhaps not. Is it impactful? We think so! Here's to more building, and less of whatever \"Ops\" is! ;-)",
+                                        "createdAt": "2022-03-01T17:40:19Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "Ng==",
+                    "node": {
+                        "name": "Pixoo",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "Icons are looking awesome. All the best!",
+                                        "createdAt": "2022-03-02T12:36:23Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Oh wow! This is awesome. great way to stand out.",
+                                        "createdAt": "2022-03-02T12:09:23Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hi team! This looks good, well done! \nI have 2 questions: \n1. Who makes all the illustrations and where do they get the inspiration?\n2. Have you considered including a 3D viewer? Or are the illustrations flat?",
+                                        "createdAt": "2022-03-02T11:44:48Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Cool, congratulations on the product release 🔥",
+                                        "createdAt": "2022-03-02T11:29:28Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congratz for the launch mas @Dani! Great products :)",
+                                        "createdAt": "2022-03-02T10:05:54Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Oh wow! This could be super helpful for our designers. Congrats on the launch 👏",
+                                        "createdAt": "2022-03-02T09:36:35Z"
+                                    }
+                                },
                                 {
                                     "node": {
                                         "body": "Nice interactive templates. Cool app and congrats on your product launch.",
@@ -159,99 +666,6 @@
                                         "body": "I really like it, looks modern and dynamic",
                                         "createdAt": "2022-03-02T02:37:12Z"
                                     }
-                                },
-                                {
-                                    "node": {
-                                        "body": "Hey, guys! 👋\n\nDuring the last couple of months, we have been working on a new project that I thought you might be interested in seeing.\n\nYou're going to love Pixoo, the unique online 3D illustration platform. This specialized platform features over 1500+ 3D illustrations about business, lifestyle, and much more. With monthly subscriptions, new 3D illustrations are added every week 🔥\n\nPixoo is:\n\n🎨 1500+ of 3D illustrations available by subscription\n🕓 download anytime & anywhere\n🤝 commercial license\n💎 the most popular categories of 3D illustrations\n🔔 updates weekly\n\nCatch promo code ( welcomepixoo ) and get 20% off for any subscription plan. Hurry up to subscribe 🔥\n\nWe're excited to share Pixoo with you and we look forward to hearing any feedback you may have. ❤️",
-                                        "createdAt": "2022-03-02T02:22:28Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "NA==",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "A great idea, I like it! Good luck!",
-                                        "createdAt": "2022-03-02T08:22:01Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "I love the chrome plugin.",
-                                        "createdAt": "2022-03-02T08:20:06Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "Hey Product Hunt 👋\n\nWe’re thrilled to launch our Snippyly SDK! \n\nWith Snippyly SDK, you can make your app multiplayer in 30 mins. It provides these out of the box capabilities: \n⚡️ UI Components: each feature comes with a beautiful customizable UI component. You can place it like any other HTML tag anywhere in your UI and style it the way you want.\n⚡️ APIs: if you don't want to use our UI components, you can use the APIs to access raw data to create your own UI. \n⚡️ Backend Infrastructure: we take care of the entire end to end real time infrastructure & ensure that it's fast, performant and secure. \n\nIt is designed to be:\n🔥 Platform agnostic:  it works well with popular JS frameworks like React, Angular, Vue etc.\n🔥 White label: we don't put our branding anywhere and want all our features to feel native to your app.\n🔥 Fully customizable: you can choose only the features you want and style them the way you want.\n\nWould love to hear the use cases that you have in mind for your app. We’re super excited to see what you build and look forward to your feedback!",
-                                        "createdAt": "2022-03-02T08:02:33Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "Thanks @mwseibel for hunting us.\n\nHey Builders and Makers 👋,\n@SoleneOudet and I are building Snippyly to make the web multiplayer & collaborative 🚀We are super exited to launch it today!\n\nDuring covid, the workplace shifted to a remote first world. But 99% of the apps are still single player and not equipped to address remote collaboration needs. With Snippyly, we want to change that.\n\nTEAM:\nWe’re a team of ex-Googlers. We’ve built several internal collaboration tools and launched products like AR mode in Google Maps & Search and expanded Google Local Services.\n\nFEATURES:\nWith Snippyly SDK, you can make your app multiplayer in just 30 mins 🔥. You can create asynchronous and real time collaboration experiences for your end users:\n1. Presence: See who is online on this page right now.\n2. Live cursors:  See each other’s cursor movement live on the page.\n3. Contextual comments: Add google docs like comments, voice notes and tag co-workers.\n4. Audio huddles: Start Slack-style spontaneous audio conversations with one click. \n5. Real-time state syncing:  See other people’s changes live without refreshing the page.\n\nUSE CASES:\n📱 App builders (e.g. Shopify)\nDesign and product teams can discuss design & copy changes directly inside the app.\n\n✉️ Email marketing & Survey Tools (eg: Mailchimp)\nMarketing and products teams can discuss automated journey configurations directly inside the app.\n\n📊 Analytics platforms (eg: Mixpanel)\nAnalytics and product teams can investigate spikes or drops in metrics directly inside the app.\n\nGet your API key before March 9th to get a special discount (30% off your first year!).\n\nPlease ping us with any feedback, ideas or suggestions you may have. ❤️\nWe can’t wait to see what you build with this. 🚀",
-                                        "createdAt": "2022-03-02T07:56:32Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "NQ==",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "Wonderful tool!",
-                                        "createdAt": "2022-03-02T08:13:09Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "It‘s interesting!",
-                                        "createdAt": "2022-03-02T08:08:11Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "Define your desired DevOps tools in a single human-readable YAML config file, and at the press of a button (one single command), you will have your whole DevOps toolchain and SDLC workflow set up. Five Minutes. One Command.\n\nNobody grew up dreaming of building great DevOps processes, even though they're necessary! We wanted to make it as easy, fast, and simple as possible to  configure, launch and manage a personalized and flexible DevOps toolchain, so we built DevStream as an open source product to do exactly that. \n\nMonolithic DevOps platforms don't fit most agile teams, One-Size-Fits-All == One-Size-Fits-None. \n\nDevStream lets you choose the pieces you want, and build your own personalized DevOps platform with none of the operational overhead.\n\nIf you're just starting up, DevStream makes it easy to get the right products, processes, connections, and automations in place to scale great engineering. \n\nIf you're already established, DevStream equips you to freshen up and enhance the interoperability of your process. \n\nIs it sexy? Perhaps not. Is it impactful? We think so! Here's to more building, and less of whatever \"Ops\" is! ;-)",
-                                        "createdAt": "2022-03-01T17:40:19Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "Ng==",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "I like it, great job!",
-                                        "createdAt": "2022-03-02T08:20:30Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "This is actually really cool!",
-                                        "createdAt": "2022-03-02T08:12:55Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "This project is completely opensource!\nI'd really appreciate a ⭐  on https://github.com/virejdasani/GitHub-Twitter-Banner\n\nIf you have any suggestions, please raise an issue here: https://github.com/virejdasani/GitHub-Twitter-Banner/issues/new\n\nThanks!",
-                                        "createdAt": "2022-03-02T07:58:35Z"
-                                    }
                                 }
                             ]
                         }
@@ -260,18 +674,73 @@
                 {
                     "cursor": "Nw==",
                     "node": {
+                        "name": "Sales & Onboarding Playbooks by Accord",
                         "comments": {
                             "edges": [
                                 {
                                     "node": {
-                                        "body": "Seems useful. Well done :)",
-                                        "createdAt": "2022-03-02T08:21:32Z"
+                                        "body": "I've loved Accord from a buyer's perspective, and the more out of the box clarity we can have for the scope of the large purchases we make is just awesome.",
+                                        "createdAt": "2022-03-02T13:10:52Z"
                                     }
                                 },
                                 {
                                     "node": {
-                                        "body": "Hey Product Hunt!  👋  \n\n🤩 Exciting news! We are sharing snippet-based authentication solutions for websites.  ✨\n\n⭐️ Rownd Auth – Frictionless authentication and profile management for any website or webapp with a snippet.   We are making this in the open and would love feedback.  \n\n\nThe Problem: \nAuthentication is still largely focused on the application and creates a divide across marketing sites (blogs, landing pages, docs) and the actual webapp where the cool stuff happens.  This divide adds needless friction.\n\n== What does Rownd do?  ==\n🏠The Rownd Hub (a small widget) is your website’s authentication and profile tab.  We give end-users a simple way to see their status, what data has been collected, and control over the data.  \n\n\n⚡️ One snippet for websites and an easy SDK for webapps (mobile app support coming soon).  \n\n✅ Any site.  We work on webflow, wordpress, Jamstack sites fronted by Netlify, custom sites or you can add us to any site you can proxy through cloudflare.  \n\n🌉 Across sites. We can work across your websites. If you have a blog in wordpress and a landing page on webflow, auth will follow the user. \n\n🗺️ User profiles can be created over time across sites and the data is available to the browser for fast customizations and personalizations.\n\n⚡️ No more “sign up” page, get your users into your app faster, let them try what you show them on your marketing pages.\n\n🎊  Privacy first - CCPA and GDPR ready\n\nWhy us?\nWe are a bunch of makers who just got sick of the current auth solutions on the market. They either take too long to set up or they offload profile/PII responsibility back to the developer.  We wanted an all in one solution that we could use for our projects.  \n\nWe all come from large IT companies where we did data authentication for some of the largest companies in the US and Europe.  We wanted to take that passion for data security and safety and bring it to the rest of the world.  \n\nWhat to expect\nEverything is snippet based.  We are working on some no-code tools to help set up the auth, but right now you have to modify the actual snippet. We show you how to add auth to any page, how to customize a page based on profile data, and how to send form data to Rownd.   \n\nGive us some feedback!\nPlease give it a whirl.  We built our onboarding tool in webflow to show you the power of our new auth.  Give it a try!   https://rowndauth.com/producthunt.  We are free for 14 days and then 50% off for the next year if you try us today!  No credit card needed.  We would LOVE feedback.",
-                                        "createdAt": "2022-03-01T20:22:45Z"
+                                        "body": "Fantastic! A must have for sales and CS leaders. This team keeps on providing amazing content for their community. Really moving the needle! Congrats!",
+                                        "createdAt": "2022-03-02T13:09:58Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Obvious product for anyone doing complex enterprise sales where there are multiple stakeholders (e.g. security review, legal etc.). Frankly, anything where your champion has to do tasks.",
+                                        "createdAt": "2022-03-02T12:44:34Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "congrats accordions!",
+                                        "createdAt": "2022-03-02T12:42:46Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Love Accord and this new product. It’s makes managing new clients and partners so much more seamless. Congrats @rossrich",
+                                        "createdAt": "2022-03-02T12:42:35Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hi, congrats on the Launch ! seems an interesting stuff",
+                                        "createdAt": "2022-03-02T11:40:36Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congrats!",
+                                        "createdAt": "2022-03-02T11:28:56Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Very interesting! The first thing I clicked into was Productboard's MAP plan for PLG - which is super relevant for where our business is at the moment. Great product, nice once ?makers!",
+                                        "createdAt": "2022-03-02T10:23:11Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey !! Congrats on the launch !!!",
+                                        "createdAt": "2022-03-02T10:04:40Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Congrats on the Launch Ross. \nFree trial is for how many days?",
+                                        "createdAt": "2022-03-02T09:05:53Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Greetings PH world & fellow builders 🖖! \n\nI’m Ross, a founding Accordion and pumped to share something super helpful for the startup community… especially those focused on scaling revenue through repeatable sales & onboarding processes 📈.\n\nAfter launching last year, we’ve learned A LOT about what founders and GTM teams need to quickly win and successfully onboard customers. Which brings me to why we’re all here 🥁🥁\n\nTo share a gallery of proven sales & onboarding playbooks, curated from the world's top startups and sales/success leaders (Figma, Productboard, YC startups, etc, etc)! 🙀 \n\nWe heard from founders: \"I'm not a sales / onboarding expert, how do I build a repeatable, collaborative experience for my customers and hit scaling revenue goals??\" \"I don't want to start from scratch\"\n\nAnd startup sales leaders: \"I need everyone on my team selling like our best rep (proactive, engaging, transparent), how do I align them around our playbook and drive consistency?\" \"How are others doing this?\"\n\nYou can now access all of these insights & winning processes, distilled into easy to use playbooks, for free.\n\nSpanning multiple use cases (from sales-led to PLG, and POCs to implementation), and for companies from Seed to hyper growth scale. Whether you’re looking for customer onboarding guides, mutual action plans, or rep training checklists, we’ve got something for you!\n\nHave a playbook you’d like to contribute or see added? Email us and let’s make the world of B2B sales a better place for buyers & sellers :)\n\nLooking forward to thoughtful feedback, comments, and constructive criticism 🤠",
+                                        "createdAt": "2022-03-01T23:44:01Z"
                                     }
                                 }
                             ]
@@ -281,8 +750,131 @@
                 {
                     "cursor": "OA==",
                     "node": {
+                        "name": "SuperTrivia for Web",
                         "comments": {
                             "edges": [
+                                {
+                                    "node": {
+                                        "body": "It's a nice one. I played it, the game sounds are quite good. All the best!",
+                                        "createdAt": "2022-03-02T12:41:49Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Haha, looks like fun! Good when need to take some time off from difficult tasks. Good luck!",
+                                        "createdAt": "2022-03-02T12:18:58Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Awesome you guys ! I am sure this is something I can use when I take a break",
+                                        "createdAt": "2022-03-02T11:58:38Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Aww yeah! Let's play :D",
+                                        "createdAt": "2022-03-02T09:40:53Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "🔥🔥🔥",
+                                        "createdAt": "2022-03-02T09:40:00Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Lezzgoooo :rocket:",
+                                        "createdAt": "2022-03-02T09:38:52Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey PH community,\n\nWe'd built Bored for Slack and people from all over the world start using it for standups, Friday sessions etc.\n\nBut not everyone's on Slack. So we built a browser version that can be played on desktop and mobile.\n\nSuperTrivia allows for unlimited players, and unlimited banter. Bring your coworkers, friends, your friends' friends, your grandma, and even your cat.\n\nCheers!",
+                                        "createdAt": "2022-03-02T08:22:19Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "OQ==",
+                    "node": {
+                        "name": "ContentIdeas.io",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "It's a good one to quickly filter out content. What does it use behind the scenes to fetch and filter the content? Is it just based on the number of likes, shares and comments of posts?",
+                                        "createdAt": "2022-03-02T12:44:17Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Looks like something I could use when I'm stuck with content ideas. Congrats on the launch! @waq_azeem",
+                                        "createdAt": "2022-03-02T12:20:28Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "This is awesome! Love stuff like this. Content is king.",
+                                        "createdAt": "2022-03-02T12:12:58Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "A much needed product for anyone who is in the marketing industry",
+                                        "createdAt": "2022-03-02T12:00:46Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "This looks promising. Congrats on the launch! @waq_azeem",
+                                        "createdAt": "2022-03-02T10:53:16Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Interesting! will try this out. Congratulations on the launch @waq_azeem",
+                                        "createdAt": "2022-03-02T10:18:58Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hi everyone, 👋\n\nIt's a great feeling to be back on PH, this time with a 100% free tool (no email required).\n\nContent discovery has been a powerful part of our flagship product <a href=\"https://www.producthunt.com/posts/contentstudio-2-0\">ContentStudio 2.0</a>  which has helped our users find and share great content.\n\nNow, we've opened the content discovery tool for public to help more people use it more often without needing to sign-up. Here's what you can do with Contentideas.io:\n\n✅Find good quality content to curate on social media or newsletter\n✅ See which type of content is getting more engagement\n✅Gather ideas for your next blog post\n✅See competitor's content performance\n✅Find new link building opportunities\n\nIt's kinda like Buzzsumo but only for blog-style (share-worthy) content.\n\nLooking forward to getting feedback and adding more useful features.",
+                                        "createdAt": "2022-03-02T09:34:02Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MTA=",
+                    "node": {
+                        "name": "Nautomate",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "Interesting one. Congrats on the launch!",
+                                        "createdAt": "2022-03-02T12:45:51Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great Product but are you guys also available on Play Store",
+                                        "createdAt": "2022-03-02T12:00:17Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Nice! looks interesting :)",
+                                        "createdAt": "2022-03-02T10:08:06Z"
+                                    }
+                                },
                                 {
                                     "node": {
                                         "body": "Hi everyone! Thanks @chrismessina for the hunt 🙏🏻\n\nNautoamate is my second app after <a href=\"https://www.producthunt.com/posts/toolbox-pro\">Toolbox Pro</a> . I made it because I'm passionate about giving power to people to be able to create their own highly-customised workflows that make them more productive without needing to write a single line of code.\n\nI absolutely love Notion - it's one of the most flexible ways for storing and visualising data, which makes it a match made in heaven when paired with Shortcuts - the most intuitive no-code automation tool.\n\nI've seen some really creative uses for it so far, some of my favourites:\n\n• Creating an inventory system using your iPhone as a barcode scanner with Notion as the database backend\n• Personal watch later list, with movies and TV shows being stored with rich metadata\n• Adding new contacts into a CRM using Siri\n• Creating an automatic journalling system which pulls in music listened to that day, workout info, weather etc to create rich Notion pages\n\nSome of these I've made into example Shortcuts you can find in the app right now and there'll be lots more I'll be adding in the coming days!\n\nShout if you have any questions ✌🏻",
@@ -306,14 +898,33 @@
                     }
                 },
                 {
-                    "cursor": "OQ==",
+                    "cursor": "MTE=",
                     "node": {
+                        "name": "Hardcover",
                         "comments": {
                             "edges": [
                                 {
                                     "node": {
-                                        "body": "Greetings PH world & fellow builders 🖖! \n\nI’m Ross, a founding Accordion and pumped to share something super helpful for the startup community… especially those focused on scaling revenue through repeatable sales & onboarding processes 📈.\n\nAfter launching last year, we’ve learned A LOT about what founders and GTM teams need to quickly win and successfully onboard customers. Which brings me to why we’re all here 🥁🥁\n\nTo share a gallery of proven sales & onboarding playbooks, curated from the world's top startups and sales/success leaders (Figma, Productboard, YC startups, etc, etc)! 🙀 \n\nWe heard from founders: \"I'm not a sales / onboarding expert, how do I build a repeatable, collaborative experience for my customers and hit scaling revenue goals??\" \"I don't want to start from scratch\"\n\nAnd startup sales leaders: \"I need everyone on my team selling like our best rep (proactive, engaging, transparent), how do I align them around our playbook and drive consistency?\" \"How are others doing this?\"\n\nYou can now access all of these insights & winning processes, distilled into easy to use playbooks, for free.\n\nSpanning multiple use cases (from sales-led to PLG, and POCs to implementation), and for companies from Seed to hyper growth scale. Whether you’re looking for customer onboarding guides, mutual action plans, or rep training checklists, we’ve got something for you!\n\nHave a playbook you’d like to contribute or see added? Email us and let’s make the world of B2B sales a better place for buyers & sellers :)\n\nLooking forward to thoughtful feedback, comments, and constructive criticism 🤠",
-                                        "createdAt": "2022-03-01T23:44:01Z"
+                                        "body": "It's a cool idea. All the best!",
+                                        "createdAt": "2022-03-02T12:58:43Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "While I love the concept of a book club - i think book recommendations stem from 2 places.\nWhile topics of interest are paramount, it would be great to see a book club app which brings in collections from some well known names / influencers e.g. Gates notes, or what musk reads. The other one is your own network - without one's own network being there it's hard to get a club and conversation going. I recently joined Literal - it's a literal upgrade on goodreads - but still hard to get the engagement in the community going. How are you guys approaching this differently?",
+                                        "createdAt": "2022-03-02T09:30:50Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great to see this live! 💥\nI'm Ste, the lead designer <a href=\"https://www.producthunt.com/posts/hardcover\">Hardcover</a> and I gotta say that it's been great working with such an amazing team on a product evolving so fast. \n\nCheck it out and if you have any feedback join the Discord community.",
+                                        "createdAt": "2022-03-02T08:54:14Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "👋 Hey hey Product Hunters!\n\nI’m Adam, a Co-founder of Hardcover, the social discovery platform for finding new life-changing books.\n\nLast year, Goodreads announced they were discontinuing their API. After using their API for over a decade, I couldn’t believe it! My years of data would no longer be accessible. I snarkily tweeted that I should build an alternative book platform out of spite for Amazon. \n\nNine months, 5 co-founders, 80+ user interviews, and 100s of GB of book data later, we’re launching our beta and you’re all invited!\n\n🧙‍♀️ Who is Hardcover For\n\nReaders who are constantly on the hunt for new and exciting books. Whether you only read a few books per year or are plowing through dozens each month, no one wants to waste time on books they don’t love. Hardcover will help you find and keep track of what’s next on your reading list.\n\nAll of your activity on Hardcover can be public, private only to you, or shared with people you follow. Yes, you can be antisocial on our social network too—whatever helps you to read more books.\n\n🐉 A Short Story\n\nMany of the readers we’ve talked to have a similar process for finding new books to read. Tell us if this sounds like you or if it doesn’t.\n\nWhenever you hear about a new book that sparks your curiosity, you search for it. You read a little bit about that book from the top search result—either on Amazon or Goodreads. Maybe you read a few reviews, or you make a choice to go in with a fresh mind.\n\nOnce you’re interested in a book the next thought is usually, “When do I read it?” As soon as possible or sometime down the line?\n\nMany readers need a place to keep track of those books—something they do today through Goodreads, in a Google Sheet, or in a bunch of other ways.\n\nAt Hardcover, we want to be that place you save all the books you want to read. When you’re ready to actively seek out new books to read, we’ll show you what your friends are reading, popular lists, and our weekly polls. (ex: “What were your favorite childhood books?”) We also have many more things planned.\n\nWe hope you join Hardcover to track what you want to read and stay for the community and book discovery.\n\n\n📚 What You Can do on Hardcover\n\nTrack 📓 what you want to read, what you’ve read, and what you’re reading; including the option to track the date(s) you started and finished a book as well as which format (read or listened).\n\nConfidently 🚚  move every book & list in your library from Goodreads to Hardcover.\n\nFollow your 👭 friends and share what you’re reading with each other.\n\nGet a 📰 feed of your friends’ activities and activities for books you’re interested in.\n\nCreate book 🏆 goals—either by the number of books or number of pages.\n\nOrganize your books into 📚 lists and easily find what you’re looking for.\n\nSee 📊 stats for lists (and more later) based on a wide variety of data.\n\nDiscover books through 📈 popular lists, prompts, and social feed.\n\n📘 Join Hardcover Beta\n\nUse the invite code “producthunt” to activate your account today! Then, say hi by jumping on our Discord or following @hardcoverapp on Twitter. 👋",
+                                        "createdAt": "2022-03-02T00:02:58Z"
                                     }
                                 }
                             ]
@@ -321,18 +932,246 @@
                     }
                 },
                 {
-                    "cursor": "MTA=",
+                    "cursor": "MTI=",
                     "node": {
+                        "name": "Stand",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "It's a good idea. Useful tool. Congrats!",
+                                        "createdAt": "2022-03-02T12:47:11Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Like the idea! What are your next planned features? Maybe you could include a little roadmap? :)",
+                                        "createdAt": "2022-03-02T11:36:02Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "I can see this being an integral tool for remote teams. It has the potential to really make people *feel* like and *function* as a team from afar. 👏",
+                                        "createdAt": "2022-03-02T10:01:35Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Interesting! Working in a remote-first company, I love the concept and would definitely give it a try. Congrats on the launch ?makers :)",
+                                        "createdAt": "2022-03-02T09:14:56Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Wonderful product for my team and myself!",
+                                        "createdAt": "2022-03-02T08:41:05Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey ProductHunters!!\n\nA big thank you to @de for hunting us!   \n\n🤔 What is Stand and why did I create it?\nStand provides asynchronous online stand-ups, discussions, mood tracking and accountability for your team.\n\nI primarily built Stand based on my own needs/wants from a product. Leading a small team of designers across multiple time zones, I don’t want to enforce stand-ups where teams are required to join a call daily. I want the team to be able to focus without interruption but be able to raise questions or concerns in a dedicated space when they need to.\n\nAfter using Stand for about 4 weeks, it feels great! It hasn’t completely removed the need for calls (and I didn’t expect that it would), but it has definitely reduced them and given me a better understanding of what the team are working on, removing blockers and most importantly, how the team are feeling day to day.\n\n🚀 How long did it take to build?\nAround 4 months in total to launch the current MVP here on Product Hunt. This is outside of my busy 9 to 5 role, working across evenings and weekends. I wanted to release an MVP at around the 2 month mark, but overall I am happy with the time it has taken me to design and build Stand from scratch.\n\n🔥 Some key features:\nAsynchronous stand-ups for your team!\nYour team will be reminded to attend the stand-up on the day and time of their choosing (although team admins can also request a time to attend).\nAll stand-ups have discussions/comments allowing your team to communicate directly and efficiently.\nMood tracking - every team member will be asked how they feel during the stand-up.\nInsights - see at a glance your team’s performance, blockers, questions and moods.\nBuilt with remote teams in mind.\nLess time on Zoom or Slack calls.\nHappier team members!\n\n🥳 50% off for the Product Hunt community\nUse the promo code ProductHunt50 when purchasing a plan to get 50% off the price of a plan forever!\n\nIf you have any feedback, I would love to hear it!",
+                                        "createdAt": "2022-03-01T19:55:47Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MTM=",
+                    "node": {
+                        "name": "The Modern Billboard Collective",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "Nice idea! Congrats on the launch.",
+                                        "createdAt": "2022-03-02T12:48:30Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Such a clever idea! Congrats",
+                                        "createdAt": "2022-03-02T10:34:41Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey heey Product Hunt!\n\nWhat if you could invest in and own digital real estate on your favorite websites? What if you could fund your startup while aligning your community with your upside? What would the Million Dollar Homepage look like, reimagined in a crypto-native way? \n\nA few Internet friends came together to reflect on these questions. The result is The Modern Billboard Collective – the first experiment in tokenized advertising where you can buy ad space represented as NFTs that are freely tradable. \n\nIf you believe any of our websites will succeed and more people will want to visit it in the future, you can buy a little piece of it now - represented as an NFT on a billboard -  and resell it in the future for a likely profit. As a lot owner, you can upload an image + link out to a URL of your choice. \n\nWant to promote your company or project? Stick your logo in it.\nWant to show off your ape avatar and link to your twitter profile? Do your thing.\nWant to rent the ad space to someone else and make $? Dream big.\n\nIt’s the benefits of advertising, the potential upside of an investment, and the feel good vibes of patronage ;)\n\nOur first three billboards are live today:\n- Startupy: https://startupy.themodernbillboard.com\n- Koodos: https://koodos.themodernbillboard.com\n- Coinvise: https://coinvise.themodernbillboard.com\n\nWatch a demo here: https://youtu.be/hFe7UpT-XaU\n\nThere are only 48 gridlots available on each billboard. 16 are open today at a fixed price of 0.5 ETH. The remaining lots will be available tomorrow at a higher floor price.\n\nWe’ve had so much fun building this and would love to hear your thoughts!",
+                                        "createdAt": "2022-03-02T07:46:15Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MTQ=",
+                    "node": {
+                        "name": "Fellow 3.2",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "A special thank you to @hnshah for hunting us today 🎉\nHiten, you hunted us when Fellow originally launched in 2019, again for Fellow v2.0, and now for Fellow 3.2. It means so much to have you continually support us along our journey!\n\nNow… Fellow 3.2 🤩\n\nYou may be wondering, how do we figure out what it is we want to build?\n\nIf you could imagine the world’s greatest meeting host as a person, they are amazing at masterfully crafting the best meetings possible. They make meetings:\n\n✅ Productive \n✅ Effective \n✅ Inclusive\n✅ A great use of everyone’s time\n✅ Move work forward \n\n…and when you come out of them, you are completely energized.\n\nWell, we’re building Fellow, the software, to do all of that for you and for everybody that uses it. \n\nFellow is becoming a smart meeting assistant - and we are looking to build the world’s greatest meeting assistant!\n\nOn that note, we’re so excited to share with you some of the new additions to Fellow in 3.2:\n1) Tags and Enhanced search 🏷\n2) Sections ⚡️\n3) Meeting timer ⏰\n4) New meeting feedback modal 🎉\n5) Delegated access 🔐\n6) Objectives enhancements 💫\n7) Okta support 💪\n8) Guest user enhancements 👋\n9) ClickUp integration 🆙\n10) Google Drive integration 🔥\n11) Partner Programs 🤝\n\nIf you missed our LIVE Fellow 3.2 event yesterday, you can visit this link to watch the recording:\n\nhttps://www.youtube.com/watch?v=HC6QmeapTqw\n\nAnd, for those of you who haven’t used Fellow before, we help you manage all of your meetings in one place - from 1on1s to team meetings to cross-functional project meetings and more. We also help with other common team practices like exchanging feedback, setting goals and most importantly, building and strengthening relationships.\n\nWe’ve got a free plan so please check it out and let us know what you think!\n\nThanks again to all of the Product Hunt community, our customers, users and the incredibly talented team that we have the privilege of working with! 🙏",
+                                        "createdAt": "2022-03-02T12:05:27Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Great idea, ?Makers! We're always looking for new ways to stop meetings from being a waste of time, this looks interesting!",
+                                        "createdAt": "2022-03-02T10:20:53Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MTU=",
+                    "node": {
+                        "name": "GitHub Twitter Banner",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "It's a good idea. \nFew suggestions\n1. There's no download button, it's better to put one.\n2. Give a few different color backgrounds to choose from\n3. By twitter banner you mean Twitter cover image? If so it is 3:1 aspect ratio, but the image you generated isn't following that, please check that\n4. Resolution of the generated image is just too small, you can increase that\n5. Some profile images just pop out, which is not a good UX, adjust that\n6. Finally why have extra options to generate PNG, you could do that in the first attempt itself. \n\nThanks, have a nice day. Congrats on the launch.",
+                                        "createdAt": "2022-03-02T12:57:22Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "I like it, great job!",
+                                        "createdAt": "2022-03-02T08:20:30Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "This is actually really cool!",
+                                        "createdAt": "2022-03-02T08:12:55Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "This project is completely opensource!\nI'd really appreciate a ⭐  on https://github.com/virejdasani/GitHub-Twitter-Banner\n\nIf you have any suggestions, please raise an issue here: https://github.com/virejdasani/GitHub-Twitter-Banner/issues/new\n\nThanks!",
+                                        "createdAt": "2022-03-02T07:58:35Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MTY=",
+                    "node": {
+                        "name": "Rownd Auth",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "This is very cool. Congrats Rownd team! 🎉🚀",
+                                        "createdAt": "2022-03-02T13:12:21Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Seems useful. Well done :)",
+                                        "createdAt": "2022-03-02T08:21:32Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey Product Hunt!  👋  \n\n🤩 Exciting news! We are sharing snippet-based authentication solutions for websites.  ✨\n\n⭐️ Rownd Auth – Frictionless authentication and profile management for any website or webapp with a snippet.   We are making this in the open and would love feedback.  \n\n\nThe Problem: \nAuthentication is still largely focused on the application and creates a divide across marketing sites (blogs, landing pages, docs) and the actual webapp where the cool stuff happens.  This divide adds needless friction.\n\n== What does Rownd do?  ==\n🏠The Rownd Hub (a small widget) is your website’s authentication and profile tab.  We give end-users a simple way to see their status, what data has been collected, and control over the data.  \n\n\n⚡️ One snippet for websites and an easy SDK for webapps (mobile app support coming soon).  \n\n✅ Any site.  We work on webflow, wordpress, Jamstack sites fronted by Netlify, custom sites or you can add us to any site you can proxy through cloudflare.  \n\n🌉 Across sites. We can work across your websites. If you have a blog in wordpress and a landing page on webflow, auth will follow the user. \n\n🗺️ User profiles can be created over time across sites and the data is available to the browser for fast customizations and personalizations.\n\n⚡️ No more “sign up” page, get your users into your app faster, let them try what you show them on your marketing pages.\n\n🎊  Privacy first - CCPA and GDPR ready\n\nWhy us?\nWe are a bunch of makers who just got sick of the current auth solutions on the market. They either take too long to set up or they offload profile/PII responsibility back to the developer.  We wanted an all in one solution that we could use for our projects.  \n\nWe all come from large IT companies where we did data authentication for some of the largest companies in the US and Europe.  We wanted to take that passion for data security and safety and bring it to the rest of the world.  \n\nWhat to expect\nEverything is snippet based.  We are working on some no-code tools to help set up the auth, but right now you have to modify the actual snippet. We show you how to add auth to any page, how to customize a page based on profile data, and how to send form data to Rownd.   \n\nGive us some feedback!\nPlease give it a whirl.  We built our onboarding tool in webflow to show you the power of our new auth.  Give it a try!   https://rowndauth.com/producthunt.  We are free for 14 days and then 50% off for the next year if you try us today!  No credit card needed.  We would LOVE feedback.",
+                                        "createdAt": "2022-03-01T20:22:45Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MTc=",
+                    "node": {
+                        "name": "Wordle Answer Today",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "Good one. Useful for the people who are after wordle! Congrats!",
+                                        "createdAt": "2022-03-02T12:59:54Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Proud of you",
+                                        "createdAt": "2022-03-02T11:57:51Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hey there Product Hunt fam ⚡\nI'm BG and I'm the founder of Crewcharge.com.\nMy sister loves wordle that she plays the game every day. \nI, on the other hand - tried it once and opened up the dev console to see the answer. \n\nAfter working several sleepless nights with Crewcharge, I thought I'd build a fun little project since you can't open up the chrome dev console on mobile. \n\nIf you do a google search, you end up getting a huge list of SEO optimized articles giving you clues, but this is rather a straight forward solution 😁\n\nSource on github: https://github.com/goforbg/wordle-answer-today",
+                                        "createdAt": "2022-03-02T08:19:05Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MTg=",
+                    "node": {
+                        "name": "Linkeem",
                         "comments": {
                             "edges": []
                         }
                     }
                 },
                 {
-                    "cursor": "MTE=",
+                    "cursor": "MTk=",
                     "node": {
+                        "name": "MetaNote",
                         "comments": {
                             "edges": [
+                                {
+                                    "node": {
+                                        "body": "Oh, nice. In recent times I was thinking to make one minimalistic to do and notes extension, just so minimal to quickly write down. \n\nThis extension is something similar to what I thought of. \n\nAlso you could add an option to use the same data on different tabs, that would be an helpful for taking notes by visiting different sites, so the data/notes will be synchronized.\n\nCongrats on the launch!",
+                                        "createdAt": "2022-03-02T13:07:52Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Hi everyone,\nWe are excited to release a new chrome extension that I've been developing for the past few weeks. With MetaNote, you can annotate any page on the web and share those notes with your colleagues.\n",
+                                        "createdAt": "2022-03-01T19:55:13Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "cursor": "MjA=",
+                    "node": {
+                        "name": "Voggle",
+                        "comments": {
+                            "edges": [
+                                {
+                                    "node": {
+                                        "body": "It's a very good one. I thought of having this kind of game and here it is. The option to select in any direction is just so good. Congrats on the launch!",
+                                        "createdAt": "2022-03-02T13:02:01Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "Amazing game! Check it out if you like Wordle!",
+                                        "createdAt": "2022-03-02T10:15:09Z"
+                                    }
+                                },
+                                {
+                                    "node": {
+                                        "body": "what a great game! So exciting to find more creative word game ideas! :)",
+                                        "createdAt": "2022-03-02T09:46:15Z"
+                                    }
+                                },
                                 {
                                     "node": {
                                         "body": "More addictive than Wordle!",
@@ -355,140 +1194,6 @@
                                     "node": {
                                         "body": "If you like Wordle or word games in general, you should check out Voggle :)",
                                         "createdAt": "2022-03-01T18:04:17Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTI=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "Much needed initiative in todays time!",
-                                        "createdAt": "2022-03-02T08:04:17Z"
-                                    }
-                                },
-                                {
-                                    "node": {
-                                        "body": "If you are looking for one app to help manage it all, try the Aila Health app. From patient community, to symptom tracking to personalized nutrition and care plans, you can feel supported with the Aila Health app to manage your autoimmune disease. Get started today!",
-                                        "createdAt": "2022-03-02T01:29:32Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTM=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "Hi everyone,\nWe are excited to release a new chrome extension that I've been developing for the past few weeks. With MetaNote, you can annotate any page on the web and share those notes with your colleagues.\n",
-                                        "createdAt": "2022-03-01T19:55:13Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTQ=",
-                    "node": {
-                        "comments": {
-                            "edges": []
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTU=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "Hey ProductHunters!!\n\nA big thank you to @de for hunting us!   \n\n🤔 What is Stand and why did I create it?\nStand provides asynchronous online stand-ups, discussions, mood tracking and accountability for your team.\n\nI primarily built Stand based on my own needs/wants from a product. Leading a small team of designers across multiple time zones, I don’t want to enforce stand-ups where teams are required to join a call daily. I want the team to be able to focus without interruption but be able to raise questions or concerns in a dedicated space when they need to.\n\nAfter using Stand for about 4 weeks, it feels great! It hasn’t completely removed the need for calls (and I didn’t expect that it would), but it has definitely reduced them and given me a better understanding of what the team are working on, removing blockers and most importantly, how the team are feeling day to day.\n\n🚀 How long did it take to build?\nAround 4 months in total to launch the current MVP here on Product Hunt. This is outside of my busy 9 to 5 role, working across evenings and weekends. I wanted to release an MVP at around the 2 month mark, but overall I am happy with the time it has taken me to design and build Stand from scratch.\n\n🔥 Some key features:\nAsynchronous stand-ups for your team!\nYour team will be reminded to attend the stand-up on the day and time of their choosing (although team admins can also request a time to attend).\nAll stand-ups have discussions/comments allowing your team to communicate directly and efficiently.\nMood tracking - every team member will be asked how they feel during the stand-up.\nInsights - see at a glance your team’s performance, blockers, questions and moods.\nBuilt with remote teams in mind.\nLess time on Zoom or Slack calls.\nHappier team members!\n\n🥳 50% off for the Product Hunt community\nUse the promo code ProductHunt50 when purchasing a plan to get 50% off the price of a plan forever!\n\nIf you have any feedback, I would love to hear it!",
-                                        "createdAt": "2022-03-01T19:55:47Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTY=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "Hey heey Product Hunt!\n\nWhat if you could invest in and own digital real estate on your favorite websites? What if you could fund your startup while aligning your community with your upside? What would the Million Dollar Homepage look like, reimagined in a crypto-native way? \n\nA few Internet friends came together to reflect on these questions. The result is The Modern Billboard Collective – the first experiment in tokenized advertising where you can buy ad space represented as NFTs that are freely tradable. \n\nIf you believe any of our websites will succeed and more people will want to visit it in the future, you can buy a little piece of it now - represented as an NFT on a billboard -  and resell it in the future for a likely profit. As a lot owner, you can upload an image + link out to a URL of your choice. \n\nWant to promote your company or project? Stick your logo in it.\nWant to show off your ape avatar and link to your twitter profile? Do your thing.\nWant to rent the ad space to someone else and make $? Dream big.\n\nIt’s the benefits of advertising, the potential upside of an investment, and the feel good vibes of patronage ;)\n\nOur first three billboards are live today:\n- Startupy: https://startupy.themodernbillboard.com\n- Koodos: https://koodos.themodernbillboard.com\n- Coinvise: https://coinvise.themodernbillboard.com\n\nWatch a demo here: https://youtu.be/hFe7UpT-XaU\n\nThere are only 48 gridlots available on each billboard. 16 are open today at a fixed price of 0.5 ETH. The remaining lots will be available tomorrow at a higher floor price.\n\nWe’ve had so much fun building this and would love to hear your thoughts!",
-                                        "createdAt": "2022-03-02T07:46:15Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTc=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "So are you Into Tech Blogging and want more exposure and coverage? Well, my suggestion is to post to all the famous blogging Platforms like Hashnode, Medium, DEV, and so on. \n\nBut I also understand how much work it might take for you to do this process, again and again, well try Blogtiple it does it in some clicks without you wasting your time.\n\nWhat do you think of this product?",
-                                        "createdAt": "2022-03-02T05:14:30Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTg=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "Hi Product Hunters! \n\nI’m Harry and a co-founder of Ango. Together with Samuel Holder, we’ve built a browser-extension that recommends product specific sustainable alternatives as you shop online. This is just a BETA and we’re looking for any and all feedback!\n\nWhy we built Ango\n\nWe built Ango to make sustainable shopping more convenient for consumers as they shop online. We found that consumers face two issues as they shop online:\n\nTruly sustainable products are difficult to verify without in depth knowledge, greenwashing makes this incredibly arduous. \nSustainable alternatives are far too expensive, we found that on average, they’re 100-200% more expensive. This is a huge barrier for the majority of consumers.\n\nWe want to help accelerate that transition to a more sustainable lifestyle and economy. Making sustainable, attainable.\n\n\nKey features of Ango\n\n\n👌 Recommendations: Ango will recommend to you sustainable alternatives as you shop online. E.g., If you shopping on Next for a t-shirt, ango would simply pop up and show you the closest matching sustainable variant. \n\n🔎 Search: We have input basic search functionality, this will be improved at a later stage!\n\n💰 Discounts: With some of our partners, we have negotiated some exclusive discounts on sustainable products.\n\n☝ Try us out on Chrome and Microsoft Edge\n\nGive us a try and please let us know what you think. It is only operational on Next, BooHoo and H&M with a relatively high degree of coverage and accuracy. We are very interested in feedback (good & bad) to make sure we continue to improve Ango in the right direction 🙂\n",
-                                        "createdAt": "2022-03-01T18:43:52Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MTk=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "Hello 👋 Product Hunt!\nRaghav here, a Software Engineer based out of India. I'm thrilled to announce my first chrome-based extension Type2Learn with you all. I had always enjoyed practicing touch typing and racing with my friends online. Hitting two birds with one stone, I created this extension to practice touch typing and concentrate on your webpage.\n\nSteps to use the extension:\n1) Select a paragraph by clicking on it or selecting any word from it\n2) Click on the extension icon in the toolbar. A popup will appear.\n3) Click on the button - Prepare Text. You should see the first letter of the paragraph highlighted.\n4) Start typing from the beginning of the selected paragraph.\n\nPS: this extension version currently works on the pages in which the text selected is in paragraph HTML tag\n\nHere's the source code if anyone is interested. Feel free to contribute to it.\nhttps://github.com/rghv96/type2learn",
-                                        "createdAt": "2022-03-01T17:45:00Z"
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "cursor": "MjA=",
-                    "node": {
-                        "comments": {
-                            "edges": [
-                                {
-                                    "node": {
-                                        "body": "NFTs are getting quite popular these days. Dimi's goal is to make it easier for everyone to create digital art and mint it on a blockchain. You can create your own custom filters, by just uploading a reference filter image, or use one of our preexisting ones. You can also do pixel drawing and enhance it with filters afterwards. You can connect your Algorand wallet (or create new one) with few simple steps and use it to mint NFTs. We plan to support more blockchains in the future. \nFun fact: the app is named after my baby boy - Dimitar. :) ",
-                                        "createdAt": "2022-03-01T21:43:00Z"
                                     }
                                 }
                             ]

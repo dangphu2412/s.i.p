@@ -8,7 +8,8 @@ export class IterateFactory {
     const user = new User();
     const fullName = name.findName() + i;
     user.email = internet.email(fullName);
-    user.avatar = image.avatar();
+    user.avatar =
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ87KJTvoZmlpQo-zqqQqFPbUXHqBnJt8xDZg&usqp=CAU';
     user.fullName = fullName;
     user.username = fullName;
     user.hashTag = SlugUtils.normalize(fullName);

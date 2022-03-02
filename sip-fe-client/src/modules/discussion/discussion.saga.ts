@@ -6,9 +6,9 @@ import { MessageType } from '../app.types';
 import { saveData } from '../data/data.action';
 import { fireMessage } from '../message/message.action';
 import { Query } from '../query/interface';
-import { CreateDiscussionDto } from './api/discussion.api';
+import { CreateDiscussionDto, UpdateDiscussionDto } from './api/discussion.api';
 import { CreatCommentDto, CreatReplyDto as CreateReplyDto, DiscussionActions } from './discussion.action';
-import { createComment, createDiscussion, createDiscussionComment, createDiscussionCommentReply, createReply, getDiscussionComments, getDiscussionDetail, getDiscussions, getPostComments } from './discussion.service';
+import { createComment, createDiscussion, createDiscussionComment, createDiscussionCommentReply, createReply, getDiscussionComments, getDiscussionDetail, getDiscussions, getPostComments, updateDiscussion } from './discussion.service';
 
 export function* DiscussionSagaTree(): SagaIterator {
     yield takeLatest(
@@ -39,6 +39,11 @@ export function* DiscussionSagaTree(): SagaIterator {
     yield takeLatest(
         DiscussionActions.createDiscussionComment.type,
         handleDiscussionCommentCreation
+    );
+
+    yield takeLatest(
+        DiscussionActions.updateDiscussion.type,
+        handleUpdateDiscussion
     );
 
     yield takeLatest(
@@ -92,6 +97,22 @@ function* handleDiscussionCommentReplyCreation(action: PayloadAction<CreateReply
         data,
         view: VIEW_SELECTOR.CREATE_REPLY
     }));
+}
+
+function* handleUpdateDiscussion(action: PayloadAction<UpdateDiscussionDto>): SagaIterator {
+    const request = updateDiscussion(action.payload.id, action.payload);
+    const data = yield call(request.handle);
+    yield put(saveData({
+        data,
+        view: VIEW_SELECTOR.CREATE_REPLY
+    }));
+    if (request.isSuccess()) {
+        yield put(fireMessage({
+            type: MessageType.SUCCESS,
+            message: 'Update discussion successfully'
+        }));
+    }
+
 }
 
 function* handleGetPostComments(action: PayloadAction<{ slug: string }>): SagaIterator {

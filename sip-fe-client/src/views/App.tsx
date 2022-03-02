@@ -24,6 +24,7 @@ import { DiscussionOverviewPage } from './dicussion/DicussionOverviewPage';
 import { DiscussionDetailPage } from './dicussion/DiscussionDetailPage';
 import { IdeaOverviewPage } from './post/IdeaOverviewPage';
 import { UpdateDetailPostPage } from './post/UpdateDetailPage';
+import { EditDiscussionPage } from './dicussion/EditDiscussionPage';
 
 configApp();
 
@@ -45,6 +46,7 @@ function App(): JSX.Element {
                             { path: '/discussions', element: DiscussionOverviewPage },
                             { path: '/discussions/:slug', element: DiscussionDetailPage },
                             { path: '/discussions/new', element: CreateDiscussionPage, protected: true },
+                            { path: '/discussions/:slug/edit', element: EditDiscussionPage, protected: true },
                             { path: '/sipers/:hashTag', element: Profile, protected: true },
                             { path: '/me/products', element: Products, protected: true },
                             { path: '/settings', element: Settings, protected: true },

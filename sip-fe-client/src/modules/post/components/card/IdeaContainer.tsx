@@ -72,7 +72,7 @@ export function IdeaContainer(): JSX.Element {
             <InfiniteScroll
                 dataLength={posts.length}
                 next={loadMorePosts}
-                hasMore={true}
+                hasMore={isLoading}
                 loader={<Spin />}
             >
                 {

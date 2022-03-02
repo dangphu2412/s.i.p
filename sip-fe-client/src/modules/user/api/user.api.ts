@@ -6,6 +6,7 @@ export interface Author  {
     fullName: string;
     avatar: string;
     headline: string;
+    createdAt?: Date;
 }
 
 export interface ProfileDetail extends Profile {

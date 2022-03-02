@@ -1,23 +1,23 @@
-import { UrlProvider } from './../../../url/url.provider';
-import { SlugUtils } from './../../utils/slug';
-import { Comment } from '@comment/entities/comment.entity';
-import { Post } from '@post/post.entity';
-import { Topic } from '@topic/topic.entity';
-import { User } from '@user/user.entity';
-import { Vote } from '@vote/entities/vote.entity';
-import { In, MigrationInterface, QueryRunner } from 'typeorm';
-import * as samplePosts from '../data/posts/index.json';
-import * as sampleTopics from '../data/topics/index.json';
-import * as sampleComments from '../data/comments/index.json';
-import { IterateFactory } from '@database/utils/iterate-factory';
-import { Permission } from '@permission/permission.entity';
 import { AccessRights } from '@constants/access-rights.enum';
+import { IterateFactory } from '@database/utils/iterate-factory';
 import { MediaService } from '@media/media.service';
+import { Permission } from '@permission/permission.entity';
 import {
   PostStatus,
   PricingType,
   ProductRunningStatus,
 } from '@post/enums/post-status.enum';
+import { Post } from '@post/post.entity';
+import { Topic } from '@topic/topic.entity';
+import { User } from '@user/user.entity';
+import { Vote } from '@vote/entities/vote.entity';
+import { random } from 'faker';
+import { keyBy } from 'lodash';
+import { In, MigrationInterface, QueryRunner } from 'typeorm';
+import * as samplePosts from '../data/posts/index.json';
+import * as sampleTopics from '../data/topics/index.json';
+import { UrlProvider } from './../../../url/url.provider';
+import { SlugUtils } from './../../utils/slug';
 
 export class initProductionData1646194432244 implements MigrationInterface {
   private notAdmin(access: keyof typeof AccessRights.RootAccess): boolean {
@@ -33,23 +33,23 @@ export class initProductionData1646194432244 implements MigrationInterface {
   }
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const MAX_VOTE = 30;
+
     const postRepository = queryRunner.connection.getRepository(Post);
-    const topicRepository = queryRunner.connection.getRepository(Topic);
     const userRepository = queryRunner.connection.getRepository(User);
-    const commentRepository = queryRunner.connection.getRepository(Comment);
     const voteRepository = queryRunner.connection.getRepository(Vote);
     const mediaService = new MediaService(null, null, new UrlProvider());
 
     const commonPermissions = await this.getCommonPermissions(queryRunner);
-    const users: Map<string, User> = new Map();
+    const userKeyByName: Map<string, User> = new Map();
     for (let i = 0; i < 30; i++) {
       const user = IterateFactory.createUser(i, commonPermissions);
-      users.set(user.fullName, user);
+      userKeyByName.set(user.fullName, user);
     }
 
     /**
      * - Create topics first (/)
-     * - Initial post entities
+     * - Initial post entities (/)
      * - Insert makers to  database if exist or not (/)
      * - See the voteCount of post
      *  -> Check if it reach max: if yes, set it to max 30
@@ -68,7 +68,8 @@ export class initProductionData1646194432244 implements MigrationInterface {
     await queryRunner.connection.getRepository(Topic).insert(topics);
     topics = undefined; // RELEASE THE OBJECT
 
-    const posts: Post[] = [];
+    let posts: Post[] = [];
+    const votes: Vote[] = [];
 
     samplePosts.data.posts.edges.forEach(({ node }) => {
       const post = new Post();
@@ -98,7 +99,7 @@ export class initProductionData1646194432244 implements MigrationInterface {
         : '';
 
       post.makers = node.makers.map((maker) => {
-        if (!users.has(maker.name)) {
+        if (!userKeyByName.has(maker.name)) {
           const slug = SlugUtils.normalize(maker.name);
           const user = new User();
           user.fullName = maker.name;
@@ -109,24 +110,51 @@ export class initProductionData1646194432244 implements MigrationInterface {
           user.headline = maker.headline || '';
           user.permissions = commonPermissions;
           user.password = '';
-          users.set(user.fullName, user);
+          userKeyByName.set(user.fullName, user);
         }
-        return users.get(maker.name);
+        return userKeyByName.get(maker.name);
       });
+
+      if (node.votesCount > MAX_VOTE) {
+        node.votesCount = MAX_VOTE;
+      }
+
+      for (let i = 0; i < node.votesCount; i++) {
+        const vote = new Vote();
+        vote.post = post;
+        vote.isVoted = true;
+        votes.push(vote);
+      }
+
       posts.push(post);
     });
-    const newUsers = await userRepository.save(Array.from(users.values()));
+    let users = Array.from(userKeyByName.values());
 
-    newUsers.forEach((user) => {
-      users.set(user.fullName, user);
+    users = await userRepository.save(users, {
+      chunk: 10,
+    });
+
+    users.forEach((user) => {
+      userKeyByName.set(user.fullName, user);
     });
 
     posts.forEach((post) => {
-      post.makers = post.makers.map((user) => users.get(user.fullName));
+      post.makers = post.makers.map((user) => userKeyByName.get(user.fullName));
       post.author = post.makers[0];
     });
+    const voteKeyByUniquePair: Map<string, Vote> = new Map();
 
-    await postRepository.save(posts);
+    posts = await postRepository.save(posts);
+    const postKeyByTitle = keyBy(posts, 'title');
+    votes.forEach((vote) => {
+      const author = random.arrayElement(users);
+      vote.post = postKeyByTitle[vote.post.title];
+      vote.author = author;
+      voteKeyByUniquePair.set(`${vote.post.id}-${author.id}`, vote);
+    });
+    await voteRepository.save(Array.from(voteKeyByUniquePair.values()), {
+      chunk: 20,
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
