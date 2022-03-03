@@ -65,8 +65,7 @@ export class initProductionData1646194432244 implements MigrationInterface {
       topic.createdAt = new Date(node.createdAt);
       return topic;
     });
-    await queryRunner.connection.getRepository(Topic).insert(topics);
-    topics = undefined; // RELEASE THE OBJECT
+    topics = await queryRunner.connection.getRepository(Topic).save(topics);
 
     let posts: Post[] = [];
     const votes: Vote[] = [];
@@ -141,6 +140,7 @@ export class initProductionData1646194432244 implements MigrationInterface {
     posts.forEach((post) => {
       post.makers = post.makers.map((user) => userKeyByName.get(user.fullName));
       post.author = post.makers[0];
+      post.topics = [random.arrayElement(topics)];
     });
     const voteKeyByUniquePair: Map<string, Vote> = new Map();
 

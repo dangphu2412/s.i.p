@@ -11,7 +11,6 @@ import { ClientLayout } from 'src/layouts/client/ClientLayout';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
 import { cleanData } from 'src/modules/data/data.action';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
-import { selectLoading } from 'src/modules/loading/loading.selector';
 import { Page } from 'src/modules/query/interface';
 import { TopicWithFollowStatus } from 'src/modules/topic/api/topic.api';
 import { TopicCard } from 'src/modules/topic/components/TopicCard';
@@ -21,7 +20,7 @@ import { TopicActions } from 'src/modules/topic/topic.action';
 export function TopicOverviewPage(): JSX.Element {
     const dispatch = useDispatch();
     const [filterSelected, setFilterSelected] = useState<GetTopicType>(GetTopicType.TRENDING);
-    const isLoading = useSelector(selectLoading);
+    const [isLoading, setIsLoading] = useState(false);
     const [topics, setTopics] = useState<TopicWithFollowStatus[]>([]);
     const [page, setPage] = useState<Page>({
         page: 1,
@@ -33,6 +32,7 @@ export function TopicOverviewPage(): JSX.Element {
     const authState = useSelector(selectAuthState);
 
     useEffect(() => {
+        setIsLoading(true);
         const resetPage = {
             page: 1,
             size: 20
@@ -48,6 +48,7 @@ export function TopicOverviewPage(): JSX.Element {
             sorts: [],
             page: resetPage
         }));
+        setIsLoading(false);
 
         return () => {
             dispatch(cleanData(VIEW_SELECTOR.SEARCH_TOPIC));
@@ -61,6 +62,7 @@ export function TopicOverviewPage(): JSX.Element {
     }, [topicDataHolder]);
 
     function loadMore() {
+        setIsLoading(true);
         const newPage = {
             page: page.page + 1,
             size: page.size
@@ -75,6 +77,7 @@ export function TopicOverviewPage(): JSX.Element {
             page: newPage,
             search
         }));
+        setIsLoading(false);
         setPage(newPage);
     }
 
@@ -112,7 +115,7 @@ export function TopicOverviewPage(): JSX.Element {
                             </Title>
                             <div className='p-color'>
                                 Follow your favorite topics to be the first to learn about the newest product arrivals in that space.
-                                You&apos;ll get the most out of Product Hunt if you follow at least three, with notifications about new launches every time you visit.
+                                You&apos;ll get the most out of Side Project if you follow at least three, with notifications about new launches every time you visit.
                             </div>
                             <div className='flex justify-between my-5'>
                                 <Input
@@ -145,7 +148,7 @@ export function TopicOverviewPage(): JSX.Element {
                             <InfiniteScroll
                                 dataLength={topics.length}
                                 next={loadMore}
-                                hasMore={true}
+                                hasMore={isLoading}
                                 loader={<Spin />}
                             >
                                 <List
@@ -161,7 +164,7 @@ export function TopicOverviewPage(): JSX.Element {
                                         />
                                     </Link>}
                                 />
-                                <Skeleton loading={isLoading.isLoading} />
+                                <Skeleton loading={isLoading} />
                             </InfiniteScroll>
                         </Col>
                         <Col span={8}></Col>

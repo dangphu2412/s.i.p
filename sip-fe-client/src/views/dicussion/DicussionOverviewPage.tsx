@@ -29,7 +29,7 @@ export function DiscussionOverviewPage(): JSX.Element {
             >
                 <Container>
                     <Title className='max-w-lg' >
-                        Learn and engage with the Product Hunt community
+                        Learn and engage with the Side Project community
                     </Title>
                     <div className='max-w-lg pb-3'>
                         Before joining or starting a discussion remember to always be civil.

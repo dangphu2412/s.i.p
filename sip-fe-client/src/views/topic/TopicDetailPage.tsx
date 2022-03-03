@@ -201,7 +201,7 @@ export function TopicDetailPage(): JSX.Element {
                             <InfiniteScroll
                                 dataLength={posts.length}
                                 next={loadMore}
-                                hasMore={true}
+                                hasMore={isLoading}
                                 loader={<Spin />}
                             >
                                 {
