@@ -1,8 +1,9 @@
-import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { FilterUtils } from '@external/crud/common/pipes/filter.pipe';
-import { toPage } from '@external/crud/extensions/typeorm-pageable';
+import { PageExtension } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
+import { RuleManager } from '@external/racl/core/rule.manager';
+import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
 import {
   BadRequestException,
   Body,
@@ -22,6 +23,7 @@ import {
   Protected,
 } from 'src/auth/decorator/protected.decorator';
 import { AuthContext } from 'src/auth/decorator/user-cred.decorator';
+import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { InitPostDto } from './dto/init-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FetchDetailType } from './enums/fetch-post-type.enum';
@@ -30,8 +32,6 @@ import { FetchAuthorPostsValidator } from './pipes/author-posts-search.validator
 import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
 import { FetchPostsDetailValidator } from './pipes/post-detail.validator';
 import { PostService } from './post.service';
-import { ExtractRuleManager } from '@external/racl/decorator/get-manager.decorator';
-import { RuleManager } from '@external/racl/core/rule.manager';
 
 @ApiTags('posts')
 @Controller('v1/posts')
@@ -73,7 +73,7 @@ export class PostController {
     @AuthContext() author: UserCredential | undefined,
   ) {
     const posts = await this.postService.findMany(searchQuery, author);
-    return toPage(posts, searchQuery);
+    return PageExtension.toInfinitivePage(posts, searchQuery);
   }
 
   @OptionalProtected
@@ -88,7 +88,7 @@ export class PostController {
       hashTag,
       author,
     );
-    return toPage(posts as [], searchQuery);
+    return PageExtension.toInfinitivePage(posts as [], searchQuery);
   }
 
   @OptionalProtected
@@ -118,7 +118,7 @@ export class PostController {
       slug,
       searchCriteria,
     );
-    return toPage(discussions, searchCriteria);
+    return PageExtension.toInfinitivePage(discussions, searchCriteria);
   }
 
   @Protected

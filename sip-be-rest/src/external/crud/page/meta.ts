@@ -3,6 +3,7 @@ export class Meta {
   public size?: number;
   public pageCount?: number;
   public totalCount?: number;
+  public hasNextPage?: boolean;
   public links?: {
     self?: string;
     first?: string;

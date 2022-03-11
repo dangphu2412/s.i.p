@@ -9,7 +9,7 @@ import { Injectable } from '@nestjs/common';
 export class FetchDiscussionOverviewValidator extends AbstractSearchValidator {
   getSchema(): SearchValidationSchema {
     return {
-      allowFilters: ['type'],
+      allowFilters: ['type', 'hashTag'],
       allowSorts: [],
       filterToMatchingMap: {
         type: (val: any) => Object.values(GetDiscussionType).includes(val),

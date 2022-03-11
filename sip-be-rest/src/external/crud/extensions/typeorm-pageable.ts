@@ -27,3 +27,17 @@ export function toPage<T>(
     size: search.limit,
   });
 }
+
+export const PageExtension = {
+  toInfinitivePage<T>(records: T[] | [T[], number], search: SearchCriteria) {
+    if (records.length > search.limit) {
+      records.pop();
+      const pageable = toPage(records, search);
+      pageable.meta.hasNextPage = true;
+      return pageable;
+    }
+    const pageable = toPage(records, search);
+    pageable.meta.hasNextPage = false;
+    return pageable;
+  },
+};

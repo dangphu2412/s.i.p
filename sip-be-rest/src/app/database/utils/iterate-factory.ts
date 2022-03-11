@@ -1,7 +1,7 @@
-import { SlugUtils } from './../../utils/slug';
 import { Permission } from '@permission/permission.entity';
 import { User } from '@user/user.entity';
-import { internet, name, image, lorem } from 'faker';
+import { internet, lorem, name } from 'faker';
+import { SlugUtils } from './../../utils/slug';
 
 export class IterateFactory {
   public static createUser(i: number, permissions: Permission[]): User {

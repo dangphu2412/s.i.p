@@ -26,6 +26,46 @@ export class DiscussionRepository extends Repository<Discussion> {
       .getMany();
   }
 
+  // TODO: Make data res correct
+  public async findPopular(searchCriteria: SearchCriteria) {
+    return this.createQueryBuilder('discussions')
+      .leftJoinAndSelect('discussions.author', 'author')
+      .loadRelationCountAndMap(
+        'discussions.totalVotes',
+        'discussions.votes',
+        'votes',
+        (qb) => qb.andWhere('votes.isVoted = true'),
+      )
+      .loadRelationCountAndMap(
+        'discussions.totalReplies',
+        'discussions.comments',
+        'comments',
+      )
+      .limit(searchCriteria.limit)
+      .offset(searchCriteria.offset)
+      .getMany();
+  }
+
+  // TODO: Make data res correct
+  public async findByUserHashTag(searchCriteria: SearchCriteria) {
+    return this.createQueryBuilder('discussions')
+      .leftJoinAndSelect('discussions.author', 'author')
+      .loadRelationCountAndMap(
+        'discussions.totalVotes',
+        'discussions.votes',
+        'votes',
+        (qb) => qb.andWhere('votes.isVoted = true'),
+      )
+      .loadRelationCountAndMap(
+        'discussions.totalReplies',
+        'discussions.comments',
+        'comments',
+      )
+      .limit(searchCriteria.limit)
+      .offset(searchCriteria.offset)
+      .getMany();
+  }
+
   public findOneDetailBySlug(slug: string) {
     return this.createQueryBuilder('discussions')
       .leftJoinAndSelect('discussions.author', 'author')

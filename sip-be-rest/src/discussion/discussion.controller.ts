@@ -1,3 +1,4 @@
+import { PageExtension } from './../external/crud/extensions/typeorm-pageable';
 import { UserCredential } from '@auth/client/user-cred';
 import {
   OptionalProtected,
@@ -5,7 +6,6 @@ import {
 } from '@auth/decorator/protected.decorator';
 import { AuthContext } from '@auth/decorator/user-cred.decorator';
 import { CreateCommentDto } from '@comment/dto/create-comment.dto';
-import { toPage } from '@external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
@@ -72,7 +72,7 @@ export class DiscussionController {
       searchCriteria,
       authContext,
     );
-    return toPage(data, searchCriteria);
+    return PageExtension.toInfinitivePage(data, searchCriteria);
   }
 
   @OptionalProtected
@@ -86,7 +86,7 @@ export class DiscussionController {
       slug,
       searchCriteria,
     );
-    return toPage(data, searchCriteria);
+    return PageExtension.toInfinitivePage(data, searchCriteria);
   }
 
   @OptionalProtected

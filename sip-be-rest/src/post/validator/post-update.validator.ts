@@ -1,4 +1,4 @@
-import { ProductRunningStatus, PostStatus } from '@post/enums/post-status.enum';
+import { Assert } from '@external/error/error-assertion';
 import { ArrayUtils } from '@external/utils/array/array.utils';
 import {
   ConflictException,
@@ -6,10 +6,10 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { UpdatePostDto } from '@post/dto/update-post.dto';
+import { ProductRunningStatus } from '@post/enums/post-status.enum';
 import { Post } from '@post/post.entity';
 import { PostRepository } from '@post/post.repository';
 import { Comparable } from '@validator/validator-handler';
-import { Assert } from '@external/error/error-assertion';
 
 @Injectable()
 export class PostUpdateValidator implements Comparable<Post, UpdatePostDto> {

@@ -123,24 +123,47 @@ export class DiscussionService {
     searchCriteria: SearchCriteria,
     authContext: UserCredential | undefined,
   ): Promise<DiscussionOverview> {
-    const getType = FilterUtils.get(searchCriteria.filters, 'type');
     let discussions: DiscussionOverview;
-    switch (getType) {
-      case GetDiscussionType.NEW:
-        discussions = await this.discussionRepository.findLatest(
-          searchCriteria,
-        );
-        break;
-      case GetDiscussionType.POPULAR:
-        discussions = [];
-        break;
-      default:
-        throw new BadRequestException('Unexpected get type');
+
+    const getType = FilterUtils.get(searchCriteria.filters, 'type');
+    const userHashtag = FilterUtils.get(searchCriteria.filters, 'hashTag');
+
+    if (userHashtag) {
+      discussions = await this.discussionRepository.findByUserHashTag(
+        searchCriteria,
+      );
+    } else {
+      switch (getType) {
+        case GetDiscussionType.NEW:
+          discussions = await this.discussionRepository.findLatest(
+            searchCriteria,
+          );
+          break;
+        case GetDiscussionType.POPULAR:
+          discussions = await this.discussionRepository.findPopular(
+            searchCriteria,
+          );
+          break;
+        default:
+          throw new BadRequestException('Unexpected get type');
+      }
     }
+
     const user: User | null = authContext
       ? await this.userService.findById(+authContext.userId)
       : null;
     await this.markIsVotedByAuthor(discussions, user);
+    if (userHashtag && user) {
+      return discussions.map((discussion) => {
+        const canModify = user.hashTag === userHashtag;
+        return {
+          ...discussion,
+          canDelete: canModify,
+          canUpdate: canModify,
+          readonly: !canModify,
+        };
+      });
+    }
     return discussions;
   }
 
