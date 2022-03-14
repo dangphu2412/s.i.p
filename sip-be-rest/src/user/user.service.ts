@@ -151,6 +151,12 @@ export class UserService {
     });
   }
 
+  public async findByIdWithFollowedIdeas(id: number) {
+    return this.userRepository.findOne(id, {
+      relations: ['followedIdeas'],
+    });
+  }
+
   public findByIds(ids: string[]) {
     return this.userRepository.find({
       where: {

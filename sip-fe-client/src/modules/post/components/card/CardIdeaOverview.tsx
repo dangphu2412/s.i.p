@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Button, Card, List } from 'antd';
-import Title from 'antd/lib/typography/Title';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
@@ -40,9 +39,7 @@ export function CardIdeaOverview({ data, authType }: CardItemOverviewProps): JSX
                 <div className='flex justify-between items-center'>
                     <List.Item.Meta
                         avatar={<Avatar shape='square' size={86} src={data.thumbnail} />}
-                        title={<Title level={4}>
-                            {data.title}
-                        </Title>}
+                        title={data.title}
                         description={
                             <div className='mt-3'>
                                 <div>{data.summary}</div>
@@ -60,7 +57,9 @@ export function CardIdeaOverview({ data, authType }: CardItemOverviewProps): JSX
                     />
                     <div className='pr-10'>
                         <Button onClick={handleFollow}>
-
+                            {
+                                followed ? 'Following' : 'Follow'
+                            }
                         </Button>
                     </div>
                 </div>

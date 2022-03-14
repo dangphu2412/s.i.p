@@ -66,6 +66,15 @@ export class PostController {
     return this.postService.upsertVoteOfPost(+id, author);
   }
 
+  @Protected
+  @Put('/:id/follow')
+  followIdea(
+    @AuthContext() authContext: UserCredential,
+    @Param('id') id: string,
+  ) {
+    return this.postService.followIdea(id, authContext);
+  }
+
   @OptionalProtected
   @Get()
   async findMany(
@@ -73,6 +82,16 @@ export class PostController {
     @AuthContext() author: UserCredential | undefined,
   ) {
     const posts = await this.postService.findMany(searchQuery, author);
+    return PageExtension.toInfinitivePage(posts, searchQuery);
+  }
+
+  @OptionalProtected
+  @Get('/ideas')
+  async findIdeas(
+    @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
+    @AuthContext() author: UserCredential | undefined,
+  ) {
+    const posts = await this.postService.findIdeas(searchQuery, author);
     return PageExtension.toInfinitivePage(posts, searchQuery);
   }
 

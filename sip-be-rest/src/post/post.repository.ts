@@ -137,4 +137,21 @@ export class PostRepository extends Repository<Post> {
       },
     });
   }
+
+  public toggleFollow(idea: Post, user: User) {
+    const isFollowed = user.followedIdeas.some(
+      (followedIdea) => followedIdea.id === idea.id,
+    );
+
+    if (isFollowed) {
+      return this.createQueryBuilder('posts')
+        .relation(Post, 'followers')
+        .of(idea)
+        .remove(user);
+    }
+    return this.createQueryBuilder('posts')
+      .relation(Post, 'followers')
+      .of(idea)
+      .add(user);
+  }
 }

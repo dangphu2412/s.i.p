@@ -8,7 +8,7 @@ import { Query } from '../query/interface';
 import { fireMessage } from '../message/message.action';
 import { PatchPostDetail, UpdatePostDto } from './api/post.api';
 import { PostActions, PostDetailRequest } from './post.action';
-import { deleteDraftPost, getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
+import { deleteDraftPost, getIdeas, getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
 
 export function* PostSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
@@ -61,13 +61,9 @@ function* handleFetchPosts(action: PayloadAction<Query>): SagaIterator {
 }
 
 function* handleFetchIdeas(action: PayloadAction<Query>): SagaIterator {
-    const request = getPostsOverview({
+    const request = getIdeas({
         page: action.payload.page,
-        filters: [{
-            column: 'type',
-            comparator: 'eq',
-            value: 'Idea'
-        }],
+        filters: [],
         sorts: []
     });
     const data = yield call(request.handle);

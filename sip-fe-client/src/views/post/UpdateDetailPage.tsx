@@ -332,7 +332,10 @@ export function UpdateDetailPostPage(): JSX.Element {
             icon: <ExclamationCircleOutlined />,
             content: 'You are about to publish this product. Once published, it will be visible to all users.',
             onOk() {
-                dispatch(PostActions.saveData(data));
+                dispatch(PostActions.saveData({
+                    ...data,
+                    status: PostStatus.PUBLISH
+                }));
                 navigate('/');
             }
         });

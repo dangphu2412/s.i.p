@@ -1,6 +1,6 @@
 import { TimeEntityGenerator } from '@database/base/time-entity';
-import { Comment } from 'src/comment/entities/comment.entity';
 import { Vote } from '@vote/entities/vote.entity';
+import { Comment } from 'src/comment/entities/comment.entity';
 import { Topic } from 'src/topic/topic.entity';
 import { User } from 'src/user/user.entity';
 import {
@@ -131,6 +131,20 @@ export class Post extends TimeEntityGenerator() {
     },
   })
   public makers: User[];
+
+  @ManyToMany(() => User, (follower) => follower.followedIdeas)
+  @JoinTable({
+    name: 'ideas_followers',
+    joinColumn: {
+      name: 'posts_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'followers_id',
+      referencedColumnName: 'id',
+    },
+  })
+  public followers: User[];
 
   public static create(partial: Partial<Post>) {
     return Object.assign(new Post(), partial);

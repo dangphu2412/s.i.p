@@ -5,6 +5,7 @@ import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { ArrayMapper } from '@external/mappers/array.mapper';
 import { RuleManager } from '@external/racl/core/rule.manager';
 import { ArrayUtils } from '@external/utils/array/array.utils';
+import { Optional } from '@external/utils/optional/optional.util';
 import { MediaService } from '@media/media.service';
 import {
   BadRequestException,
@@ -156,9 +157,6 @@ export class PostService {
       case FetchPostType.HOTTEST:
         posts = await this.postRepository.findHottestPosts(searchQuery);
         break;
-      case FetchPostType.IDEA:
-        posts = await this.postRepository.findIdeaPosts(searchQuery);
-        break;
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
     }
@@ -168,6 +166,13 @@ export class PostService {
     await this.markAuthorForPosts(posts, user);
 
     return posts;
+  }
+
+  public async findIdeas(
+    searchQuery: SearchCriteria,
+    authContext: UserCredential | undefined,
+  ): Promise<PostOverview> {
+    return this.postRepository.findIdeaPosts(searchQuery);
   }
 
   public async findPostsOfAuthor(
@@ -259,6 +264,27 @@ export class PostService {
       );
     }
     return this.commentService.findCommentsOfPost(post, searchCriteria);
+  }
+
+  public async followIdea(id: string, authContext: UserCredential) {
+    const user = new Optional(
+      await this.userService.findByIdWithFollowedIdeas(+authContext.userId),
+    ).orElseThrow(
+      () => new UnprocessableEntityException('User is not available to follow'),
+    );
+
+    const idea = new Optional(
+      await this.postRepository.findOne(id, {
+        where: {
+          status: PostStatus.PUBLISH,
+          runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+        },
+      }),
+    ).orElseThrow(
+      () => new UnprocessableEntityException('Idea is not available'),
+    );
+
+    await this.postRepository.toggleFollow(idea, user);
   }
 
   public async remove(
@@ -434,8 +460,6 @@ export class PostService {
       posts.forEach((post) => {
         post.isVoted = !!postMap[`${post.id}`];
       });
-
-      return;
     }
 
     posts.forEach((post) => {

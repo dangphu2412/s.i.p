@@ -98,6 +98,20 @@ export class User extends TimeEntityGenerator() {
   @ManyToMany(() => Post, (post) => post.makers)
   public joinedProducts: Post[];
 
+  @ManyToMany(() => Post, (post) => post.makers)
+  @JoinTable({
+    name: 'ideas_followers',
+    joinColumn: {
+      name: 'followers_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'posts_id',
+      referencedColumnName: 'id',
+    },
+  })
+  public followedIdeas: Post[];
+
   static create(partials: Partial<User>) {
     return Object.assign(new User(), partials);
   }

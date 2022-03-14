@@ -14,6 +14,12 @@ export function getPostsOverview(query: Query): RequestProcessor<PostOverview> {
     }));
 }
 
+export function getIdeas(query: Query): RequestProcessor<PostOverview> {
+    return createRequest<PostOverview, Query>(axios.get('/v1/posts/ideas', {
+        params: parseToSearchParams(query)
+    }));
+}
+
 export function getSelfIdeas(hashTag:  string, query: Query): RequestProcessor<PostOverview> {
     return createRequest<PostOverview, Query>(axios.get(`/v1/posts/users/${hashTag}`, {
         params: parseToSearchParams(query)
