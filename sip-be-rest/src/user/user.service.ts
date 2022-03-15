@@ -136,8 +136,8 @@ export class UserService {
     return this.userRepository.findOne(id);
   }
 
-  public async findByIdOrElseThrowNotFoundExp(id: number) {
-    return new Optional(await this.userRepository.findOne(id)).orElseThrow(
+  public async findRequiredUserById(id: number) {
+    return Optional(await this.userRepository.findOne(id)).orElseThrow(
       () =>
         new NotFoundException(
           `User is now not available in the system. Please contact system owner`,

@@ -14,6 +14,8 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { PostRankingStrategy } from '@rank/rank-post.strategy';
+import { RankService } from '@rank/rank.service';
 import { Topic } from '@topic/topic.entity';
 import { TopicService } from '@topic/topic.service';
 import { User } from '@user/user.entity';
@@ -47,6 +49,7 @@ import { PostUpdateValidator } from './validator/post-update.validator';
 export class PostService {
   constructor(
     private readonly postRepository: PostRepository,
+    private readonly rankService: RankService,
     private readonly voteService: VoteService,
     private readonly userService: UserService,
     private readonly topicService: TopicService,
@@ -64,7 +67,7 @@ export class PostService {
       );
     }
 
-    const author = await this.userService.findByIdOrElseThrowNotFoundExp(
+    const author = await this.userService.findRequiredUserById(
       +authContext.userId,
     );
 
@@ -162,8 +165,11 @@ export class PostService {
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
     }
+
+    this.rankService.rank(posts, PostRankingStrategy);
+
     const user: User | null = authContext
-      ? await this.userService.findById(+authContext.userId)
+      ? await this.userService.findRequiredUserById(+authContext.userId)
       : null;
     await this.markAuthorForPosts(posts, user);
 
@@ -270,13 +276,13 @@ export class PostService {
   }
 
   public async followIdea(id: string, authContext: UserCredential) {
-    const user = new Optional(
+    const user = Optional(
       await this.userService.findByIdWithFollowedIdeas(+authContext.userId),
     ).orElseThrow(
       () => new UnprocessableEntityException('User is not available to follow'),
     );
 
-    const idea = new Optional(
+    const idea = Optional(
       await this.postRepository.findOne(id, {
         where: {
           status: PostStatus.PUBLISH,

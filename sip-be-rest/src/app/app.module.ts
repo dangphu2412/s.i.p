@@ -14,6 +14,8 @@ import { RoleModule } from '@role/role.module';
 import { TopicModule } from '@topic/topic.module';
 import { UserModule } from '@user/user.module';
 import { VoteModule } from '@vote/vote.module';
+import { NotificationModule } from 'src/notification/notification.module';
+import { RankModule } from '@rank/rank.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { VoteModule } from '@vote/vote.module';
     DiscussionModule,
     VoteModule,
     ValidatorModule,
+    NotificationModule,
+    RankModule,
   ],
 })
 export class AppModule {}

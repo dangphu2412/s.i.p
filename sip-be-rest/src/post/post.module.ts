@@ -2,6 +2,7 @@ import { CommentModule } from '@comment/comment.module';
 import { MediaModule } from '@media/media.module';
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RankModule } from '@rank/rank.module';
 import { TopicModule } from '@topic/topic.module';
 import { UserModule } from '@user/user.module';
 import { VoteModule } from '@vote/vote.module';
@@ -20,6 +21,7 @@ import { PostUpdateValidator } from './validator/post-update.validator';
     TopicModule,
     CommentModule,
     MediaModule,
+    RankModule,
   ],
   controllers: [PostController],
   providers: [

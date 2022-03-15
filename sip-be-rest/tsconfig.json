@@ -36,6 +36,8 @@
       "@url/*": ["./src/url/*"],
       "@vote/*": ["./src/vote/*"],
       "@validator/*": ["./src/validator/*"],
+      "@rank/*": ["./src/rank/*"],
+      "@notification/*": ["./src/notification/*"],
     }
   }
 }
