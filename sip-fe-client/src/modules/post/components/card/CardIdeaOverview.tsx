@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { openAuthPopupAction } from 'src/modules/auth/auth.action';
 import { AuthType } from 'src/modules/auth/auth.reducer';
 import { IdeaSummary } from '../../api/post.api';
+import { PostActions } from '../../post.action';
 import './index.scss';
 
 export interface VoteState {
@@ -19,7 +20,7 @@ interface CardItemOverviewProps {
 
 export function CardIdeaOverview({ data, authType }: CardItemOverviewProps): JSX.Element {
     const dispatch = useDispatch();
-    const [followed, setFollowed] = useState<boolean>(false);
+    const [followed, setFollowed] = useState<boolean>(data.isFollowed);
 
     function handleFollow(e: React.MouseEvent<HTMLElement, MouseEvent>) {
         e.preventDefault();
@@ -27,6 +28,7 @@ export function CardIdeaOverview({ data, authType }: CardItemOverviewProps): JSX
             dispatch(openAuthPopupAction());
             return;
         }
+        dispatch(PostActions.followIdeaById(data.id));
         setFollowed(!followed);
     }
 

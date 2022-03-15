@@ -36,63 +36,6 @@ interface GalleryItem {
     thumbnail: string;
 }
 
-const followers = [
-    {
-        id: '1',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '2',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '3',
-        avatar: 'https://joeschmoe.io/api/v1/random'
-    },
-    {
-        id: '4',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '5',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '6',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '7',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '8',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '9',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '10',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-    {
-        id: '11',
-        avatar: 'https://joeschmoe.io/api/v1/random',
-        fullName: 'Fus dep trai'
-    },
-];
-
 export function PostDetailPage(): JSX.Element {
     const dispatch = useDispatch();
     const { slug } = useParams();
@@ -122,6 +65,7 @@ export function PostDetailPage(): JSX.Element {
             totalVotes: 0,
             videoLink: '',
             videoThumbnail: '',
+            followers: [],
         }
     );
     const [vote, setVote] = useState<VoteState>({
@@ -338,7 +282,7 @@ export function PostDetailPage(): JSX.Element {
 
                             <Row className='my-5 grid grid-cols-4 gap-3'>
                                 {
-                                    followers.map(follower => {
+                                    postDetail.followers.map(follower => {
                                         return (
                                             <Tooltip
                                                 key={follower.id}

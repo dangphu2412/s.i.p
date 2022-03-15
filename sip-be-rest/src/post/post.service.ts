@@ -25,6 +25,8 @@ import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 import { UserService } from 'src/user/user.service';
+import { In } from 'typeorm';
+import { Idea } from './client/ideas.api';
 import { EditablePostView } from './client/post-editable';
 import { PostOverview } from './client/post-overview.api';
 import { InitPostDto } from './dto/init-post.dto';
@@ -171,8 +173,9 @@ export class PostService {
   public async findIdeas(
     searchQuery: SearchCriteria,
     authContext: UserCredential | undefined,
-  ): Promise<PostOverview> {
-    return this.postRepository.findIdeaPosts(searchQuery);
+  ): Promise<Idea[]> {
+    const ideas = await this.postRepository.findIdeaPosts(searchQuery);
+    return this.mapFollowedByIdeas(ideas, authContext);
   }
 
   public async findPostsOfAuthor(
@@ -219,7 +222,7 @@ export class PostService {
       where: {
         slug,
       },
-      relations: ['author', 'topics', 'makers'],
+      relations: ['author', 'topics', 'makers', 'followers'],
     });
 
     if (!post) {
@@ -277,7 +280,10 @@ export class PostService {
       await this.postRepository.findOne(id, {
         where: {
           status: PostStatus.PUBLISH,
-          runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+          runningStatus: In([
+            ProductRunningStatus.LOOKING_FOR_MEMBERS,
+            ProductRunningStatus.IDEA,
+          ]),
         },
       }),
     ).orElseThrow(
@@ -480,6 +486,34 @@ export class PostService {
         canDelete: canModify,
         canUpdate: canModify,
         readonly: !canModify,
+      };
+    });
+  }
+
+  private async mapFollowedByIdeas(
+    ideas: Post[],
+    authContext: UserCredential | undefined,
+  ): Promise<Idea[]> {
+    if (authContext) {
+      const user = await this.userService.findByIdWithFollowedIdeas(
+        +authContext.userId,
+      );
+      if (!user) {
+        throw new UnprocessableEntityException('User is not available');
+      }
+
+      const ideaKeyMap = keyBy(user.followedIdeas, 'id');
+      return ideas.map((idea: Post) => {
+        return {
+          ...idea,
+          isFollowed: !!ideaKeyMap[`${idea.id}`],
+        };
+      });
+    }
+    return ideas.map((idea) => {
+      return {
+        ...idea,
+        isFollowed: false,
       };
     });
   }

@@ -73,23 +73,16 @@ export class PostRepository extends Repository<Post> {
   }
 
   public findIdeaPosts(searchCriteria: SearchCriteria) {
-    return <Promise<PostOverview>>this.createQueryBuilder('posts')
+    return this.createQueryBuilder('posts')
       .leftJoinAndSelect('posts.author', 'author')
       .leftJoinAndSelect('posts.topics', 'topics')
-      .loadRelationCountAndMap(
-        'posts.totalVotes',
-        'posts.votes',
-        'votes',
-        (qb) => qb.andWhere('votes.isVoted = true'),
-      )
-      .loadRelationCountAndMap(
-        'posts.totalReplies',
-        'posts.comments',
-        'comments',
-      )
-      .where('posts.running_status = :runningStatus', {
-        runningStatus: ProductRunningStatus.LOOKING_FOR_MEMBERS,
+      .where('posts.running_status IN (:...runningStatus)', {
+        runningStatus: [
+          ProductRunningStatus.LOOKING_FOR_MEMBERS,
+          ProductRunningStatus.IDEA,
+        ],
       })
+      .andWhere('posts.status = :status', { status: PostStatus.PUBLISH })
       .orderBy('posts.createdAt', 'DESC')
       .take(searchCriteria.limit)
       .skip(searchCriteria.offset)

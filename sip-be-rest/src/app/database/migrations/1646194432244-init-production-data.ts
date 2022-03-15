@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { AccessRights } from '@constants/access-rights.enum';
 import { IterateFactory } from '@database/utils/iterate-factory';
 import { MediaService } from '@media/media.service';
@@ -157,6 +159,5 @@ export class initProductionData1646194432244 implements MigrationInterface {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async down(queryRunner: QueryRunner): Promise<void> {}
 }

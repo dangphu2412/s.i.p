@@ -74,6 +74,10 @@ export function deleteDraftPost(postId: string): RequestProcessor<void> {
     return createRequest<void, void>(axios.delete('/v1/posts/' + postId));
 }
 
+export function followIdeaById(id: string): RequestProcessor<void> {
+    return createRequest<void, void>(axios.put(`/v1/posts/${id}/follow`));
+}
+
 export function getUploadUrl(): string {
     return `${REACT_APP_API_URL}/v1/media/upload`;
 }

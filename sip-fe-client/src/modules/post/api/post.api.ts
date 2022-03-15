@@ -1,6 +1,6 @@
 import { ProductRunningStatus, PricingType, PostStatus } from './../constants/post-status.enum';
 import { Topic } from '../../topic/api/topic.api';
-import { Author } from '../../user/api/user.api';
+import { Author, User } from '../../user/api/user.api';
 
 export interface PostSummary {
   id: string;
@@ -15,7 +15,7 @@ export interface PostSummary {
   author: Author;
 }
 
-export type IdeaSummary =  (Omit<PostSummary, 'isVoted'> & { followed: boolean });
+export type IdeaSummary =  (Omit<PostSummary, 'isVoted'> & { isFollowed: boolean });
 
 export type PostOverview = PostSummary[];
 
@@ -43,6 +43,7 @@ export interface PostDetail {
   makers: Author[];
   topics: Topic[];
   author: Author;
+  followers: User[];
 
   ranking: string;
 }

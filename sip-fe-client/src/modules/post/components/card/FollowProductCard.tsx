@@ -1,29 +1,29 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Image, Row } from 'antd';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { openAuthPopupAction } from 'src/modules/auth/auth.action';
+import { AuthType } from 'src/modules/auth/auth.reducer';
+import { PostActions } from '../../post.action';
 export interface FollowProductProps {
     id: string;
     title: string;
     summary: string;
-    followed: boolean;
-}
-
-interface FollowState {
-    followed: boolean;
+    isFollowed: boolean;
+    authState: AuthType
 }
 
 export function FollowProductCard(props: FollowProductProps): JSX.Element {
-    const [follow, setFollow] = useState<FollowState>(props.followed ? {
-        followed: props.followed
-    } : {
-        followed: props.followed
-    });
+    const dispatch = useDispatch();
+    const [follow, setFollow] = useState<boolean>(props.isFollowed);
 
     function handleFollowUpComingProduct() {
-        setFollow({
-            followed: !follow.followed
-        });
-        return;
+        if (props.authState !== AuthType.LOGGED_IN) {
+            dispatch(openAuthPopupAction());
+            return;
+        }
+        setFollow(!props.isFollowed);
+        dispatch(PostActions.followIdeaById(props.id));
     }
     return <Row key={props.id} className='mt-5'>
         <Col span={20}>
@@ -37,7 +37,7 @@ export function FollowProductCard(props: FollowProductProps): JSX.Element {
 
             <div className='cursor-pointer' onClick={handleFollowUpComingProduct}>
                 {
-                    follow.followed ?
+                    follow ?
                         <div>
                             <FontAwesomeIcon icon='check-circle' className='mr-3'/>
                             Following

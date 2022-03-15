@@ -8,7 +8,7 @@ import { Query } from '../query/interface';
 import { fireMessage } from '../message/message.action';
 import { PatchPostDetail, UpdatePostDto } from './api/post.api';
 import { PostActions, PostDetailRequest } from './post.action';
-import { deleteDraftPost, getIdeas, getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
+import { deleteDraftPost, followIdeaById, getIdeas, getPatchPostData, getPostDetail, getPostsOverview, getSelfIdeas, updatePostData } from './post.service';
 
 export function* PostSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
@@ -43,6 +43,11 @@ export function* PostSagaTree(): Generator<ForkEffect<never>, void, unknown> {
     yield takeLatest(
         PostActions.deleteDraft.type,
         handleDeletePostDraft
+    );
+
+    yield takeLatest(
+        PostActions.followIdeaById.type,
+        handleFollowIdeaById
     );
 }
 
@@ -138,5 +143,10 @@ function* handleSavePostData(action: PayloadAction<PatchPostDetail>): SagaIterat
 
 function* handleDeletePostDraft(action: PayloadAction<string>): SagaIterator {
     const request = deleteDraftPost(action.payload);
+    yield call(request.handle);
+}
+
+function* handleFollowIdeaById(action: PayloadAction<string>): SagaIterator {
+    const request = followIdeaById(action.payload);
     yield call(request.handle);
 }

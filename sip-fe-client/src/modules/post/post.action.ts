@@ -20,5 +20,6 @@ export const PostActions = {
     getDetailData: createAction<PostDetailRequest>('POST/GET_DETAIL_DATA'),
     getPatchData: createAction<PostDetailRequest>('POST/GET_PATCH_DaTA'),
     saveData: createAction<PatchPostDetail>('POST/SAVE_DATA'),
-    deleteDraft: createAction<string>('POST/DELETE_DRAFT')
+    deleteDraft: createAction<string>('POST/DELETE_DRAFT'),
+    followIdeaById: createAction<string>('POST/FOLLOW_IDEA_BY_ID'),
 };
