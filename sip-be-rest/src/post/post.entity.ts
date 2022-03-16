@@ -82,18 +82,7 @@ export class Post extends TimeEntityGenerator() {
 
   public totalReplies: number;
 
-  @Column({
-    select: false,
-    insert: false,
-    update: false,
-    name: 'total_votes',
-    nullable: true,
-  })
   public totalVotes?: number;
-
-  /**
-   * END VIRTUAL FIELDS
-   */
 
   @ManyToMany(() => Topic, (topic) => topic.posts)
   @JoinTable({

@@ -21,7 +21,7 @@ export function Optional<T>(input: T) {
     return isEmpty(value) ? cb() : value;
   }
   function orElseThrow<E extends Error>(exceptionSupplier: Supplier<E>): T {
-    if (isEmpty(this.value)) {
+    if (isEmpty(value)) {
       throw exceptionSupplier();
     }
     return value;

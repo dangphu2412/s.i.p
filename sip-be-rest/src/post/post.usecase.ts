@@ -7,7 +7,9 @@ import { ArrayUtils } from '@external/utils/array/array.utils';
 import { Optional } from '@external/utils/optional/optional.util';
 import {
   BadRequestException,
+  CACHE_MANAGER,
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -19,6 +21,7 @@ import { SlugUtils } from '@utils/slug';
 import { UpsertVoteDto } from '@vote/dto/upsert-vote.dto';
 import { Vote } from '@vote/entities/vote.entity';
 import { VoteService } from '@vote/vote.service';
+import { Cache } from 'cache-manager';
 import { keyBy } from 'lodash';
 import { UserCredential } from 'src/auth/client/user-cred';
 import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
@@ -52,6 +55,8 @@ export class PostUseCase {
     private readonly commentService: CommentService,
     private readonly postUpdateValidator: PostUpdateValidator,
     private readonly postPublishValidator: PostPublishValidator,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   public async init(initPostDto: InitPostDto, authContext: UserCredential) {
@@ -148,20 +153,19 @@ export class PostUseCase {
         posts = await this.postRepository.findLatestPosts(searchQuery);
         break;
       case FetchPostType.HOTTEST:
-        posts = await this.postRepository.findHottestPosts(searchQuery);
+        posts = await this.postRepository.findLatestPosts(searchQuery);
+        posts = this.doSomething(posts, searchQuery);
         break;
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
     }
 
-    const rankedPosts = this.rankService.rank(posts, PostRankingStrategy);
-
     const user: User | null = authContext
       ? await this.userService.findRequiredUserById(+authContext.userId)
       : null;
-    await this.markAuthorForPosts(rankedPosts, user);
+    await this.markAuthorForPosts(posts, user);
 
-    return rankedPosts;
+    return posts;
   }
 
   public async findIdeas(
@@ -439,10 +443,43 @@ export class PostUseCase {
     });
   }
 
-  private findRequiredPostBySlug(slug: string) {
-    return Optional(this.postRepository.findBySlug(slug)).orElseThrow(
+  private async findRequiredPostBySlug(slug: string) {
+    return Optional(await this.postRepository.findBySlug(slug)).orElseThrow(
       () =>
         new UnprocessableEntityException(`Post with slug ${slug} not found`),
     );
+  }
+
+  // Key posts by createdAt and rank them by their totalVotes and totalReplies
+  private async doSomething(
+    posts: PostOverview,
+    searchQuery: SearchCriteria,
+  ): Promise<PostOverview> {
+    const rankDates = [];
+    const postsKeyByCreatedDate = new Map();
+    posts.forEach((post) => {
+      rankDates.push(post.createdAt);
+      if (postsKeyByCreatedDate.has(post.createdAt)) {
+        postsKeyByCreatedDate.get(post.createdAt).push(post);
+      } else {
+        postsKeyByCreatedDate.set(post.createdAt, [post]);
+      }
+    });
+
+    const ranks = await this.rankService.getByRankDates(rankDates);
+    const rankMap = keyBy(ranks, 'rankDate');
+
+    const result = [];
+
+    for (const [rankDate, value] of postsKeyByCreatedDate) {
+      if (result.length >= searchQuery.limit) {
+        break;
+      }
+
+      // TODO: We may skip computation because we have already computed rank
+
+      result.push(...this.rankService.rank(value, PostRankingStrategy));
+    }
+    return result;
   }
 }

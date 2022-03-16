@@ -12,6 +12,7 @@ export interface PostSummary {
   topics: Topic[];
   author?: User;
   thumbnail: string;
+  createdAt: Date;
   updatedAt: Date;
   status: PostStatus;
 }

@@ -21,9 +21,8 @@ export class PostRankingStrategy implements RankStrategy<PostSummary> {
 
     for (const post of input) {
       const point =
-        post.totalVotes / sumTotalVotes +
-        weightsMap['totalVotes'] +
-        (post.totalReplies / sumTotalReplies + weightsMap['totalReplies']);
+        (post.totalVotes / sumTotalVotes) * weightsMap['totalVotes'] +
+        (post.totalReplies / sumTotalReplies) * weightsMap['totalReplies'];
 
       rankPoints[post.id] = point;
     }
