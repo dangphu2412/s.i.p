@@ -29,9 +29,9 @@ export function ClientNavbar(): JSX.Element {
             if (newWindow?.closed) {
                 clearInterval(interval);
 
-                const profile = localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY));
+                const profileFromStorage = localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY));
 
-                if (!profile) {
+                if (!profileFromStorage) {
                     dispatch(fireMessage({
                         message: 'Cannot login at the moment. Please try again later',
                         type: MessageType.ERROR
@@ -40,13 +40,13 @@ export function ClientNavbar(): JSX.Element {
                 }
 
                 dispatch(loggedInAction({
-                    profile: JSON.parse(profile as string)
+                    profile: JSON.parse(profileFromStorage)
                 }));
                 axios.defaults.headers.common['Authorization'] = window.localStorage.getItem(AuthConfig.get(AuthConfigKeys.AUTH_KEY_KEY)) || '';
-                dispatch(setLoading({ isLoading: false }));
                 location.href = '/';
             }
         }, 5000);
+        dispatch(setLoading({ isLoading: false }));
     }
 
     function onLogout(menuInfo: MenuInfo) {

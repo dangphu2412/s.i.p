@@ -22,4 +22,5 @@ export const DiscussionActions = {
     getDiscussions: createAction<Partial<Query>>('DISCUSSION/GET_DISCUSSIONS'),
     getDiscussionDetail: createAction<string>('DISCUSSION/GET_DISCUSSION_DETAIL'),
     getDiscussionComments: createAction<Partial<Query> & { slug: string }>('DISCUSSION/GET_DISCUSSION_COMMENTS'),
+    deleteDiscussion: createAction<string>('DISCUSSION/DELETE_ONE'),
 };

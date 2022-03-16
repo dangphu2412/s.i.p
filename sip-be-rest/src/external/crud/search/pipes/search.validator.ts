@@ -37,8 +37,9 @@ export abstract class AbstractSearchValidator
       const isNotAccepted = !filters.some(
         (item) =>
           schema.allowFilters.includes(item.column) &&
-          (schema.filterToMatchingMap
-            ? schema?.filterToMatchingMap[item.column](item.value)
+          (schema.filterToMatchingMap &&
+          item.column in schema.filterToMatchingMap
+            ? schema.filterToMatchingMap[item.column](item.value)
             : true),
       );
 

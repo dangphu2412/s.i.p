@@ -9,40 +9,28 @@ import { Comparable } from './../../validator/validator-handler';
 @Injectable()
 export class PostPublishValidator implements Comparable<Post, UpdatePostDto> {
   compare(base: Post, updatePostDto: UpdatePostDto): void {
-    Assert.isTrue(
-      !!updatePostDto.title,
-      () => new UnprocessableEntityException('Missing title to publish'),
-    );
+    Assert.isTrue(!!updatePostDto.title, 'Missing title to publish');
 
-    Assert.isTrue(
-      !!updatePostDto.summary,
-      () => new UnprocessableEntityException('Missing summary to publish'),
-    );
+    Assert.isTrue(!!updatePostDto.summary, 'Missing summary to publish');
 
     Assert.isTrue(
       !!updatePostDto.description,
-      () => new UnprocessableEntityException('Missing description to publish'),
+      'Missing description to publish',
     );
 
     Assert.isTrue(
       !!updatePostDto.socialMedia.thumbnail,
-      () => new UnprocessableEntityException('Missing thumbnail to publish'),
+      'Missing thumbnail to publish',
     );
 
     Assert.isTrue(
       !!updatePostDto.socialMedia.socialPreviewImage,
-      () =>
-        new UnprocessableEntityException(
-          'Missing socialPreviewImage to publish',
-        ),
+      'Missing socialPreviewImage to publish',
     );
 
     Assert.isTrue(
       ArrayUtils.isPresent(updatePostDto.socialMedia.galleryImages),
-      () =>
-        new UnprocessableEntityException(
-          'Missing socialPreviewImage to publish',
-        ),
+      'Missing socialPreviewImage to publish',
     );
 
     if (ArrayUtils.isEmpty(updatePostDto.topicIds)) {
@@ -68,6 +56,12 @@ export class PostPublishValidator implements Comparable<Post, UpdatePostDto> {
           'Missing product link that we cannot find your product',
         );
       }
+    }
+    if (updatePostDto.runningStatus === ProductRunningStatus.RELEASED) {
+      Assert.isTrue(
+        ArrayUtils.isPresent(updatePostDto.makerIds),
+        'Missing makers when release',
+      );
     }
   }
 }

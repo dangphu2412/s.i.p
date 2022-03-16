@@ -8,11 +8,21 @@ import { AuthContext } from '@auth/decorator/user-cred.decorator';
 import { CreateCommentDto } from '@comment/dto/create-comment.dto';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Patch,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DiscussionService } from './discussion.service';
 import { CreateDiscussionDto } from './dto/create-discussion.dto';
 import { FetchDiscussionOverviewValidator } from './pipes/discussion-overview.validator';
+import { UpdateDiscussionDto } from './dto/update-discussion.dto';
 
 @ApiTags('discussions')
 @Controller('v1/discussions')
@@ -105,5 +115,19 @@ export class DiscussionController {
     @AuthContext() authContext: UserCredential,
   ) {
     return this.discussionService.upsertVoteOfDiscussion(+id, authContext);
+  }
+
+  @Protected
+  @Patch('/:id')
+  updateDiscussion(
+    @Param('id') id: string,
+    @Body() updateDiscussionDto: UpdateDiscussionDto,
+  ) {
+    return this.discussionService.updateDiscussion(+id, updateDiscussionDto);
+  }
+
+  @Delete('/:id')
+  deleteDiscussion(@Param('id') id: string) {
+    return this.discussionService.deleteDiscussion(+id);
   }
 }

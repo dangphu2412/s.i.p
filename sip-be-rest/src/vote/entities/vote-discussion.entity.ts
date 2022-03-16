@@ -24,6 +24,7 @@ export class DiscussionVote {
 
   @ManyToOne(() => Discussion, (discussion) => discussion.votes, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'discussion_id' })
   public discussion: Discussion;

@@ -31,12 +31,12 @@ import { PostStatus } from './enums/post-status.enum';
 import { FetchAuthorPostsValidator } from './pipes/author-posts-search.validator';
 import { FetchPostsOverviewValidator } from './pipes/overview-search.validator';
 import { FetchPostsDetailValidator } from './pipes/post-detail.validator';
-import { PostService } from './post.service';
+import { PostUseCase } from './post.usecase';
 
 @ApiTags('posts')
 @Controller('v1/posts')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(private readonly postUseCase: PostUseCase) {}
 
   @Protected
   @Post()
@@ -44,7 +44,7 @@ export class PostController {
     @Body() initPostDto: InitPostDto,
     @AuthContext() authContext: UserCredential,
   ) {
-    return this.postService.init(initPostDto, authContext);
+    return this.postUseCase.init(initPostDto, authContext);
   }
 
   @Protected
@@ -54,7 +54,7 @@ export class PostController {
     @Body() updatePostDto: UpdatePostDto,
     @Query('status') status: PostStatus,
   ) {
-    return this.postService.update(+id, status, updatePostDto);
+    return this.postUseCase.update(+id, status, updatePostDto);
   }
 
   @Protected
@@ -63,7 +63,7 @@ export class PostController {
     @Param('id') id: string,
     @AuthContext() author: UserCredential,
   ) {
-    return this.postService.upsertVoteOfPost(+id, author);
+    return this.postUseCase.upsertVoteOfPost(+id, author);
   }
 
   @Protected
@@ -72,7 +72,7 @@ export class PostController {
     @AuthContext() authContext: UserCredential,
     @Param('id') id: string,
   ) {
-    return this.postService.followIdea(id, authContext);
+    return this.postUseCase.followIdea(id, authContext);
   }
 
   @OptionalProtected
@@ -81,7 +81,8 @@ export class PostController {
     @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
   ) {
-    const posts = await this.postService.findMany(searchQuery, author);
+    PageExtension.setInfinitiveReq(searchQuery);
+    const posts = await this.postUseCase.findMany(searchQuery, author);
     return PageExtension.toInfinitivePage(posts, searchQuery);
   }
 
@@ -91,7 +92,7 @@ export class PostController {
     @SearchQuery(FetchPostsOverviewValidator) searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
   ) {
-    const posts = await this.postService.findIdeas(searchQuery, author);
+    const posts = await this.postUseCase.findIdeas(searchQuery, author);
     return PageExtension.toInfinitivePage(posts, searchQuery);
   }
 
@@ -102,7 +103,8 @@ export class PostController {
     @SearchQuery(FetchAuthorPostsValidator) searchQuery: SearchCriteria,
     @AuthContext() author: UserCredential | undefined,
   ) {
-    const posts = await this.postService.findPostsOfAuthor(
+    PageExtension.setInfinitiveReq(searchQuery);
+    const posts = await this.postUseCase.findPostsOfAuthor(
       searchQuery,
       hashTag,
       author,
@@ -120,9 +122,9 @@ export class PostController {
     const getType = FilterUtils.get(searchCriteria.filters, 'type');
     switch (getType) {
       case FetchDetailType.DETAIL:
-        return this.postService.findOneForDetail(slug, author);
+        return this.postUseCase.findOneForDetail(slug, author);
       case FetchDetailType.EDIT:
-        return this.postService.findOneForEdit(slug);
+        return this.postUseCase.findOneForEdit(slug);
       default:
         throw new BadRequestException('Invalid type to fetch detail post data');
     }
@@ -133,7 +135,8 @@ export class PostController {
     @Param('slug') slug: string,
     @SearchQuery() searchCriteria: SearchCriteria,
   ) {
-    const discussions = await this.postService.findRelatedDiscussions(
+    PageExtension.setInfinitiveReq(searchCriteria);
+    const discussions = await this.postUseCase.findRelatedDiscussions(
       slug,
       searchCriteria,
     );
@@ -147,7 +150,7 @@ export class PostController {
     @Body() createDiscussionDto: CreateCommentDto,
     @AuthContext() author: UserCredential,
   ) {
-    return this.postService.createCommentOfPost(
+    return this.postUseCase.createCommentOfPost(
       slug,
       createDiscussionDto,
       author,
@@ -162,7 +165,7 @@ export class PostController {
     @Body() createDiscussionDto: CreateCommentDto,
     @AuthContext() author: UserCredential,
   ) {
-    return this.postService.createReplyOfPost(
+    return this.postUseCase.createReplyOfPost(
       slug,
       commentId,
       createDiscussionDto,
@@ -177,6 +180,6 @@ export class PostController {
     @AuthContext() authContext: UserCredential,
     @ExtractRuleManager() ruleManager: RuleManager,
   ) {
-    return this.postService.remove(+id, authContext, ruleManager);
+    return this.postUseCase.remove(+id, authContext, ruleManager);
   }
 }

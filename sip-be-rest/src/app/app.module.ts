@@ -7,7 +7,7 @@ import { getTypeOrmModule } from '@config/typeorm.config';
 import { CommentModule } from '@comment/comment.module';
 import { RaclModule } from '@external/racl/rule.module';
 import { MediaModule } from '@media/media.module';
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
 import { PermissionModule } from '@permission/permission.module';
 import { PostModule } from '@post/post.module';
 import { RoleModule } from '@role/role.module';
@@ -36,6 +36,7 @@ import { RankModule } from '@rank/rank.module';
     ValidatorModule,
     NotificationModule,
     RankModule,
+    CacheModule.register(),
   ],
 })
 export class AppModule {}

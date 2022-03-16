@@ -9,8 +9,8 @@ import { VoteModule } from '@vote/vote.module';
 import { PostController } from './post.controller';
 import { PostRepository } from './post.repository';
 import { PostService } from './post.service';
+import { PostUseCase } from './post.usecase';
 import { PostPublishValidator } from './validator/post-publish.validator';
-import { PostReleaseValidator } from './validator/post-release.validatot';
 import { PostUpdateValidator } from './validator/post-update.validator';
 
 @Module({
@@ -25,12 +25,12 @@ import { PostUpdateValidator } from './validator/post-update.validator';
   ],
   controllers: [PostController],
   providers: [
+    PostUseCase,
     PostService,
     Logger,
     PostUpdateValidator,
     PostPublishValidator,
-    PostReleaseValidator,
   ],
-  exports: [PostService],
+  exports: [PostUseCase],
 })
 export class PostModule {}

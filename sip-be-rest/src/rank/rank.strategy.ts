@@ -1,4 +1,4 @@
 export interface RankStrategy<T> {
-  getProperties(): string[];
+  getWeights(): Record<string, number>;
   compute(input: T[]): T[];
 }

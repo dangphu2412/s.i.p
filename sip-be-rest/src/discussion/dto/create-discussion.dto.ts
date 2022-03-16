@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateDiscussionDto {
   @ApiProperty()
@@ -7,7 +7,5 @@ export class CreateDiscussionDto {
   public title: string;
 
   @ApiProperty()
-  @IsOptional()
-  @IsString()
   public content: string;
 }

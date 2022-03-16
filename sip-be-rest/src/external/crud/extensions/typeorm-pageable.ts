@@ -30,7 +30,7 @@ export function toPage<T>(
 
 export const PageExtension = {
   toInfinitivePage<T>(records: T[] | [T[], number], search: SearchCriteria) {
-    if (records.length > search.limit) {
+    if (records.length > search.initialLimit) {
       records.pop();
       const pageable = toPage(records, search);
       pageable.meta.hasNextPage = true;
@@ -39,5 +39,9 @@ export const PageExtension = {
     const pageable = toPage(records, search);
     pageable.meta.hasNextPage = false;
     return pageable;
+  },
+
+  setInfinitiveReq(search: SearchCriteria) {
+    search.limit += 1;
   },
 };

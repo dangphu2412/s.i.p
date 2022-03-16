@@ -8,7 +8,7 @@ import { fireMessage } from '../message/message.action';
 import { Query } from '../query/interface';
 import { CreateDiscussionDto, UpdateDiscussionDto } from './api/discussion.api';
 import { CreatCommentDto, CreatReplyDto as CreateReplyDto, DiscussionActions } from './discussion.action';
-import { createComment, createDiscussion, createDiscussionComment, createDiscussionCommentReply, createReply, getDiscussionComments, getDiscussionDetail, getDiscussions, getPostComments, updateDiscussion } from './discussion.service';
+import { createComment, createDiscussion, createDiscussionComment, createDiscussionCommentReply, createReply, deleteDiscussion, getDiscussionComments, getDiscussionDetail, getDiscussions, getPostComments, updateDiscussion } from './discussion.service';
 
 export function* DiscussionSagaTree(): SagaIterator {
     yield takeLatest(
@@ -61,6 +61,11 @@ export function* DiscussionSagaTree(): SagaIterator {
         handleGetDiscussionComments
     );
 
+    yield takeLatest(
+        DiscussionActions.deleteDiscussion,
+        handleDeleteDiscussion
+    );
+
 }
 
 function* handleCommentCreation(action: PayloadAction<CreatCommentDto>): SagaIterator {
@@ -101,11 +106,8 @@ function* handleDiscussionCommentReplyCreation(action: PayloadAction<CreateReply
 
 function* handleUpdateDiscussion(action: PayloadAction<UpdateDiscussionDto>): SagaIterator {
     const request = updateDiscussion(action.payload.id, action.payload);
-    const data = yield call(request.handle);
-    yield put(saveData({
-        data,
-        view: VIEW_SELECTOR.CREATE_REPLY
-    }));
+    yield call(request.handle);
+
     if (request.isSuccess()) {
         yield put(fireMessage({
             type: MessageType.SUCCESS,
@@ -159,5 +161,14 @@ function* handleGetDiscussionComments(action: PayloadAction<Partial<Query> & { s
     yield put(saveData({
         data: data.data,
         view: VIEW_SELECTOR.FIND_DISCUSSION_COMMENTS
+    }));
+}
+
+function* handleDeleteDiscussion(action: PayloadAction<string>) {
+    const request = deleteDiscussion(action.payload);
+    yield call(request.handle);
+    yield put(saveData({
+        data: 'DELETE_SUCCESS',
+        view: VIEW_SELECTOR.DISCUSSION_CHANGE
     }));
 }

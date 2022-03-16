@@ -1,3 +1,4 @@
+import { PageExtension } from './../external/crud/extensions/typeorm-pageable';
 import { SearchCriteria } from '@external/crud/search/core/search-criteria';
 import { SearchQuery } from '@external/crud/search/decorator/search.decorator';
 import { Controller, Get, Param, Patch } from '@nestjs/common';
@@ -18,11 +19,13 @@ export class TopicController {
 
   @Get()
   @OptionalProtected
-  findMany(
+  async findMany(
     @SearchQuery(FetchTopicsOverviewValidator) searchQuery: SearchCriteria,
     @AuthContext() authContext: UserCredential | undefined,
   ) {
-    return this.topicService.findMany(searchQuery, authContext);
+    PageExtension.setInfinitiveReq(searchQuery);
+    const data = await this.topicService.findMany(searchQuery, authContext);
+    return PageExtension.toInfinitivePage(data, searchQuery);
   }
 
   @Get(':slug')

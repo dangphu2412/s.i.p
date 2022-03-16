@@ -216,4 +216,29 @@ export class UserService {
     user.permissions = permissions;
     await this.userRepository.save(user);
   }
+
+  public splitAuthorAndUsers(
+    authorId: string,
+    users: User[],
+  ): [User | null, User[]] {
+    if (!authorId) {
+      return [null, users];
+    }
+
+    if (users.length === 1 && users[0].id === authorId) {
+      return [users[0], users];
+    }
+
+    return users.reduce(
+      (result, user) => {
+        if (user.id === authorId) {
+          result[0] = user;
+        } else {
+          result[1].push(user);
+        }
+        return result;
+      },
+      [null, []],
+    );
+  }
 }

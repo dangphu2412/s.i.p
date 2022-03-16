@@ -1,3 +1,4 @@
+import { Optional } from './../external/utils/optional/optional.util';
 import { UserCredential } from '@auth/client/user-cred';
 import { CommentService } from '@comment/comment.service';
 import { CreateCommentDto } from '@comment/dto/create-comment.dto';
@@ -22,6 +23,7 @@ import { GetDiscussionType } from './constants/get-discussion-type.enum';
 import { Discussion } from './discussion.entity';
 import { DiscussionRepository } from './discussion.repository';
 import { CreateDiscussionDto } from './dto/create-discussion.dto';
+import { UpdateDiscussionDto } from './dto/update-discussion.dto';
 
 @Injectable()
 export class DiscussionService {
@@ -37,10 +39,6 @@ export class DiscussionService {
     authContext: UserCredential,
   ) {
     createDiscussionDto.content = createDiscussionDto.content.trim();
-
-    if (!createDiscussionDto.content) {
-      throw new BadRequestException('Content of discussion can not be empty');
-    }
 
     const discussion = new Discussion();
 
@@ -130,6 +128,7 @@ export class DiscussionService {
 
     if (userHashtag) {
       discussions = await this.discussionRepository.findByUserHashTag(
+        userHashtag,
         searchCriteria,
       );
     } else {
@@ -214,6 +213,34 @@ export class DiscussionService {
     voteDto.discussion = discussion;
 
     return this.voteService.upsertForDiscussionVote(voteDto);
+  }
+
+  public async updateDiscussion(
+    id: number,
+    updateDiscussionDto: UpdateDiscussionDto,
+  ) {
+    const discussion = Optional(
+      await this.discussionRepository.findOne(id),
+    ).orElseThrow(
+      () => new NotFoundException(`Cannot find discussion with id: ${id}`),
+    );
+
+    discussion.title = updateDiscussionDto.title;
+    discussion.content = updateDiscussionDto.content;
+
+    return this.discussionRepository.save(discussion);
+  }
+
+  public async deleteDiscussion(id: number) {
+    return this.discussionRepository.remove(
+      Optional(
+        await this.discussionRepository.findOne(id, {
+          relations: ['votes'],
+        }),
+      ).orElseThrow(
+        () => new NotFoundException(`Cannot find discussion with id: ${id}`),
+      ),
+    );
   }
 
   private async markIsVotedByAuthor(

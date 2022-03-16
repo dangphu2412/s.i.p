@@ -29,7 +29,7 @@ function* handleSearchTopics(action: PayloadAction<Query>): SagaIterator {
     const request = searchTopics(action.payload);
     const data = yield call(request.handle);
     yield put(saveData({
-        data,
+        data: data.data,
         view: VIEW_SELECTOR.SEARCH_TOPIC
     }));
 }

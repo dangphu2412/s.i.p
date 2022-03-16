@@ -47,3 +47,7 @@ export function createDiscussion(createDiscussionDto: CreateDiscussionDto): Requ
 export function updateDiscussion(id: string, updateDiscussionDto: CreateDiscussionDto): RequestProcessor<unknown> {
     return createRequest<unknown, CreateDiscussionDto>(axios.patch(`/v1/discussions/${id}`, updateDiscussionDto));
 }
+
+export function deleteDiscussion(id: string): RequestProcessor<unknown> {
+    return createRequest<unknown, CreateDiscussionDto>(axios.delete(`/v1/discussions/${id}`));
+}

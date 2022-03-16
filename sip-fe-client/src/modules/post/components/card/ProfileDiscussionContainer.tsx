@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
+import { MessageType } from 'src/modules/app.types';
 import { selectAuthState } from 'src/modules/auth/auth.selector';
 import { cleanData } from 'src/modules/data/data.action';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
-import { DiscussionOverview } from 'src/modules/discussion/api/discussion.api';
+import { DiscussionOverviewExtension } from 'src/modules/discussion/api/discussion.api';
 import { DiscussionCard } from 'src/modules/discussion/components/card/DiscussionCard';
 import { DiscussionActions } from 'src/modules/discussion/discussion.action';
+import { fireMessage } from 'src/modules/message/message.action';
 import { Page } from 'src/modules/query/interface';
 import { PostActions } from '../../post.action';
 
@@ -19,7 +21,7 @@ export interface ProfileCardContainerProps {
 export function ProfileDiscussionContainer(props: ProfileCardContainerProps): JSX.Element {
     const dispatch = useDispatch();
 
-    const [discussions, setDiscussions] = useState<DiscussionOverview>([]);
+    const [discussions, setDiscussions] = useState<DiscussionOverviewExtension>([]);
     const [isLoading, setLoading] = useState(false);
     const [page, setPage] = useState<Page>({
         page: 0,
@@ -27,6 +29,7 @@ export function ProfileDiscussionContainer(props: ProfileCardContainerProps): JS
     });
 
     const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_DISCUSSIONS));
+    const changeDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.DISCUSSION_CHANGE));
     const authState = useSelector(selectAuthState);
 
     useEffect(() => {
@@ -36,16 +39,16 @@ export function ProfileDiscussionContainer(props: ProfileCardContainerProps): JS
         setLoading(true);
         dispatch(DiscussionActions.getDiscussions({
             filters: [{
-                column: 'type',
+                column: 'hashTag',
                 comparator: 'eq',
-                value: 'byUserHashTag'
+                value: props.hashTag
             }],
             sorts: [],
             page
         }));
-        setPage((page) => ({
-            ...page,
-            page: page.page + 1
+        setPage((currPage) => ({
+            ...currPage,
+            page: currPage.page + 1
         }));
         setLoading(false);
         return () => {
@@ -60,6 +63,38 @@ export function ProfileDiscussionContainer(props: ProfileCardContainerProps): JS
             ));
         }
     }, [dataHolder]);
+
+    useEffect(() => {
+        if (changeDataHolder?.data) {
+            if (changeDataHolder?.data === 'DELETE_SUCCESS') {
+                setLoading(true);
+                setDiscussions([]);
+                const newPage: Page = {
+                    page: 0,
+                    size: 15
+                };
+                dispatch(DiscussionActions.getDiscussions({
+                    filters: [{
+                        column: 'hashTag',
+                        comparator: 'eq',
+                        value: props.hashTag
+                    }],
+                    sorts: [],
+                    page: newPage
+                }));
+                setPage(newPage);
+                setLoading(false);
+                dispatch(fireMessage({
+                    type: MessageType.SUCCESS,
+                    message: 'Delete success'
+                }));
+            }
+        }
+        return () => {
+            dispatch(cleanData(VIEW_SELECTOR.DISCUSSION_CHANGE));
+        };
+    }, [changeDataHolder]);
+
 
     function loadMore() {
         setLoading(true);
@@ -97,6 +132,11 @@ export function ProfileDiscussionContainer(props: ProfileCardContainerProps): JS
                             {
                                 ...item
                             }
+                            crudExtension={{
+                                canDelete: item.canDelete,
+                                canUpdate: item.canUpdate,
+                                readonly: item.readonly
+                            }}
                         />}
                 >
                     <Skeleton loading={isLoading} />

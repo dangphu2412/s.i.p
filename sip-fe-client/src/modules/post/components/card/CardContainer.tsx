@@ -14,7 +14,6 @@ import { PostActions } from '../../post.action';
 import { FilterDropdown } from '../dropdown/FilterDropdown';
 import { CardItemOverview } from './CardItemOverview';
 
-// UI to load posts
 export function CardContainer(): JSX.Element {
     const dispatch = useDispatch();
 
@@ -23,7 +22,7 @@ export function CardContainer(): JSX.Element {
     const [selectedFilter, setSelectedFilter] = useState<PostFilter>(PostFilter.HOTTEST);
     const [page, setPage] = useState<Page>({
         page: 1,
-        size: 20
+        size: 15
     });
 
     const dataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_OVERVIEW));
@@ -34,7 +33,7 @@ export function CardContainer(): JSX.Element {
         setPosts([]);
         const newPage = {
             page: 1,
-            size: 20
+            size: 15
         };
         setPage(newPage);
         dispatch(PostActions.getOverviewData({

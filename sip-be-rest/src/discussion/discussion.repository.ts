@@ -47,7 +47,10 @@ export class DiscussionRepository extends Repository<Discussion> {
   }
 
   // TODO: Make data res correct
-  public async findByUserHashTag(searchCriteria: SearchCriteria) {
+  public async findByUserHashTag(
+    userHashtag: string,
+    searchCriteria: SearchCriteria,
+  ) {
     return this.createQueryBuilder('discussions')
       .leftJoinAndSelect('discussions.author', 'author')
       .loadRelationCountAndMap(
@@ -63,6 +66,9 @@ export class DiscussionRepository extends Repository<Discussion> {
       )
       .limit(searchCriteria.limit)
       .offset(searchCriteria.offset)
+      .where('author.hashTag = :hashTag', {
+        hashTag: userHashtag,
+      })
       .getMany();
   }
 

@@ -1,6 +1,12 @@
 import { Comment } from 'antd';
 import { Author } from 'src/modules/user/api/user.api';
 
+export interface CrudExtension {
+    canUpdate: boolean;
+    canDelete: boolean;
+    readonly: boolean;
+}
+
 export interface Comment {
     id: string;
     updatedAt: string;
@@ -37,6 +43,7 @@ export interface DiscussionSummary {
 }
 
 export type DiscussionOverview = DiscussionSummary[];
+export type DiscussionOverviewExtension = (DiscussionSummary & CrudExtension)[];
 
 export interface DiscussionDetail extends DiscussionSummary {
     content: string;

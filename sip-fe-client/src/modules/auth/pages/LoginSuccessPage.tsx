@@ -30,7 +30,7 @@ export function LoginSuccessPage(): JSX.Element {
                     window.close();
                     return;
                 }
-            
+
                 localStorage.setItem(
                     AuthConfig.get(AuthConfigKeys.AUTH_STATE_KEY),
                     JSON.stringify(authProps)
