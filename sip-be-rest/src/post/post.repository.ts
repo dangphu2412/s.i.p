@@ -35,6 +35,49 @@ export class PostRepository extends Repository<Post> {
     return <Promise<PostOverview>>queryBuilder.getMany();
   }
 
+  public findHottestPosts(searchCriteria: SearchCriteria) {
+    const queryBuilder = this.createQueryBuilder('posts')
+      .addSelect(`post_ordered_by_votes.total_votes as "posts_total_votes"`)
+      .innerJoin(
+        (qb) => {
+          qb.select('posts.id as id, COUNT(votes.id) as total_votes')
+            .from(Post, 'posts')
+            .leftJoin(
+              'votes',
+              'votes',
+              'votes.post_id = posts.id AND votes.is_voted = true',
+            )
+            .where('posts.status = :status', { status: PostStatus.PUBLISH })
+            .groupBy('posts.id')
+            .limit(searchCriteria.limit)
+            .offset(searchCriteria.offset)
+            .orderBy('total_votes', 'DESC');
+          return qb;
+        },
+        'post_ordered_by_votes',
+        'post_ordered_by_votes.id = posts.id',
+      )
+      .leftJoinAndSelect('posts.topics', 'topics')
+      .loadRelationCountAndMap(
+        'posts.totalVotes',
+        'posts.votes',
+        'votes',
+        (qb) => qb.andWhere('votes.isVoted = true'),
+      )
+      .loadRelationCountAndMap(
+        'posts.totalReplies',
+        'posts.comments',
+        'comments',
+      )
+      .orderBy('posts_total_votes', 'DESC');
+
+    if (FilterUtils.has(searchCriteria.filters, 'topicName')) {
+      const topicName = FilterUtils.get(searchCriteria.filters, 'topicName');
+      queryBuilder.where(`topics.name = :topicName`, { topicName });
+    }
+    return <Promise<PostOverview>>queryBuilder.getMany();
+  }
+
   public findIdeaPosts(searchCriteria: SearchCriteria) {
     return this.createQueryBuilder('posts')
       .leftJoinAndSelect('posts.author', 'author')
@@ -76,6 +119,28 @@ export class PostRepository extends Repository<Post> {
       .getMany() as Promise<PostOverview>;
   }
 
+  public findPostsByCreatedDate(createdDate: string) {
+    return <Promise<PostOverview>>this.createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.author', 'author')
+      .leftJoinAndSelect('posts.topics', 'topics')
+      .loadRelationCountAndMap(
+        'posts.totalVotes',
+        'posts.votes',
+        'votes',
+        (qb) => qb.andWhere('votes.isVoted = true'),
+      )
+      .loadRelationCountAndMap(
+        'posts.totalReplies',
+        'posts.comments',
+        'comments',
+      )
+      .where('posts.status = :status', { status: PostStatus.PUBLISH })
+      .andWhere('DATE(posts.createdAt) = :createdDate', {
+        createdDate: createdDate,
+      })
+      .getMany();
+  }
+
   public async isTitleConflict(title: string): Promise<boolean> {
     return (
       (await this.count({
@@ -87,6 +152,14 @@ export class PostRepository extends Repository<Post> {
   }
 
   public findBySlug(slug: string): Promise<Post> {
+    return this.findOne({
+      where: {
+        slug,
+      },
+    });
+  }
+
+  public findWithIdeaFollowersBySlug(slug: string) {
     return this.findOne({
       where: {
         slug,

@@ -12,7 +12,10 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotificationPayload } from '@notification/client/notification-payload';
+import { NotificationService } from '@notification/notification.service';
 import { PermissionService } from '@permission/permission.service';
+import { Post } from '@post/post.entity';
 import { SlugUtils } from '@utils/slug';
 import { isEqual, pick } from 'lodash';
 import { Profile } from 'src/auth/client/login-success';
@@ -32,6 +35,7 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     private readonly permissionService: PermissionService,
     private readonly bcryptService: BcryptService,
+    private readonly notificationService: NotificationService,
   ) {
     this.logger = new Logger(UserService.name);
   }
@@ -165,6 +169,31 @@ export class UserService {
     });
   }
 
+  public async findNotifications(userId: number): Promise<NotificationPayload> {
+    const userWithNotifications = Optional(
+      await this.userRepository.findOne(userId, {
+        relations: ['notifications'],
+      }),
+    ).orElseThrow(
+      () => new UnprocessableEntityException('User is not available'),
+    );
+    const notifications = userWithNotifications.notifications;
+    const unreadNotifications = notifications.filter((i) => !i.isRead);
+    return {
+      notifications: userWithNotifications.notifications,
+      unreadNotifications: unreadNotifications,
+      unreadCount: unreadNotifications.length,
+    };
+  }
+
+  public findPostFollowers(post: Post) {
+    return this.userRepository.find({
+      where: {
+        followedIdeas: [post],
+      },
+    });
+  }
+
   public async updateProfile(userId: number, profile: UpdateProfileDto) {
     const user = await this.userRepository.findOne(userId);
 
@@ -176,6 +205,14 @@ export class UserService {
     user.headline = profile.headline;
     user.fullName = profile.fullName;
     return this.userRepository.save(user);
+  }
+
+  public async updateIsReadNotifications(ids: string[], userId: number) {
+    if (ArrayUtils.isEmpty(ids)) {
+      return;
+    }
+    const user = await this.findRequiredUserById(userId);
+    await this.notificationService.updateIsReadByIds(ids, user);
   }
 
   public save(user: User) {

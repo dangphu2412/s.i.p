@@ -97,6 +97,15 @@ export class TopicService {
     return this.mapFollowedTopicsByAuthor([topic], user)[0];
   }
 
+  public findTopicsWithFollowers(ids: string[]) {
+    return this.topicRepository.find({
+      where: {
+        id: In(ids),
+      },
+      relations: ['followers'],
+    });
+  }
+
   private mapFollowedTopicsByAuthor(
     topics: Topic[],
     author: User | undefined,

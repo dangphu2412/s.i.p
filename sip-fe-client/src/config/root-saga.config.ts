@@ -6,6 +6,7 @@ import { VoteSagaTree } from 'src/modules/vote/vote.saga';
 import { TopicSagaTree } from 'src/modules/topic/topic.saga';
 import { UserSagaTree } from 'src/modules/user/user.saga';
 import { DiscussionSagaTree } from 'src/modules/discussion/discussion.saga';
+import { NotificationSagaTree } from 'src/modules/notification/notification.saga';
 
 export default function* rootSaga(): SagaIterator {
     yield all([
@@ -14,6 +15,7 @@ export default function* rootSaga(): SagaIterator {
         fork(PostSagaTree),
         fork(VoteSagaTree),
         fork(TopicSagaTree),
-        fork(DiscussionSagaTree)
+        fork(DiscussionSagaTree),
+        fork(NotificationSagaTree)
     ]);
 }

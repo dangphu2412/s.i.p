@@ -104,11 +104,17 @@ export class PostUseCase {
       +authContext.userId,
     );
 
-    return this.commentService.createCommentForPost(
-      post,
-      createDiscussionDto,
-      author,
-    );
+    return Promise.all([
+      this.commentService.createCommentForPost(
+        post,
+        createDiscussionDto,
+        author,
+      ),
+      this.postService.sendNewCommentNotificationToFollowersAndAuthor(
+        post,
+        author,
+      )
+    ]);
   }
 
   public async createReplyOfPost(
@@ -153,8 +159,8 @@ export class PostUseCase {
         posts = await this.postRepository.findLatestPosts(searchQuery);
         break;
       case FetchPostType.HOTTEST:
-        posts = await this.postRepository.findLatestPosts(searchQuery);
-        posts = this.doSomething(posts, searchQuery);
+        posts = await this.postRepository.findHottestPosts(searchQuery);
+        posts = await this.getRankedPosts(posts, searchQuery);
         break;
       default:
         throw new BadRequestException('Unsupported filter type to get posts');
@@ -377,7 +383,7 @@ export class PostUseCase {
 
   private async publish(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.postRepository.findOne(id, {
-      relations: ['topics', 'makers'],
+      relations: ['topics', 'makers', 'author'],
     });
 
     if (!post) {
@@ -388,6 +394,10 @@ export class PostUseCase {
     this.postPublishValidator.compare(post, updatePostDto);
 
     await this.postService.updatePost(post, updatePostDto);
+
+    if (post.status !== PostStatus.PUBLISH) {
+      this.postService.sendPublishNotificationToTopicFollowers(post);
+    }
 
     post.status = PostStatus.PUBLISH;
     return this.postRepository.save(post);
@@ -445,40 +455,53 @@ export class PostUseCase {
 
   private async findRequiredPostBySlug(slug: string) {
     return Optional(await this.postRepository.findBySlug(slug)).orElseThrow(
-      () =>
-        new UnprocessableEntityException(`Post with slug ${slug} not found`),
+      () => new UnprocessableEntityException(),
     );
   }
 
   // Key posts by createdAt and rank them by their totalVotes and totalReplies
-  private async doSomething(
+  private async getRankedPosts(
     posts: PostOverview,
     searchQuery: SearchCriteria,
   ): Promise<PostOverview> {
-    const rankDates = [];
-    const postsKeyByCreatedDate = new Map();
+    const postsKeyByCreatedDate = new Map<string, PostOverview>();
     posts.forEach((post) => {
-      rankDates.push(post.createdAt);
-      if (postsKeyByCreatedDate.has(post.createdAt)) {
-        postsKeyByCreatedDate.get(post.createdAt).push(post);
+      const createdDate = post.createdAt.toDateString();
+      if (postsKeyByCreatedDate.has(createdDate)) {
+        postsKeyByCreatedDate.get(createdDate).push(post);
       } else {
-        postsKeyByCreatedDate.set(post.createdAt, [post]);
+        postsKeyByCreatedDate.set(createdDate, [post]);
       }
     });
 
-    const ranks = await this.rankService.getByRankDates(rankDates);
-    const rankMap = keyBy(ranks, 'rankDate');
+    const result: PostOverview = [];
 
-    const result = [];
-
-    for (const [rankDate, value] of postsKeyByCreatedDate) {
+    for (const [rankDate, currentPosts] of postsKeyByCreatedDate.entries()) {
       if (result.length >= searchQuery.limit) {
         break;
       }
 
       // TODO: We may skip computation because we have already computed rank
+      const remainingSize = searchQuery.limit - result.length;
 
-      result.push(...this.rankService.rank(value, PostRankingStrategy));
+      if (currentPosts.length < remainingSize) {
+        result.push(
+          ...this.rankService.rank(currentPosts, PostRankingStrategy),
+        );
+      } else {
+        const fullPostsGetByDate =
+          await this.postRepository.findPostsByCreatedDate(rankDate);
+        const rankedPosts = this.rankService.rank(
+          fullPostsGetByDate,
+          PostRankingStrategy,
+        );
+
+        result.push(
+          ...(rankedPosts.length > remainingSize
+            ? rankedPosts.slice(0, remainingSize)
+            : rankedPosts),
+        );
+      }
     }
     return result;
   }

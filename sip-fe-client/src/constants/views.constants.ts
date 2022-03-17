@@ -14,5 +14,6 @@ export const VIEW_SELECTOR = {
     SEARCH_MAKERS: 'searchUsers',
     CREATE_COMMENT: 'createComment',
     CREATE_REPLY: 'createReply',
-    DISCUSSION_CHANGE: 'discussionChange'
+    DISCUSSION_CHANGE: 'discussionChange',
+    FIND_NOTIFICATION: 'findNotification'
 };

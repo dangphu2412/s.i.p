@@ -16,6 +16,7 @@ import { UserModule } from '@user/user.module';
 import { VoteModule } from '@vote/vote.module';
 import { NotificationModule } from 'src/notification/notification.module';
 import { RankModule } from '@rank/rank.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { RankModule } from '@rank/rank.module';
     NotificationModule,
     RankModule,
     CacheModule.register(),
+    EventEmitterModule.forRoot(),
   ],
 })
 export class AppModule {}

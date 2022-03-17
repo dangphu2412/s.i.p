@@ -16,6 +16,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { DiscussionComment } from '@comment/entities/discussion-comment.entity';
+import { Notification } from '@notification/notification.entity';
 
 @Entity('users')
 export class User extends TimeEntityGenerator() {
@@ -80,6 +81,9 @@ export class User extends TimeEntityGenerator() {
 
   @OneToMany(() => Post, (post) => post.author)
   public posts: Post[];
+
+  @OneToMany(() => Notification, (notification) => notification.receiver)
+  public notifications: Notification[];
 
   @ManyToMany(() => Topic, (topic) => topic.followers)
   @JoinTable({

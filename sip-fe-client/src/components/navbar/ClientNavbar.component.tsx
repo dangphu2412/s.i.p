@@ -14,6 +14,7 @@ import { AuthConfig, AuthConfigKeys } from '../../modules/auth/config/auth.confi
 import { fireMessage } from '../../modules/message/message.action';
 import { setLoading } from '../../modules/loading/loading.action';
 import './index.scss';
+import { DropdownNotification } from 'src/modules/notification/components/DropdownNotification';
 
 export function ClientNavbar(): JSX.Element {
     const dispatch = useDispatch();
@@ -95,6 +96,7 @@ export function ClientNavbar(): JSX.Element {
                 </div>
 
                 <div className='p-right-container f-center' >
+
                     <Dropdown placement='bottomRight' overlay={
                         <Menu>
                             <Menu.Item key="1">
@@ -116,37 +118,42 @@ export function ClientNavbar(): JSX.Element {
                             Let&#39;s hunt
                         </div>
                     </Dropdown>
+
                     {
                         authState === AuthType.LOGGED_IN
-                            ? <Dropdown overlay={
-                                <Menu mode={'horizontal'}>
-                                    <Menu.Item key="2">
-                                        <Link to='/settings'>
+                            ? <>
+                                <DropdownNotification/>
+
+                                <Dropdown overlay={
+                                    <Menu mode={'horizontal'}>
+                                        <Menu.Item key="1">
+                                            <Link to='/settings'>
                                             My settings
-                                        </Link>
-                                    </Menu.Item>
-                                    <Menu.Item key="1">
-                                        <Link to={`/sipers/${profile?.hashTag}`}>
+                                            </Link>
+                                        </Menu.Item>
+                                        <Menu.Item key="2">
+                                            <Link to={`/sipers/${profile?.hashTag}`}>
                                             Profile
-                                        </Link>
-                                    </Menu.Item>
-                                    <Menu.Item key="2">
-                                        <Link to='/me/products'>
+                                            </Link>
+                                        </Menu.Item>
+                                        <Menu.Item key="3">
+                                            <Link to='/me/products'>
                                             My ideas
-                                        </Link>
-                                    </Menu.Item>
-                                    <Menu.Item key="3" onClick={onLogout}>Logout</Menu.Item>
-                                </Menu>
-                            }
-                            >
-                                <Avatar src={
-                                    <Image
-                                        src={profile?.avatar}
-                                        style={{ width: 36 }}
-                                        preview={false}
-                                    />}
-                                />
-                            </Dropdown>
+                                            </Link>
+                                        </Menu.Item>
+                                        <Menu.Item key="4" onClick={onLogout}>Logout</Menu.Item>
+                                    </Menu>
+                                }
+                                >
+                                    <Avatar src={
+                                        <Image
+                                            src={profile?.avatar}
+                                            style={{ width: 36 }}
+                                            preview={false}
+                                        />}
+                                    />
+                                </Dropdown>
+                            </>
                             : <Button
                                 className="ant-dropdown-link btn-bg btn-bg-hover"
                                 shape="circle"

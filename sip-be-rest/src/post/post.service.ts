@@ -2,11 +2,14 @@ import { ArrayMapper } from '@external/mappers/array.mapper';
 import { ArrayUtils } from '@external/utils/array/array.utils';
 import { MediaService } from '@media/media.service';
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Topic } from '@topic/topic.entity';
 import { TopicService } from '@topic/topic.service';
 import { User } from '@user/user.entity';
 import { UserService } from '@user/user.service';
 import { SlugUtils } from '@utils/slug';
+import { SendNotificationEvent } from 'src/events/notification.event';
+import { EventKeys } from './../events/event-keys';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './post.entity';
 
@@ -16,7 +19,36 @@ export class PostService {
     private readonly userService: UserService,
     private readonly topicService: TopicService,
     private readonly mediaService: MediaService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  public async sendNewCommentNotificationToFollowersAndAuthor(
+    post: Post,
+    author: User,
+  ) {
+    const eventMessage: SendNotificationEvent = {
+      receiverIds: post.followers.map((f) => f.id).concat(author.id),
+      title: `User ${author.fullName} has commented on post ${post.title}`,
+      link: `/posts/${post.slug}`,
+    };
+    this.eventEmitter.emit(EventKeys.SEND_NOTIFICATION, eventMessage);
+  }
+
+  public async sendPublishNotificationToTopicFollowers(post: Post) {
+    const topics = await this.topicService.findTopicsWithFollowers(
+      post.topics.map((topic) => topic.id),
+    );
+    topics.forEach((topic) => {
+      const eventMessage: SendNotificationEvent = {
+        receiverIds: topic.followers.map((f) => f.id),
+        title: `New post was published: ${
+          post.title
+        } on ${post.createdAt.toDateString()}`,
+        link: `/posts/${post.slug}`,
+      };
+      this.eventEmitter.emit(EventKeys.SEND_NOTIFICATION, eventMessage);
+    });
+  }
 
   public async updatePost(
     baseData: Post,

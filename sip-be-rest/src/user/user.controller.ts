@@ -15,6 +15,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -50,6 +51,21 @@ export class UserController {
   @Get('/sipers/:hashTag')
   public findDetail(@Param('hashTag') hashTag: string) {
     return this.userService.findDetail(hashTag);
+  }
+
+  @Protected
+  @Get('/notifications')
+  public findNotifications(@AuthContext() authContext: UserCredential) {
+    return this.userService.findNotifications(+authContext.userId);
+  }
+
+  @Protected
+  @Put('/notifications')
+  public updateIsReadNotifications(
+    @AuthContext() authContext: UserCredential,
+    @Body() { ids }: { ids: string[] },
+  ) {
+    return this.userService.updateIsReadNotifications(ids, +authContext.userId);
   }
 
   @Post()
