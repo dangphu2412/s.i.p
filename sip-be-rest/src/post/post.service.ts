@@ -27,7 +27,7 @@ export class PostService {
     author: User,
   ) {
     const eventMessage: SendNotificationEvent = {
-      receiverIds: post.followers.map((f) => f.id).concat(author.id),
+      receiverIds: post.followers.map((f) => f.id).concat(post.author.id),
       title: `User ${author.fullName} has commented on post ${post.title}`,
       link: `/posts/${post.slug}`,
     };
@@ -41,9 +41,7 @@ export class PostService {
     topics.forEach((topic) => {
       const eventMessage: SendNotificationEvent = {
         receiverIds: topic.followers.map((f) => f.id),
-        title: `New post was published: ${
-          post.title
-        } on ${post.createdAt.toDateString()}`,
+        title: `Topic ${topic.name} has a new post: ${post.title}`,
         link: `/posts/${post.slug}`,
       };
       this.eventEmitter.emit(EventKeys.SEND_NOTIFICATION, eventMessage);

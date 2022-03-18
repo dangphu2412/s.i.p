@@ -46,6 +46,7 @@ export interface PostDetail {
   followers: User[];
 
   ranking: string;
+  runningStatus: ProductRunningStatus;
 }
 
 export interface PatchPostDetail {
@@ -67,6 +68,7 @@ export interface PatchPostDetail {
     pricingType: PricingType;
     launchSchedule: Date | null;
     firstComment: string;
+    updatedAt: Date | null
 }
 
 export interface UpdatePostDto extends PatchPostDetail {

@@ -173,6 +173,9 @@ export class UserService {
     const userWithNotifications = Optional(
       await this.userRepository.findOne(userId, {
         relations: ['notifications'],
+        order: {
+          createdAt: 'DESC',
+        },
       }),
     ).orElseThrow(
       () => new UnprocessableEntityException('User is not available'),

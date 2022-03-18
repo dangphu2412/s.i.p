@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
@@ -16,7 +16,7 @@ import { selectDataHolderByView } from 'src/modules/data/data.selector';
 import { CommentContainer } from 'src/modules/discussion/components/CommentContainer';
 import { TopFeatureBadge } from 'src/modules/post/components/badge/TopFeatureBadge';
 import { VoteState } from 'src/modules/post/components/card/CardItemOverview';
-import { PricingType } from 'src/modules/post/constants/post-status.enum';
+import { PricingType, ProductRunningStatus } from 'src/modules/post/constants/post-status.enum';
 import { PostActions } from 'src/modules/post/post.action';
 import { VoteActions } from 'src/modules/vote/vote.action';
 import { ArrayUtils } from 'src/utils/array.utils';
@@ -66,6 +66,7 @@ export function PostDetailPage(): JSX.Element {
             videoLink: '',
             videoThumbnail: '',
             followers: [],
+            runningStatus: ProductRunningStatus.IDEA
         }
     );
     const [vote, setVote] = useState<VoteState>({
@@ -156,9 +157,9 @@ export function PostDetailPage(): JSX.Element {
 
                             <div className='mt-2'>
                                 {postDetail?.topics.map(topic => {
-                                    return (<span key={topic.id}>
+                                    return (<Link to={`/topics/${topic.slug}`} key={topic.id}>
                                         {topic.name}
-                                    </span>);
+                                    </Link>);
                                 })}
                             </div>
                         </Col>
@@ -257,7 +258,7 @@ export function PostDetailPage(): JSX.Element {
                         {/* Vote & connected information */}
                         <Col span={8}  className='pl-5'>
                             <Row className='rounded'>
-                                <Col span={12} className='pr-2'>
+                                <Col span={postDetail.runningStatus === ProductRunningStatus.RELEASED ? 12 : 24 } className='pr-2'>
                                     <Button danger className=' w-full'>
                                         <a href={postDetail.productLink} target='_blank' rel="noreferrer">
                                         Go to product
@@ -265,19 +266,22 @@ export function PostDetailPage(): JSX.Element {
                                     </Button>
                                 </Col>
 
-                                <Col span={12} className='pl-2'>
-                                    <Button
-                                        className={'w-full center ' + (vote.isVoted ? ' btn ' : '')}
-                                        onClick={handleVote}
-                                    >
-                                        {
-                                            vote.isVoted
-                                                ? <CaretUpOutlined/>
-                                                : <CaretDownFilled/>
-                                        }
+                                {
+                                    postDetail.runningStatus === ProductRunningStatus.RELEASED &&
+                                    <Col span={12} className='pl-2'>
+                                        <Button
+                                            className={'w-full center ' + (vote.isVoted ? ' btn ' : '')}
+                                            onClick={handleVote}
+                                        >
+                                            {
+                                                vote.isVoted
+                                                    ? <CaretUpOutlined/>
+                                                    : <CaretDownFilled/>
+                                            }
                                         Vote {vote.voteTotal}
-                                    </Button>
-                                </Col>
+                                        </Button>
+                                    </Col>
+                                }
                             </Row>
 
                             <Row className='my-5 grid grid-cols-4 gap-3'>

@@ -1,3 +1,4 @@
+import { PostStatus } from './constants/post-status.enum';
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 import { SagaIterator } from 'redux-saga';
 import { call, ForkEffect, put, takeLatest } from 'redux-saga/effects';
@@ -136,6 +137,12 @@ function* handleSavePostData(action: PayloadAction<PatchPostDetail>): SagaIterat
         yield put(fireMessage({
             message: request.getErrorMessage(),
             type: MessageType.ERROR
+        }));
+    }
+    if (action.payload.status === PostStatus.PUBLISH) {
+        yield put(fireMessage({
+            message: 'Post updated successfully',
+            type: MessageType.SUCCESS
         }));
     }
     return;
