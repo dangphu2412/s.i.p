@@ -1,4 +1,4 @@
-import { PostStatus } from '@post/enums/post-status.enum';
+import { PostStatus, ProductRunningStatus } from '@post/enums/post-status.enum';
 import { Topic } from 'src/topic/topic.entity';
 import { User } from 'src/user/user.entity';
 
@@ -15,6 +15,7 @@ export interface PostSummary {
   createdAt: Date;
   updatedAt: Date;
   status: PostStatus;
+  runningStatus: ProductRunningStatus;
 }
 
 export type PostOverview = PostSummary[];

@@ -10,13 +10,16 @@ import dayFormatter from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Container } from 'src/components/container/Container';
+import { UNKNOWN_ID } from 'src/constants/data.constants';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { ClientLayout } from 'src/layouts/client/ClientLayout';
+import { MessageType } from 'src/modules/app.types';
 import { selectProfile } from 'src/modules/auth/auth.selector';
 import { Profile } from 'src/modules/auth/auth.service';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
+import { fireMessage } from 'src/modules/message/message.action';
 import { PatchPostDetail } from 'src/modules/post/api/post.api';
 import { PostStatus, PricingType, ProductRunningStatus } from 'src/modules/post/constants/post-status.enum';
 import { PostActions } from 'src/modules/post/post.action';
@@ -25,6 +28,7 @@ import { Topic } from 'src/modules/topic/api/topic.api';
 import { TopicActions } from 'src/modules/topic/topic.action';
 import { Author } from 'src/modules/user/api/user.api';
 import { UserActions } from 'src/modules/user/user.action';
+import { DateUtils } from 'src/modules/utils/date.utils';
 import './create-post-detail.scss';
 
 interface MenuProps {
@@ -48,7 +52,7 @@ enum DetailMenu {
     REVIEW_AND_LAUNCH = 'REVIEW_AND_LAUNCH'
 }
 
-export function UpdateDetailPostPage(): JSX.Element {
+export function CreateDetailPostPage(): JSX.Element {
     const menuData: MenuProps[] = [
         {
             key: DetailMenu.MAIN_INFO,
@@ -105,7 +109,6 @@ export function UpdateDetailPostPage(): JSX.Element {
     ];
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const { slug } = useParams();
     const [selectedMenu, setSelectedMenu] = useState<DetailMenu>(menuData[0].key);
@@ -114,7 +117,7 @@ export function UpdateDetailPostPage(): JSX.Element {
     const profile: Profile | undefined = useSelector(selectProfile);
     const postDetailDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.FIND_POST_PATCH_DETAIL));
     const [data, setData] = useState<PatchPostDetail>({
-        id: 'UNKNOWN',
+        id: UNKNOWN_ID,
         title: '',
         summary: '',
         description: '',
@@ -131,7 +134,8 @@ export function UpdateDetailPostPage(): JSX.Element {
         makers: [],
         pricingType: PricingType.FREE,
         launchSchedule: null,
-        firstComment: ''
+        firstComment: '',
+        updatedAt: null
     });
 
     const searchTopicDataHolder = useSelector(selectDataHolderByView(VIEW_SELECTOR.SEARCH_TOPIC));
@@ -155,6 +159,14 @@ export function UpdateDetailPostPage(): JSX.Element {
         }
         dispatch(PostActions.getPatchData({ slug }));
     }, []);
+
+    useEffect(() => {
+        if (data.status === PostStatus.DRAFT) {
+            if (data.id !== 'UNKNOWN') {
+                dispatch(PostActions.saveData(data));
+            }
+        }
+    } , [data]);
 
     useEffect(() => {
         if (searchTopicDataHolder?.data) {
@@ -251,11 +263,9 @@ export function UpdateDetailPostPage(): JSX.Element {
 
     function onProductLinkChange(event: React.ChangeEvent<HTMLInputElement>) {
         const productLink = event.target.value;
-        if (!productLink) {
-            setData({
-                ...data,
-                productLink
-            });
+        if (productLink) {
+            updateData('productLink', productLink);
+            return;
         }
     }
 
@@ -336,7 +346,6 @@ export function UpdateDetailPostPage(): JSX.Element {
                     ...data,
                     status: PostStatus.PUBLISH
                 }));
-                navigate('/');
             }
         });
     }
@@ -364,10 +373,66 @@ export function UpdateDetailPostPage(): JSX.Element {
         return productRunningPlans.findIndex(plan => plan.key === status);
     }
 
+    function handleRunningStatusChange(value: ProductRunningStatus) {
+        if (data.runningStatus === ProductRunningStatus.RELEASED) {
+            if (!data.productLink) {
+                dispatch(fireMessage({
+                    message: 'Please provide a product link if you want to release your project',
+                    type: MessageType.ERROR
+                }));
+                return;
+            }
+            if (data.productLink.indexOf('https://') === -1) {
+                dispatch(fireMessage({
+                    message: 'Please provide a valid product link if you want to release your project',
+                    type: MessageType.ERROR
+                }));
+                return;
+            }
+        }
+        if (data.runningStatus === ProductRunningStatus.PRE_RELEASED) {
+            if (!data.launchSchedule) {
+                dispatch(fireMessage({
+                    message: 'Please provide a launch date if you want to schedule your project',
+                    type: MessageType.ERROR
+                }));
+                return;
+            }
+        }
+        updateData('runningStatus', value);
+    }
+
     return <ClientLayout>
         <div className='py-10'>
             <Container>
                 {/* Header */}
+                <div className='flex justify-between'>
+                    <div>
+                        <Title level={3}>
+                            {
+                                data.title
+                            }
+                        </Title>
+                        <div>
+                        Status: { data.status }
+                        </div>
+                        <div>
+                        Running Status: { data.runningStatus }
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            Auto saved {
+                                data.updatedAt && DateUtils.diff(new Date(), data.updatedAt)
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+                <Divider />
+
                 <Row>
                     <Col span={6} className='pr-5'>
                         <Menu
@@ -904,9 +969,17 @@ export function UpdateDetailPostPage(): JSX.Element {
                                             Running plan
                                         </Title>
 
-                                        <Select value={data.runningStatus} style={{ width: 120 }} onChange={(value) => updateData('runningStatus', value)}>
+                                        <Select
+                                            disabled={canRelease(data)}
+                                            value={data.runningStatus}
+                                            style={{ width: 120 }}
+                                            onChange={handleRunningStatusChange}
+                                        >
                                             {
                                                 productRunningPlans.map(plan => {
+                                                    if (plan.key === ProductRunningStatus.PRE_RELEASED) {
+                                                        return <></>;
+                                                    }
                                                     return (
                                                         <Select.Option key={plan.key} value={plan.key}>{plan.title}</Select.Option>
                                                     );

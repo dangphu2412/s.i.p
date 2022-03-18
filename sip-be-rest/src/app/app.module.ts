@@ -17,6 +17,7 @@ import { VoteModule } from '@vote/vote.module';
 import { NotificationModule } from 'src/notification/notification.module';
 import { RankModule } from '@rank/rank.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { EventModule } from 'src/events/event.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     ValidatorModule,
     NotificationModule,
     RankModule,
+    EventModule,
     CacheModule.register(),
     EventEmitterModule.forRoot(),
   ],

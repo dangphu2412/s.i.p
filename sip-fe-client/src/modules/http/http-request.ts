@@ -18,8 +18,8 @@ const DEFAULT_ERROR_MAPPING = {
     401: 'You are required to be authenticate first',
     403: 'You are not allowed to access this resource. Please contact your admin',
     404: 'Resource not found',
-    409: 'Some data conflict',
-    500: 'Internal server error',
+    422: 'Seem like data is not valid. Look like our dev need to work more about this',
+    500: 'Server is handling something wrong. Please try again later',
 
     UNEXPECTED_ERROR_CODE: 'Unexpected error happened'
 };
@@ -72,8 +72,13 @@ export function createRequest<Response, Request>(request: Promise<AxiosResponse<
 
     function _getErrorMessage(error: AxiosError): string {
         if (error.response) {
-            if (ErrorCodeToMsgMap.has(`${error.response.status}`)) {
+            // if (ErrorCodeToMsgMap.has(`${error.response.status}`)) {
+            //     return ErrorCodeToMsgMap.get(`${error.response.status}`) as string;
+            // }
+            if ([500, 422, 400].includes(error.response.status)) {
                 return ErrorCodeToMsgMap.get(`${error.response.status}`) as string;
+            } else {
+                return error.response.data.message;
             }
         }
 

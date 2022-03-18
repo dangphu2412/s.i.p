@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { VIEW_SELECTOR } from 'src/constants/views.constants';
 import { cleanData } from 'src/modules/data/data.action';
 import { selectDataHolderByView } from 'src/modules/data/data.selector';
+import { DateUtils } from 'src/modules/utils/date.utils';
 import { NotificationActions, NotificationPayload } from '../notification.action';
 
 export function DropdownNotification(): JSX.Element {
@@ -55,7 +56,7 @@ export function DropdownNotification(): JSX.Element {
                             notification.notifications.map(item => {
                                 return <Menu.Item key={item.id}>
                                     <Link to={item.link}>
-                                        {item.title}
+                                        {item.title} {DateUtils.diff(new Date(), new Date(item.createdAt))} {item.isRead ? '' : <FontAwesomeIcon icon='circle' className='text-primary' />}
                                     </Link>
                                 </Menu.Item>;
                             })

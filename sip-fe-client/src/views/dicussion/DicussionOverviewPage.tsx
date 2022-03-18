@@ -28,10 +28,10 @@ export function DiscussionOverviewPage(): JSX.Element {
                 className='title-wrapper title-background'
             >
                 <Container>
-                    <Title className='max-w-lg' >
+                    <Title className='max-w-md' >
                         Learn and engage with the Side Project community
                     </Title>
-                    <div className='max-w-lg pb-3'>
+                    <div className='max-w-md pb-3'>
                         Before joining or starting a discussion remember to always be civil.
                         Treat others with respect. Do not use the discussions board for direct sales or self-promotion.
                         You are free to share your products and product ideas for feedback. 🙌

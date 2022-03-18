@@ -45,6 +45,6 @@ export class ArrayUtils {
   }
 
   public static atLeast<T>(count: number, arr: T[]): boolean {
-    return ArrayUtils.isPresent(arr) && arr.length >= count;
+    return Array.isArray(arr) && arr.length >= count;
   }
 }

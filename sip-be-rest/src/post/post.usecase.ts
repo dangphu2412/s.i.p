@@ -98,7 +98,7 @@ export class PostUseCase {
     createDiscussionDto: CreateCommentDto,
     authContext: UserCredential,
   ) {
-    const post = await this.findRequiredPostBySlug(slug);
+    const post = await this.postRepository.findWithIdeaFollowersBySlug(slug);
 
     const author = await this.userService.findRequiredUserById(
       +authContext.userId,
@@ -385,6 +385,14 @@ export class PostUseCase {
     const post = await this.postRepository.findOne(id, {
       relations: ['topics', 'makers', 'author'],
     });
+    const shouldNotify =
+      ([
+        ProductRunningStatus.IDEA,
+        ProductRunningStatus.LOOKING_FOR_MEMBERS,
+        ProductRunningStatus.PRE_RELEASED,
+      ].includes(post.runningStatus) &&
+        updatePostDto.runningStatus === ProductRunningStatus.RELEASED) ||
+      post.status === PostStatus.DRAFT;
 
     if (!post) {
       throw new NotFoundException(`Post ${id} not found to update`);
@@ -395,7 +403,7 @@ export class PostUseCase {
 
     await this.postService.updatePost(post, updatePostDto);
 
-    if (post.status !== PostStatus.PUBLISH) {
+    if (shouldNotify) {
       this.postService.sendPublishNotificationToTopicFollowers(post);
     }
 

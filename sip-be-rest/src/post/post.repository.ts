@@ -164,6 +164,7 @@ export class PostRepository extends Repository<Post> {
       where: {
         slug,
       },
+      relations: ['followers', 'author'],
     });
   }
 
