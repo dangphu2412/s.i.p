@@ -35,7 +35,7 @@ export class initProductionData1646194432244 implements MigrationInterface {
   }
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const MAX_VOTE = 30;
+    const MAX_VOTE = 50;
 
     const postRepository = queryRunner.connection.getRepository(Post);
     const userRepository = queryRunner.connection.getRepository(User);

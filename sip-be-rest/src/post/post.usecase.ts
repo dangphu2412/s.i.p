@@ -113,7 +113,7 @@ export class PostUseCase {
       this.postService.sendNewCommentNotificationToFollowersAndAuthor(
         post,
         author,
-      )
+      ),
     ]);
   }
 
