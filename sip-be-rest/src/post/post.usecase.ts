@@ -103,18 +103,16 @@ export class PostUseCase {
     const author = await this.userService.findRequiredUserById(
       +authContext.userId,
     );
+    await this.postService.sendNewCommentNotificationToFollowersAndAuthor(
+        post,
+        author,
+    );
 
-    return Promise.all([
-      this.commentService.createCommentForPost(
-        post,
-        createDiscussionDto,
-        author,
-      ),
-      this.postService.sendNewCommentNotificationToFollowersAndAuthor(
-        post,
-        author,
-      ),
-    ]);
+    return this.commentService.createCommentForPost(
+      post,
+      createDiscussionDto,
+      author,
+    );
   }
 
   public async createReplyOfPost(

@@ -150,7 +150,7 @@ export class PostController {
     @Body() createDiscussionDto: CreateCommentDto,
     @AuthContext() author: UserCredential,
   ) {
-    await this.postUseCase.createCommentOfPost(
+    return this.postUseCase.createCommentOfPost(
       slug,
       createDiscussionDto,
       author,
